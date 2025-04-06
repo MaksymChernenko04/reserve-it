@@ -2,6 +2,8 @@ package com.maksymchernenko.reserveit.model;
 
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,7 +19,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
@@ -28,7 +30,7 @@ public class User {
     private String password;
 
     @Column(nullable = false)
-    private Boolean active;
+    private Boolean active = true;
 
     @Column(name = "first_name")
     private String firstName;

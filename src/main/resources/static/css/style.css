@@ -1,0 +1,192 @@
+
+/* General */
+
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "Rubik", sans-serif;
+    overflow: hidden;
+}
+
+body {
+    background: url("/img/background.jpg") no-repeat fixed center center;
+    background-size: cover;
+}
+
+main {
+    padding: 10px;
+    margin-top: 8vh;
+    margin-bottom: 8vh;
+    min-height: 84vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+a {
+    text-decoration: none;
+}
+
+li {
+    list-style-type: none;
+}
+
+::selection {
+    background-color: #c8c8c8;
+    color: black;
+}
+
+::-moz-selection {
+    background-color: #c8c8c8;
+    color: black;
+}
+
+.error-message {
+    color: #ec1c1c;
+}
+
+/* Header */
+
+.nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 0 1vw;
+    background: rgba(28, 120, 255, 0.75);
+    min-height: 8vh;
+}
+
+.nav-company a {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    gap: 1vw;
+}
+
+.nav-company .name, .nav-menu ul li a {
+    font-size: 3.5vh;
+    color: white;
+}
+
+.nav-company .logo {
+    width:50px;
+    height:50px;
+}
+
+.nav-menu ul {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 3vw;
+}
+
+.nav-menu ul li {
+    padding: 5px 0;
+    border-bottom: 2px solid transparent;
+    transition: border-bottom-color 0.3s ease-in-out;
+}
+
+.nav-menu ul li:hover {
+    border-bottom-color: white;
+    cursor: pointer;
+}
+
+.nav-lang .lang-select {
+    cursor: pointer;
+    font-size: 2vh;
+    border: none;
+    outline: none;
+    text-align: center;
+    background-color: transparent;
+    color: white;
+}
+
+.nav-lang .lang-select option {
+    color: rgb(28, 120, 255);
+}
+
+.greet {
+    padding: 5vh 5vw;
+    background-color: rgba(255, 255, 255, 0.75);
+    font-size: 2.5vh;
+}
+
+/* Footer */
+
+.footer {
+    text-align: center;
+    background: rgba(28, 120, 255, 0.75);
+    color: white;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 1vh 1vw;
+}
+
+/* Register */
+
+.form {
+    min-height: 50vh;
+    padding: 2vh 4vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    background-color: rgba(0, 0, 0, 0.75);
+}
+
+.form h1 {
+    color: white;
+}
+
+.input-set {
+    display: flex;
+    flex-direction: column;
+    gap: 1vw;
+}
+
+input {
+    min-width: 17vw;
+    font-size: 2vh;
+    padding: 1vh;
+    border: none;
+    transition: background-color 0.3s ease-in-out;
+}
+
+input:hover {
+    background-color: rgba(255, 255, 255, 0.75);
+}
+
+input:focus {
+    outline: none;
+}
+
+input:checked {
+    border: none;
+}
+
+.btn {
+    color: white;
+    border: none;
+    padding: 1vh 1vw;
+    font-size: 2vh;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.btn-submit {
+    background: rgba(28, 120, 255, 0.75);
+}
+
+.btn-submit:hover {
+    background: rgba(74, 145, 248, 0.75);
+}

@@ -1,0 +1,23 @@
+<nav class="nav">
+    <div class="nav-company">
+        <a href="/">
+            <img class="logo" th:src="@{/img/icon.png}" alt="Icon" />
+            <p class="name">Reserve It</p>
+        </a>
+    </div>
+    <div class="nav-menu">
+        <ul>
+            <li><a href="/" th:text="#{header.index}"></a></li>
+            <li><a href="/user/register" th:text="#{header.register}"></a></li>
+            <li><a href="/user/login" th:text="#{header.login}"></a></li>
+        </ul>
+    </div>
+    <div class="nav-lang">
+        <form id="langForm" method="get">
+            <select class="lang-select" name="lang" onchange="document.getElementById('langForm').submit();">
+                <option value="en" th:text="#{header.lang.en}" th:selected="${#locale.language == 'en'}"></option>
+                <option value="uk" th:text="#{header.lang.uk}" th:selected="${#locale.language == 'uk'}"></option>
+            </select>
+        </form>
+    </div>
+</nav>

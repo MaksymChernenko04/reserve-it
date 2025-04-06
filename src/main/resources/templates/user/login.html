@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="icon" th:href="@{/img/icon.png}">
+
+    <title th:text="#{user.login.title}"></title>
+</head>
+<body>
+<header th:insert="~{header.html}"></header>
+<main>
+    <form class="form" th:object="${user}" th:action="@{/user/login}" method="post">
+        <h1 th:text="#{user.login.form.header}"></h1>
+
+        <div class="input-set">
+            <input type="email" name="email" required th:field="*{email}" th:placeholder="#{user.login.form.email.placeholder}"/>
+            <input type="password" name="password" required th:field="*{password}" th:placeholder="#{user.login.form.password.placeholder}"/>
+        </div>
+
+        <button class="btn btn-submit" type="submit" th:text="#{user.login.form.submitbutton}"></button>
+    </form>
+</main>
+<footer th:insert="~{footer.html}"></footer>
+</body>
+</html>

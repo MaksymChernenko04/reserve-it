@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="icon" th:href="@{/img/icon.png}">
+
+    <title th:text="#{index.title}"></title>
+</head>
+<body>
+    <header th:insert="~{header.html}"></header>
+
+    <main>
+        <p class="greet" th:utext="#{index.greet}"></p>
+    </main>
+
+    <footer th:insert="~{footer.html}"></footer>
+</body>
+</html>
