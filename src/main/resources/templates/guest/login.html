@@ -12,7 +12,7 @@
 <body>
 <header th:insert="~{header.html}"></header>
 <main>
-    <form class="form" th:object="${user}" th:action="@{/user/login}" method="post">
+    <form class="sign" th:object="${user}" th:action="@{/guest/login}" method="post">
         <h1 th:text="#{user.login.form.header}"></h1>
 
         <div class="input-set">

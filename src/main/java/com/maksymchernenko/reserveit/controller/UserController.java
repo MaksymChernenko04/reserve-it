@@ -1,8 +1,6 @@
 package com.maksymchernenko.reserveit.controller;
 
 import com.maksymchernenko.reserveit.exceptions.UserAlreadyExistsException;
-import com.maksymchernenko.reserveit.exceptions.UserNotFoundException;
-import com.maksymchernenko.reserveit.exceptions.WrongPasswordException;
 import com.maksymchernenko.reserveit.model.User;
 import com.maksymchernenko.reserveit.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/guest")
 public class UserController {
 
     private final UserService userService;
@@ -25,27 +23,20 @@ public class UserController {
     public String register(Model model) {
         model.addAttribute("user", new User());
 
-        return "user/register";
+        return "guest/register";
     }
 
     @PostMapping("/register")
     public String register(@ModelAttribute("user") User user) throws UserAlreadyExistsException {
         userService.register(user);
 
-        return "redirect:/";
+        return "guest/successful_register";
     }
 
     @GetMapping("/login")
     public String login(Model model) {
         model.addAttribute("user", new User());
 
-        return "user/login";
-    }
-
-    @PostMapping("/login")
-    public String login(@ModelAttribute("user") User user) throws UserNotFoundException, WrongPasswordException {
-        userService.login(user.getEmail(), user.getPassword());
-
-        return "redirect:/";
+        return "guest/login";
     }
 }

@@ -12,7 +12,7 @@
 <body>
     <header th:insert="~{header.html}"></header>
     <main>
-        <form class="form" th:object="${user}" th:action="@{/user/register}" method="post">
+        <form class="sign" th:object="${user}" th:action="@{/guest/register}" method="post">
             <h1 th:text="#{user.register.form.header}"></h1>
 
             <div class="input-set">
@@ -20,8 +20,8 @@
                        th:field="*{email}" th:placeholder="#{user.register.form.email.placeholder}"/>
                 <input type="password" name="password" minlength="8" pattern="^(?!.*\s)[!-~]+$" required
                        th:field="*{password}" th:placeholder="#{user.register.form.password.placeholder}"/>
-                <input type="text" name="firstName" pattern="^[\\p{L}]+$" th:field="*{firstName}" th:placeholder="#{user.register.form.firstname.placeholder}"/>
-                <input type="text" name="lastName" pattern="^[\\p{L}]+$" th:field="*{lastName}" th:placeholder="#{user.register.form.lastname.placeholder}"/>
+                <input type="text" name="firstName" pattern="^[\\p{L}]+$" th:field="*{firstName}" th:placeholder="#{user.register.form.firstname.placeholder}" required />
+                <input type="text" name="lastName" pattern="^[\\p{L}]+$" th:field="*{lastName}" th:placeholder="#{user.register.form.lastname.placeholder}" required />
             </div>
 
             <button class="btn btn-submit" type="submit" th:text="#{user.register.form.submitbutton}"></button>

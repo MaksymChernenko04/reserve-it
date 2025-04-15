@@ -1,3 +1,5 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+
 <nav class="nav">
     <div class="nav-company">
         <a href="/">
@@ -8,8 +10,13 @@
     <div class="nav-menu">
         <ul>
             <li><a href="/" th:text="#{header.index}"></a></li>
-            <li><a href="/user/register" th:text="#{header.register}"></a></li>
-            <li><a href="/user/login" th:text="#{header.login}"></a></li>
+            <li sec:authorize="!isAuthenticated()"><a href="/guest/register" th:text="#{header.register}"></a></li>
+            <li sec:authorize="!isAuthenticated()"><a href="/guest/login" th:text="#{header.login}"></a></li>
+            <li sec:authorize="isAuthenticated()">
+                <form style="margin: 0; padding: 0" method="post" th:action="@{/user/logout}">
+                    <button class="button-link" type="submit" th:text="#{header.logout}"></button>
+                </form>
+            </li>
         </ul>
     </div>
     <div class="nav-lang">

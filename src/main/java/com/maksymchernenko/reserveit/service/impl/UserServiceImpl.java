@@ -1,8 +1,6 @@
 package com.maksymchernenko.reserveit.service.impl;
 
 import com.maksymchernenko.reserveit.exceptions.UserAlreadyExistsException;
-import com.maksymchernenko.reserveit.exceptions.UserNotFoundException;
-import com.maksymchernenko.reserveit.exceptions.WrongPasswordException;
 import com.maksymchernenko.reserveit.model.User;
 import com.maksymchernenko.reserveit.repository.UserRepository;
 import com.maksymchernenko.reserveit.service.UserService;
@@ -30,19 +28,8 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    @Transactional
     @Override
-    public User login(String email, String password) throws UserNotFoundException, WrongPasswordException {
-        User user = userRepository.findByEmail(email).orElse(null);
-
-        if (user == null) {
-            throw new UserNotFoundException("User with given email doesn't exist");
-        }
-
-        if (user.getPassword().equals(password)) {
-            return user;
-        } else {
-            throw new WrongPasswordException("Wrong password");
-        }
+    public User getByEmail(String email) {
+        return userRepository.findByEmail(email).get() ;
     }
 }

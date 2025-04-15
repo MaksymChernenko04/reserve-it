@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,7 +13,10 @@
     <header th:insert="~{header.html}"></header>
 
     <main>
-        <p class="greet" th:utext="#{index.greet}"></p>
+        <div class="sign">
+            <h1 sec:authorize="isAuthenticated()" th:text="#{index.personal.greet} + ${fullName}"></h1>
+            <h2 th:utext="#{index.greet}"></h2>
+        </div>
     </main>
 
     <footer th:insert="~{footer.html}"></footer>

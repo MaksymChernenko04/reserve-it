@@ -29,15 +29,17 @@ public class UserRepositoryImpl implements UserRepository {
         return list.isEmpty() ? Optional.empty() : Optional.of(list.get(0));
     }
 
-    public Role findRoleByName(String name) {
-        return entityManager.createQuery("FROM Role r WHERE r.name = :name", Role.class)
+    public Optional<Role> findRoleByName(String name) {
+        List<Role> list = entityManager.createQuery("FROM Role r WHERE r.name = :name", Role.class)
                 .setParameter("name", name)
-                .getSingleResult();
+                .getResultList();
+
+        return list.isEmpty() ? Optional.empty() : Optional.of(list.get(0));
     }
 
     @Override
     public User save(User user) {
-        user.setRole(findRoleByName("ROLE_CLIENT"));
+        user.setRole(findRoleByName("ROLE_CLIENT").orElseThrow());
         entityManager.persist(user);
 
         return entityManager.find(User.class, user.getId());
