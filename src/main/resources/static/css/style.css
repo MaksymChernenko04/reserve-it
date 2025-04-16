@@ -53,10 +53,6 @@ li {
     text-decoration: none;
 }
 
-.button-link:hover {
-    text-decoration: underline;
-}
-
 .sign h1, h2, h3 {
     color: white;
 }
