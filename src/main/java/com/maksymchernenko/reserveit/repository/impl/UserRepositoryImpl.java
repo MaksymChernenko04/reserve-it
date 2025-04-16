@@ -40,6 +40,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User save(User user) {
         user.setRole(findRoleByName("ROLE_CLIENT").orElseThrow());
+        user.setPassword("{noop}" + user.getPassword());
         entityManager.persist(user);
 
         return entityManager.find(User.class, user.getId());
