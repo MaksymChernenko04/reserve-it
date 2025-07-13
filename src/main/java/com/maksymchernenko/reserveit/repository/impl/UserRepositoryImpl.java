@@ -29,6 +29,7 @@ public class UserRepositoryImpl implements UserRepository {
         return list.isEmpty() ? Optional.empty() : Optional.of(list.get(0));
     }
 
+    @Override
     public Optional<Role> findRoleByName(String name) {
         List<Role> list = entityManager.createQuery("FROM Role r WHERE r.name = :name", Role.class)
                 .setParameter("name", name)

@@ -2,6 +2,7 @@ package com.maksymchernenko.reserveit.controller;
 
 import com.maksymchernenko.reserveit.model.User;
 import com.maksymchernenko.reserveit.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +15,7 @@ public class IndexController {
 
     private final UserService userService;
 
+    @Autowired
     public IndexController(UserService userService) {
         this.userService = userService;
     }
