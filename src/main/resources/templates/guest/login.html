@@ -15,6 +15,10 @@
     <form class="sign" th:object="${user}" th:action="@{/guest/login}" method="post">
         <h1 th:text="#{user.login.form.header}"></h1>
 
+        <div th:if="${param.error}">
+            <i style="color: red" th:text="#{user.login.error}"></i>
+        </div>
+
         <div class="input-set">
             <input type="email" name="email" required th:field="*{email}" th:placeholder="#{user.login.form.email.placeholder}"/>
             <input type="password" name="password" required th:field="*{password}" th:placeholder="#{user.login.form.password.placeholder}"/>

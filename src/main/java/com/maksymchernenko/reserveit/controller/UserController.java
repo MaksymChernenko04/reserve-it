@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/guest")
@@ -27,10 +28,16 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute("user") User user) throws UserAlreadyExistsException {
-        userService.register(user);
+    public String register(@ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
+        try {
+            userService.register(user);
 
-        return "guest/successful_register";
+            return "guest/successful_register";
+        } catch (UserAlreadyExistsException e) {
+            redirectAttributes.addAttribute("error", "true");
+
+            return "redirect:/guest/register";
+        }
     }
 
     @GetMapping("/login")
