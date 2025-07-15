@@ -10,16 +10,18 @@
     <title th:text="#{user.register.success.title}"></title>
 </head>
 <body>
-<header th:insert="~{header.html}"></header>
-<main>
-    <div class="sign">
-        <h1 th:text="#{user.register.success.message}"></h1>
-        <div class="input-set">
-            <a class="btn btn-redirect" th:href="@{/templates/guest/login}" th:text="#{user.register.success.login}"></a>
-            <a class="btn btn-redirect" th:href="@{/}" th:text="#{user.register.success.main}"></a>
+    <header th:insert="~{header.html}"></header>
+
+    <main>
+        <div class="sign">
+            <h1 th:text="#{user.register.success.message}"></h1>
+            <div class="input-set">
+                <a class="btn btn-redirect" th:href="@{/guest/login}" th:text="#{user.register.success.login}"></a>
+                <a class="btn btn-redirect" th:href="@{/}" th:text="#{user.register.success.main}"></a>
+            </div>
         </div>
-    </div>
-</main>
-<footer th:insert="~{footer.html}"></footer>
+    </main>
+
+    <footer th:insert="~{footer.html}"></footer>
 </body>
 </html>
