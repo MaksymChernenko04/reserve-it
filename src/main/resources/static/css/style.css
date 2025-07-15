@@ -35,6 +35,58 @@ li {
     list-style-type: none;
 }
 
+.table {
+    width: 100%;
+    max-width: 1200px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.table table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+.table th,
+.table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.table thead {
+    background-color: rgb(28, 120, 255);
+    color: white;
+}
+
+.table thead th {
+    font-weight: 600;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.table tbody tr:nth-child(even) {
+    background-color: rgba(28, 120, 255, 0.05);
+}
+
+.table tbody td {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.table .caption {
+    caption-side: top;
+    text-align: left;
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+}
+
 .sign {
     gap: 2vh;
     contain: content;
@@ -161,7 +213,7 @@ li {
     gap: 1vw;
 }
 
-input {
+input, select {
     min-width: 17vw;
     font-size: 2vh;
     padding: 1vh;
@@ -178,6 +230,10 @@ input:focus {
 }
 
 input:checked {
+    border: none;
+}
+
+select, option {
     border: none;
 }
 
@@ -205,4 +261,20 @@ input:checked {
 
 .btn-redirect:hover {
     background: rgba(255, 184, 0, 0.75);
+}
+
+.btn-delete {
+    background: rgba(244, 43, 43, 0.75);
+}
+
+.btn-delete:hover {
+    background: rgba(255, 69, 69, 0.75);
+}
+
+.btn-create {
+    background: rgba(25, 228, 0, 0.75);
+}
+
+.btn-create:hover {
+    background: rgba(66, 255, 41, 0.75);
 }
