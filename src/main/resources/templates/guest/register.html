@@ -11,12 +11,13 @@
 </head>
 <body>
     <header th:insert="~{header.html}"></header>
+
     <main>
         <form class="sign" th:object="${user}" th:action="@{/guest/register}" method="post">
             <h1 th:text="#{user.register.form.header}"></h1>
 
             <div th:if="${param.error}">
-                <i style="color: red" th:text="#{user.register.error}"></i>
+                <i class="error-message" th:text="#{user.register.error}"></i>
             </div>
 
             <div class="input-set">
@@ -31,6 +32,7 @@
             <button class="btn btn-submit" type="submit" th:text="#{user.register.form.submitbutton}"></button>
         </form>
     </main>
+
     <footer th:insert="~{footer.html}"></footer>
 </body>
 </html>
