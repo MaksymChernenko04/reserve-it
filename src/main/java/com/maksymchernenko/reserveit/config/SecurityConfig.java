@@ -16,7 +16,7 @@ public class SecurityConfig {
     public UserDetailsManager userDetailsManager(DataSource dataSource) {
         JdbcUserDetailsManager userDetailsManager = new JdbcUserDetailsManager(dataSource);
 
-        userDetailsManager.setUsersByUsernameQuery("SELECT email, password, active FROM User WHERE email = ?");
+        userDetailsManager.setUsersByUsernameQuery("SELECT email AS username, password, active FROM User WHERE email = ?");
         userDetailsManager.setAuthoritiesByUsernameQuery("SELECT u.email AS username, r.name AS authority FROM User u JOIN Role r ON r.id = u.role_id WHERE u.email = ?");
 
         return userDetailsManager;
@@ -28,6 +28,9 @@ public class SecurityConfig {
         httpSecurity
                 .authorizeHttpRequests(configurer -> configurer
                         .requestMatchers("/", "/guest/login", "/guest/register", "/css/**", "/img/**").permitAll()
+                        .requestMatchers("/client/**").hasRole("CLIENT")
+                        .requestMatchers("/manager/**").hasRole("MANAGER")
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
 
