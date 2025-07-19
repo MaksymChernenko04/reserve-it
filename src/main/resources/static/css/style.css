@@ -213,7 +213,13 @@ li {
     gap: 1vw;
 }
 
-input, select {
+select {
+    font-size: 2vh;
+    padding: 1vh;
+    border: none;
+}
+
+input {
     min-width: 17vw;
     font-size: 2vh;
     padding: 1vh;
@@ -247,11 +253,11 @@ select, option {
     cursor: pointer;
 }
 
-.btn-submit {
+.btn-default {
     background: rgba(28, 120, 255, 0.75);
 }
 
-.btn-submit:hover {
+.btn-default:hover {
     background: rgba(74, 145, 248, 0.75);
 }
 
