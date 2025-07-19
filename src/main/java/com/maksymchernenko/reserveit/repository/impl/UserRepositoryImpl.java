@@ -21,6 +21,24 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public Optional<List<User>> getAllUsers() {
+        List<User> users = entityManager
+                .createQuery("FROM User", User.class)
+                .getResultList();
+
+        return users.isEmpty() ? Optional.empty() : Optional.of(users);
+    }
+
+    @Override
+    public Optional<List<Role>> getAllRoles() {
+        List<Role> roles = entityManager
+                .createQuery("FROM Role", Role.class)
+                .getResultList();
+
+        return roles.isEmpty() ? Optional.empty() : Optional.of(roles);
+    }
+
+    @Override
     public Optional<User> findByEmail(String email) {
         List<User> list = entityManager.createQuery("FROM User u WHERE u.email = :email", User.class)
                 .setParameter("email", email)
@@ -40,10 +58,19 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User save(User user) {
-        user.setRole(findRoleByName("ROLE_CLIENT").orElseThrow());
+        if (user.getRole() == null) {
+            user.setRole(findRoleByName("ROLE_CLIENT").orElseThrow());
+        }
+
         user.setPassword("{noop}" + user.getPassword());
         entityManager.persist(user);
 
         return entityManager.find(User.class, user.getId());
+    }
+
+    @Override
+    public void delete(int id) {
+        User user = entityManager.find(User.class, id);
+        entityManager.remove(user);
     }
 }
