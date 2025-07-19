@@ -1,5 +1,6 @@
 package com.maksymchernenko.reserveit.controller;
 
+import com.maksymchernenko.reserveit.exceptions.UserNotFoundException;
 import com.maksymchernenko.reserveit.model.User;
 import com.maksymchernenko.reserveit.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +25,12 @@ public class IndexController {
     public String index(Model model, Authentication authentication) {
         if (authentication != null && authentication.isAuthenticated()) {
             String email = authentication.getName();
-            User user = userService.getByEmail(email);
-            model.addAttribute("fullName", user.getFirstName() + " " + user.getLastName());
+            try {
+                User user = userService.getByEmail(email);
+                model.addAttribute("fullName", user.getFirstName() + " " + user.getLastName());
+            } catch (UserNotFoundException e) {
+                return "redirect:/user/logout";
+            }
         }
 
         return "index";
