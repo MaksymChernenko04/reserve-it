@@ -207,9 +207,15 @@ li {
     padding: 1vh 1vw;
 }
 
-.input-set {
+.input-set-column {
     display: flex;
     flex-direction: column;
+    gap: 1vw;
+}
+
+.input-set-row {
+    display: flex;
+    flex-direction: row;
     gap: 1vw;
 }
 
