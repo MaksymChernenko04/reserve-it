@@ -20,7 +20,7 @@
                 <i class="error-message" th:text="#{user.register.error}"></i>
             </div>
 
-            <div class="input-set-column">
+            <div class="item-set-column">
                 <label><input type="email" name="email" pattern="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$" required
                        th:field="*{email}" th:placeholder="#{user.register.form.email.placeholder}"/></label>
                 <label><input type="password" name="password" minlength="8" pattern="^(?!.*\s)[!-~]+$" required
