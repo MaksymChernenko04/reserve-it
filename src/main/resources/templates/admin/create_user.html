@@ -21,13 +21,13 @@
             </div>
 
             <div class="input-set-column">
-                <input type="email" name="email" pattern="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$" required
-                       th:field="*{email}" th:placeholder="#{user.register.form.email.placeholder}"/>
-                <input type="password" name="password" minlength="8" pattern="^(?!.*\s)[!-~]+$" required
-                       th:field="*{password}" th:placeholder="#{user.register.form.password.placeholder}"/>
-                <select th:field="*{role.id}">
+                <label><input type="email" name="email" pattern="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$" required
+                       th:field="*{email}" th:placeholder="#{user.register.form.email.placeholder}"/></label>
+                <label><input type="password" name="password" minlength="8" pattern="^(?!.*\s)[!-~]+$" required
+                       th:field="*{password}" th:placeholder="#{user.register.form.password.placeholder}"/></label>
+                <label><select th:field="*{role.id}">
                     <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.name}" />
-                </select>
+                </select></label>
             </div>
 
             <button class="btn btn-default" type="submit" th:text="#{admin.user.create.submitbutton}" />

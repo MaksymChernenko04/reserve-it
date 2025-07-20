@@ -21,12 +21,14 @@
             </div>
 
             <div class="input-set-column">
-                <input type="email" name="email" pattern="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$" required
-                       th:field="*{email}" th:placeholder="#{user.register.form.email.placeholder}"/>
-                <input type="password" name="password" minlength="8" pattern="^(?!.*\s)[!-~]+$" required
-                       th:field="*{password}" th:placeholder="#{user.register.form.password.placeholder}"/>
-                <input type="text" name="firstName" pattern="^[\\p{L}]+$" th:field="*{firstName}" th:placeholder="#{user.register.form.firstname.placeholder}" required />
-                <input type="text" name="lastName" pattern="^[\\p{L}]+$" th:field="*{lastName}" th:placeholder="#{user.register.form.lastname.placeholder}" required />
+                <label><input type="email" name="email" pattern="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$" required
+                              th:field="*{email}" th:placeholder="#{user.register.form.email.placeholder}"/></label>
+                <label><input type="password" name="password" minlength="8" pattern="^(?!.*\s)[!-~]+$" required
+                              th:field="*{password}" th:placeholder="#{user.register.form.password.placeholder}"/></label>
+                <label><input type="text" name="firstName" pattern="^[\\p{L}]+$" th:field="*{firstName}"
+                              th:placeholder="#{user.register.form.firstname.placeholder}" required /></label>
+                <label><input type="text" name="lastName" pattern="^[\\p{L}]+$" th:field="*{lastName}"
+                              th:placeholder="#{user.register.form.lastname.placeholder}" required /></label>
             </div>
 
             <button class="btn btn-default" type="submit" th:text="#{user.register.form.submitbutton}"></button>

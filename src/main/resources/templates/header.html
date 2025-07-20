@@ -37,10 +37,10 @@
     </div>
     <div class="nav-lang">
         <form id="langForm" method="get">
-            <select class="lang-select" name="lang" onchange="document.getElementById('langForm').submit();">
+            <label><select class="lang-select" name="lang" onchange="document.getElementById('langForm').submit();">
                 <option value="en" th:text="#{header.lang.en}" th:selected="${#locale.language == 'en'}"></option>
                 <option value="uk" th:text="#{header.lang.uk}" th:selected="${#locale.language == 'uk'}"></option>
-            </select>
+            </select></label>
         </form>
     </div>
 </nav>

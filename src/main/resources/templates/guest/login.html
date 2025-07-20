@@ -21,8 +21,8 @@
             </div>
 
             <div class="input-set-column">
-                <input type="email" name="email" required th:field="*{email}" th:placeholder="#{user.login.form.email.placeholder}"/>
-                <input type="password" name="password" required th:field="*{password}" th:placeholder="#{user.login.form.password.placeholder}"/>
+                <label><input type="email" name="email" required th:field="*{email}" th:placeholder="#{user.login.form.email.placeholder}"/></label>
+                <label><input type="password" name="password" required th:field="*{password}" th:placeholder="#{user.login.form.password.placeholder}"/></label>
             </div>
 
             <button class="btn btn-default" type="submit" th:text="#{user.login.form.submitbutton}"></button>
