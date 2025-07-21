@@ -85,7 +85,7 @@ public class UserController {
         } catch (UserAlreadyExistsException e) {
             redirectAttributes.addAttribute("error", "true");
 
-            return "redirect:/admin/create_user";
+            return "redirect:/admin/user/create";
         }
     }
 
