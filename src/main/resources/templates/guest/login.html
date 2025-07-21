@@ -7,17 +7,17 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="icon" th:href="@{/img/icon.png}">
 
-    <title th:text="#{user.login.title}"></title>
+    <title th:text="#{user.login.title}" />
 </head>
 <body>
     <header th:insert="~{header.html}"></header>
 
     <main>
         <form class="sign" th:object="${user}" th:action="@{/guest/login}" method="post">
-            <h1 th:text="#{user.login.form.header}"></h1>
+            <h1 th:text="#{user.login.form.header}" />
 
             <div th:if="${param.error}">
-                <i class="error-message" th:text="#{user.login.error}"></i>
+                <i class="error-message" th:text="#{user.login.error}" />
             </div>
 
             <div class="item-set-column">
@@ -25,7 +25,10 @@
                 <label><input type="password" name="password" required th:field="*{password}" th:placeholder="#{user.login.form.password.placeholder}"/></label>
             </div>
 
-            <button class="btn btn-default" type="submit" th:text="#{user.login.form.submitbutton}"></button>
+            <div class="item-set-row">
+                <a class="btn btn-redirect" th:href="@{/}" th:text="#{button.back}" />
+                <button class="btn btn-default" type="submit" th:text="#{user.login.form.submitbutton}" />
+            </div>
         </form>
     </main>
 
