@@ -105,7 +105,7 @@ li {
     text-decoration: none;
 }
 
-.sign h1, h2, h3 {
+.sign h1, h2, h3, p {
     color: white;
 }
 
@@ -219,6 +219,11 @@ li {
     gap: 1vw;
 }
 
+.flex-center {
+    justify-content: center;
+    align-items: center;
+}
+
 select {
     font-size: 2vh;
     padding: 1vh;
@@ -227,6 +232,7 @@ select {
 
 input {
     min-width: 17vw;
+    width: 100%;
     font-size: 2vh;
     padding: 1vh;
     border: none;

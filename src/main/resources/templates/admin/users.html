@@ -41,7 +41,7 @@
                         <td>
                             <form th:action="@{/admin/user/{id}/delete(id=${user.id})}" method="post">
                                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                                <button type="submit" class="btn btn-delete" th:text="#{admin.user.delete}" />
+                                <button type="submit" class="btn btn-delete" th:text="#{button.delete}" />
                             </form>
                         </td>
                     </tr>
