@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="icon" th:href="@{/img/icon.png}">
+
+    <title th:text="#{manager.tablesandtimes.create.title}"></title>
+</head>
+<body>
+    <header th:insert="~{header.html}"></header>
+
+    <main>
+        <form class="sign item-set-row flex-center" th:object="${workingTime}" th:action="@{/manager/restaurant/create/addtablesandtimes}" method="post">
+            <input type="hidden" th:field="*{restaurant.id}" />
+            <label><select name="day" th:field="*{dayOfWeek}">
+                <option value="" hidden selected th:text="#{manager.tablesandtimes.create.form.day}" />
+                <option th:each="d : ${T(java.time.DayOfWeek).values()}" th:value="${d}" th:text="#{${'weekday.' + d.name().toLowerCase()}}" />
+            </select></label>
+            <label><select name="openTime" th:field="*{openTime}">
+                <option th:text="#{manager.tablesandtimes.create.form.opentime}" value="" hidden selected />
+                <option th:each="time : ${availableTimes}" th:value="${time}" th:text="${time}" />
+            </select></label>
+            <label><select name="closeTime" th:field="*{closeTime}">
+                <option th:text="#{manager.tablesandtimes.create.form.closetime}" value="" hidden selected />
+                <option th:each="time : ${availableTimes}" th:value="${time}" th:text="${time}" />
+            </select></label>
+
+            <a class="btn btn-redirect" th:href="@{/manager/restaurants}" th:text="#{button.back}" />
+            <button class="btn btn-create" type="submit" th:text="#{button.create}" />
+        </form>
+    </main>
+
+    <footer th:insert="~{footer.html}"></footer>
+</body>
+</html>
