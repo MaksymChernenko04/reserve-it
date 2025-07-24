@@ -5,6 +5,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
@@ -22,6 +23,7 @@ public class WorkingTime {
 
     @ManyToOne
     @JoinColumn(name = "restaurant_id", nullable = false)
+    @Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
     private Restaurant restaurant;
 
     @Column(name = "day_of_week")

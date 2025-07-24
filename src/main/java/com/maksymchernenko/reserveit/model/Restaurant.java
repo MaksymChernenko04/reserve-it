@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @NoArgsConstructor
 @Setter
 @Getter
@@ -22,6 +25,13 @@ public class Restaurant {
 
     @Column(nullable = false)
     private String address;
+
+    @OneToMany(
+            mappedBy = "restaurant",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<WorkingTime> workingTimes = new ArrayList<>();
 
     public Restaurant(String name, String address) {
         this.name = name;
