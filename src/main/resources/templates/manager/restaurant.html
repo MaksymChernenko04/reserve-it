@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <link rel="icon" th:href="@{/img/icon.png}">
+
+  <title th:text="#{manager.restaurant.title}" />
+</head>
+<body>
+  <header th:insert="~{header.html}"></header>
+
+  <main>
+    <div class="sign">
+      <h1 th:text="#{manager.restaurant.header}" />
+
+      <div>
+        <div class="item-set-row">
+          <h3 th:text="ID  + ':'" />
+          <p th:text="${restaurant.id}" />
+        </div>
+
+        <div class="item-set-row">
+          <h3 th:text="#{manager.restaurants.name} + ':'" />
+          <p th:text="${restaurant.name}" />
+        </div>
+
+        <div class="item-set-row">
+          <h3 th:text="#{manager.restaurants.address} + ':'" />
+          <p th:text="${restaurant.address}" />
+        </div>
+
+        <br />
+
+        <div class="table">
+          <table>
+            <thead>
+            <tr>
+              <th th:each="day : ${T(java.time.DayOfWeek).values()}" th:value="${day}" th:text="#{${'weekday.' + day.name().toLowerCase()}}" />
+            </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td th:each="day : ${T(java.time.DayOfWeek).values()}"
+                    th:text="${workingTime.get(day) != null
+                      ? workingTime.get(day).openTime.format(T(java.time.format.DateTimeFormatter).ofPattern('HH:mm')) + ' - '
+                      + workingTime.get(day).closeTime.format(T(java.time.format.DateTimeFormatter).ofPattern('HH:mm'))
+                      : '-'}">
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <br />
+
+        <div class="item-set-row flex-center">
+          <a class="btn btn-redirect" th:text="#{button.back}" th:href="@{/manager/restaurants}" />
+          <a class="btn btn-default" th:text="#{manager.restaurant.edit}" />
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer th:insert="~{footer.html}"></footer>
+</body>
+</html>
