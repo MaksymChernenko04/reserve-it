@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="icon" th:href="@{/img/icon.png}">
+
+    <title th:text="#{manager.restaurant.create.title}"></title>
+</head>
+<body>
+    <header th:insert="~{header.html}"></header>
+
+    <main>
+        <form class="sign" th:object="${restaurant}" th:action="@{/manager/restaurant/create}" method="post">
+            <h1 th:text="#{manager.restaurant.create.header}" />
+
+            <div th:if="${param.error}">
+                <i class="error-message" th:text="#{manager.restaurant.create.error}"></i>
+            </div>
+
+            <div class="item-set-column">
+                <label><input type="text" name="name" required
+                              th:field="*{name}" th:placeholder="#{manager.restaurant.create.form.name.placeholder}"/></label>
+                <label><input type="text" name="address" required
+                              th:field="*{address}" th:placeholder="#{manager.restaurant.create.form.address.placeholder}"/></label>
+            </div>
+
+            <div class="item-set-row">
+                <a class="btn btn-redirect" th:href="@{/manager/restaurants}" th:text="#{button.back}" />
+                <button class="btn btn-create" type="submit" th:text="#{button.create}" />
+            </div>
+        </form>
+
+    </main>
+
+    <footer th:insert="~{footer.html}"></footer>
+</body>
+</html>
