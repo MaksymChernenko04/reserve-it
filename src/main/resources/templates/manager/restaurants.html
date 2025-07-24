@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="icon" th:href="@{/img/icon.png}">
+
+    <title th:text="#{manager.restaurants.title}"></title>
+</head>
+<body>
+    <header th:insert="~{header.html}"></header>
+
+    <main>
+        <div class="table">
+            <h1 th:text="#{manager.restaurants.header}" />
+
+            <a class="btn btn-create" th:href="@{/manager/restaurant/create}" th:text="#{button.create}" />
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th th:text="#{manager.restaurants.name}" />
+                        <th th:text="#{manager.restaurants.address}" />
+                        <th th:text="#{manager.restaurants.action}" />
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="restaurant : ${restaurants}">
+                        <td th:text="${restaurant.id}" />
+                        <td th:text="${restaurant.name}" />
+                        <td th:text="${restaurant.address}" />
+                        <td class="item-set-row">
+                            <a class="btn btn-redirect" th:href="@{/manager/restaurant/{id}/more(id=${restaurant.id})}" th:text="#{manager.restaurants.more}"></a>
+
+                            <form th:action="@{/manager/restaurant/{id}/delete(id=${restaurant.id})}" method="post">
+                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                <button type="submit" class="btn btn-delete" th:text="#{button.delete}" />
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <footer th:insert="~{footer.html}"></footer>
+</body>
+</html>
