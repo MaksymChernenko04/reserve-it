@@ -123,6 +123,10 @@ li {
     color: #ec1c1c;
 }
 
+.message {
+    color: rgba(66, 255, 41, 0.75);
+}
+
 /* Header */
 
 .nav {

@@ -2,8 +2,10 @@ package com.maksymchernenko.reserveit.controller;
 
 import com.maksymchernenko.reserveit.exceptions.RestaurantAlreadyExistsException;
 import com.maksymchernenko.reserveit.model.Restaurant;
+import com.maksymchernenko.reserveit.model.RestaurantTable;
 import com.maksymchernenko.reserveit.model.WorkingTime;
 import com.maksymchernenko.reserveit.service.RestaurantService;
+import com.maksymchernenko.reserveit.service.RestaurantTableService;
 import com.maksymchernenko.reserveit.service.WorkingTimeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,11 +23,15 @@ public class RestaurantController {
 
     private final RestaurantService restaurantService;
     private final WorkingTimeService workingTimeService;
+    private final RestaurantTableService restaurantTableService;
 
     @Autowired
-    public RestaurantController(RestaurantService restaurantService, WorkingTimeService workingTimeService) {
+    public RestaurantController(RestaurantService restaurantService,
+                                WorkingTimeService workingTimeService,
+                                RestaurantTableService restaurantTableService) {
         this.restaurantService = restaurantService;
         this.workingTimeService = workingTimeService;
+        this.restaurantTableService = restaurantTableService;
     }
 
     @GetMapping("/manager/restaurants")
@@ -69,6 +75,9 @@ public class RestaurantController {
         WorkingTime workingTime = new WorkingTime();
         workingTime.setRestaurant(restaurantService.getRestaurant(id));
 
+        RestaurantTable restaurantTable = new RestaurantTable();
+        restaurantTable.setRestaurant(restaurantService.getRestaurant(id));
+
         List<LocalTime> availableTimes = new ArrayList<>();
         for (int h = 0; h < 24; h++) {
             for (int m = 0; m < 60; m += 15) {
@@ -78,16 +87,35 @@ public class RestaurantController {
 
         model.addAttribute("availableTimes", availableTimes);
         model.addAttribute("workingTime", workingTime);
+        model.addAttribute("restaurantTable", restaurantTable);
+        model.addAttribute("tablesNumber", null);
 
         return  "manager/create_tables_and_times";
     }
 
     @PostMapping("/manager/restaurant/create/addtablesandtimes")
-    public String createTablesAndTimes(@ModelAttribute WorkingTime workingTime, RedirectAttributes redirectAttributes) {
-        Restaurant restaurant = restaurantService.getRestaurant(workingTime.getRestaurant().getId());
-        workingTime.setRestaurant(restaurant);
+    public String createTablesAndTimes(@ModelAttribute WorkingTime workingTime,
+                             @ModelAttribute RestaurantTable restaurantTable,
+                             @RequestParam(required=false) Integer tablesNumber,
+                             RedirectAttributes redirectAttributes) {
+        Restaurant restaurant;
+        if (workingTime.getDayOfWeek() != null) {
+            restaurant = restaurantService.getRestaurant(workingTime.getRestaurant().getId());
+            workingTime.setRestaurant(restaurant);
 
-        workingTimeService.createWorkingTime(workingTime);
+            workingTimeService.createWorkingTime(workingTime);
+
+            redirectAttributes.addFlashAttribute("timeAdded", true);
+        } else {
+            restaurant = restaurantService.getRestaurant(restaurantTable.getRestaurant().getId());
+
+            for (int i = 0; i < tablesNumber; i++) {
+                restaurantTable.setRestaurant(restaurant);
+                restaurantTableService.createTable(restaurantTable);
+            }
+
+            redirectAttributes.addFlashAttribute("tableAdded", true);
+        }
 
         redirectAttributes.addAttribute("id", restaurant.getId());
 
