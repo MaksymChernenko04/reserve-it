@@ -13,24 +13,47 @@
     <header th:insert="~{header.html}"></header>
 
     <main>
-        <form class="sign item-set-row flex-center" th:object="${workingTime}" th:action="@{/manager/restaurant/create/addtablesandtimes}" method="post">
-            <input type="hidden" th:field="*{restaurant.id}" />
-            <label><select name="day" th:field="*{dayOfWeek}">
-                <option value="" hidden selected th:text="#{manager.tablesandtimes.create.form.day}" />
-                <option th:each="d : ${T(java.time.DayOfWeek).values()}" th:value="${d}" th:text="#{${'weekday.' + d.name().toLowerCase()}}" />
-            </select></label>
-            <label><select name="openTime" th:field="*{openTime}">
-                <option th:text="#{manager.tablesandtimes.create.form.opentime}" value="" hidden selected />
-                <option th:each="time : ${availableTimes}" th:value="${time}" th:text="${time}" />
-            </select></label>
-            <label><select name="closeTime" th:field="*{closeTime}">
-                <option th:text="#{manager.tablesandtimes.create.form.closetime}" value="" hidden selected />
-                <option th:each="time : ${availableTimes}" th:value="${time}" th:text="${time}" />
-            </select></label>
+        <div class="sign item-set-column flex-center">
+            <div th:if="${timeAdded}">
+                <i class="message" th:text="#{manager.tablesandtimes.createtime.message}" />
+            </div>
 
-            <a class="btn btn-redirect" th:href="@{/manager/restaurants}" th:text="#{button.back}" />
-            <button class="btn btn-create" type="submit" th:text="#{button.create}" />
-        </form>
+            <div th:if="${tableAdded}">
+                <i class="message" th:text="#{manager.tablesandtimes.createtable.message}" />
+            </div>
+
+            <h1 th:text="#{manager.tablesandtimes.createtime.header}" />
+
+            <form class="item-set-row flex-center" th:object="${workingTime}" th:action="@{/manager/restaurant/create/addtablesandtimes}" method="post">
+                <input type="hidden" th:field="*{restaurant.id}" />
+                <label><select name="day" th:field="*{dayOfWeek}">
+                    <option value="" hidden selected th:text="#{manager.tablesandtimes.create.form.day}" />
+                    <option th:each="day : ${T(java.time.DayOfWeek).values()}" th:value="${day}" th:text="#{${'weekday.' + day.name().toLowerCase()}}" />
+                </select></label>
+                <label><select name="openTime" th:field="*{openTime}">
+                    <option th:text="#{manager.tablesandtimes.create.form.opentime}" value="" hidden selected />
+                    <option th:each="time : ${availableTimes}" th:value="${time}" th:text="${time}" />
+                </select></label>
+                <label><select name="closeTime" th:field="*{closeTime}">
+                    <option th:text="#{manager.tablesandtimes.create.form.closetime}" value="" hidden selected />
+                    <option th:each="time : ${availableTimes}" th:value="${time}" th:text="${time}" />
+                </select></label>
+
+                <button class="btn btn-create" type="submit" th:text="#{button.create}" />
+            </form>
+
+            <h1 th:text="#{manager.tablesandtimes.createtable.header}" />
+
+            <form class="item-set-row flex-center" th:object="${restaurantTable}" th:action="@{/manager/restaurant/create/addtablesandtimes}" method="post">
+                <input type="hidden" th:field="*{restaurant.id}" />
+                <label><input th:placeholder="#{manager.tablesandtimes.create.form.placeholder.seatsnumber}" type="text" th:field="*{seatsNumber}" /></label>
+                <label><input th:placeholder="#{manager.tablesandtimes.create.form.placeholder.tablesnumber}" type="text" name="tablesNumber" /></label>
+
+                <button class="btn btn-create" type="submit" th:text="#{button.create}" />
+            </form>
+
+                <a class="btn btn-redirect" th:href="@{/manager/restaurants}" th:text="#{button.back}" />
+        </div>
     </main>
 
     <footer th:insert="~{footer.html}"></footer>
