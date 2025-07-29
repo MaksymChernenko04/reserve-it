@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
 
 @NoArgsConstructor
 @Setter
@@ -17,18 +18,15 @@ public class RestaurantTable {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "restaurant_id")
+    @JoinColumn(name = "restaurant_id", nullable = false)
+    @Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
     private Restaurant restaurant;
-
-    @Column
-    private Integer number;
 
     @Column(name = "seats_number")
     private Integer seatsNumber;
 
-    public RestaurantTable(Restaurant restaurant, Integer number, Integer seatsNumber) {
+    public RestaurantTable(Restaurant restaurant, Integer seatsNumber) {
         this.restaurant = restaurant;
-        this.number = number;
         this.seatsNumber = seatsNumber;
     }
 }

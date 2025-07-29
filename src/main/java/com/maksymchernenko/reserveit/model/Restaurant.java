@@ -33,6 +33,13 @@ public class Restaurant {
     )
     private List<WorkingTime> workingTimes = new ArrayList<>();
 
+    @OneToMany(
+            mappedBy = "restaurant",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<RestaurantTable> restaurantTables = new ArrayList<>();
+
     public Restaurant(String name, String address) {
         this.name = name;
         this.address = address;
