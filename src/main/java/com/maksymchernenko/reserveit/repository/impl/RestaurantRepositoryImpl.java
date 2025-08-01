@@ -7,8 +7,7 @@ import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 public class RestaurantRepositoryImpl implements RestaurantRepository {
@@ -48,6 +47,25 @@ public class RestaurantRepositoryImpl implements RestaurantRepository {
         return entityManager.createQuery("FROM WorkingTime WHERE restaurant.id = :id", WorkingTime.class)
                 .setParameter("id", id)
                 .getResultList();
+    }
+
+    @Override
+    public Map<Integer, Integer> getTables(long id) {
+        List<Object[]> rows = entityManager.createQuery("SELECT table.seatsNumber, COUNT(table) " +
+                        "FROM RestaurantTable table " +
+                        "WHERE table.restaurant.id = :id " +
+                        "GROUP BY table.seatsNumber", Object[].class)
+                .setParameter("id", id)
+                .getResultList();
+
+        Map<Integer,Integer> result = new LinkedHashMap<>();
+        for (Object[] row : rows) {
+            Integer seatsNumber = (Integer) row[0];
+            Long countLong = (Long) row[1];
+            result.put(seatsNumber, countLong.intValue());
+        }
+
+        return result;
     }
 
     @Override

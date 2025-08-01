@@ -35,6 +35,8 @@
         <br />
 
         <div class="table">
+          <h2 style="color: black" th:text="#{manager.restaurant.time.header}" />
+
           <table>
             <thead>
             <tr>
@@ -51,6 +53,32 @@
                       : '-'}">
                 </td>
               </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <br />
+
+        <div class="table">
+          <h2 style="color: black" th:text="#{manager.restaurant.tables.header}" />
+
+          <table>
+            <thead>
+            <tr>
+              <th th:text="#{manager.restaurant.tables.seats}" />
+              <th th:each="seatsNumber : ${tables.keySet()}" th:value="${seatsNumber}" th:text="${seatsNumber}" />
+              <th th:if="${tables.keySet().isEmpty()}">-</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr>
+              <td th:text="#{manager.restaurant.tables.tables}" />
+              <td th:each="count : ${tables.values()}"
+                  th:text="${count}">
+              </td>
+              <td th:if="${tables.values().isEmpty()}">-</td>
+            </tr>
             </tbody>
           </table>
         </div>

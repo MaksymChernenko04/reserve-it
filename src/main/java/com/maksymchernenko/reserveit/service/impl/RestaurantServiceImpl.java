@@ -50,6 +50,11 @@ public class RestaurantServiceImpl implements RestaurantService {
         return workingTimeMap;
     }
 
+    @Override
+    public Map<Integer, Integer> getTables(long id) {
+        return restaurantRepository.getTables(id);
+    }
+
     @Transactional
     @Override
     public Restaurant createRestaurant(Restaurant restaurant) throws RestaurantAlreadyExistsException {

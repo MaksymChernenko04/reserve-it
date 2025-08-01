@@ -45,6 +45,7 @@ public class RestaurantController {
     public String getRestaurantPage(Model model, @PathVariable long id) {
         model.addAttribute("restaurant", restaurantService.getRestaurant(id));
         model.addAttribute("workingTime", restaurantService.getWorkingTime(id));
+        model.addAttribute("tables", restaurantService.getTables(id));
 
         return "manager/restaurant";
     }
@@ -110,8 +111,7 @@ public class RestaurantController {
             restaurant = restaurantService.getRestaurant(restaurantTable.getRestaurant().getId());
 
             for (int i = 0; i < tablesNumber; i++) {
-                restaurantTable.setRestaurant(restaurant);
-                restaurantTableService.createTable(restaurantTable);
+                restaurantTableService.createTable(new RestaurantTable(restaurant, restaurantTable.getSeatsNumber()));
             }
 
             redirectAttributes.addFlashAttribute("tableAdded", true);

@@ -14,6 +14,7 @@ public interface RestaurantService {
     Restaurant getRestaurant(long id);
     Restaurant getRestaurant(String name);
     Map<DayOfWeek, WorkingTime> getWorkingTime(long id);
+    Map<Integer, Integer> getTables(long id);
     Restaurant createRestaurant(Restaurant restaurant) throws RestaurantAlreadyExistsException;
     void deleteRestaurant(long id);
 }
