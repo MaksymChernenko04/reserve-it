@@ -22,11 +22,17 @@ public class RestaurantTable {
     @Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
     private Restaurant restaurant;
 
+    @Column
+    private Integer number;
+
     @Column(name = "seats_number")
     private Integer seatsNumber;
 
     public RestaurantTable(Restaurant restaurant, Integer seatsNumber) {
         this.restaurant = restaurant;
         this.seatsNumber = seatsNumber;
+
+        restaurant.setNumberOfTables(restaurant.getNumberOfTables() + 1);
+        number = restaurant.getNumberOfTables();
     }
 }

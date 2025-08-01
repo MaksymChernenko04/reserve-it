@@ -26,6 +26,8 @@ public class Restaurant {
     @Column(nullable = false)
     private String address;
 
+    private Integer numberOfTables = 0;
+
     @OneToMany(
             mappedBy = "restaurant",
             cascade = CascadeType.ALL,
