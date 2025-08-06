@@ -8,7 +8,6 @@
     margin: 0;
     box-sizing: border-box;
     font-family: "Rubik", sans-serif;
-    overflow: hidden;
 }
 
 body {
@@ -33,6 +32,10 @@ a {
 
 li {
     list-style-type: none;
+}
+
+hr {
+    width: 100%;
 }
 
 .table {
@@ -138,7 +141,7 @@ li {
     top: 0;
     width: 100%;
     padding: 0 1vw;
-    background: rgba(28, 120, 255, 0.75);
+    background: rgb(28, 120, 255);
     min-height: 8vh;
 }
 
@@ -195,7 +198,7 @@ li {
 
 .greet {
     padding: 5vh 5vw;
-    background-color: rgba(255, 255, 255, 0.75);
+    background-color: rgb(255, 255, 255);
     font-size: 2.5vh;
 }
 
@@ -203,7 +206,7 @@ li {
 
 .footer {
     text-align: center;
-    background: rgba(28, 120, 255, 0.75);
+    background: rgb(28, 120, 255);
     color: white;
     position: fixed;
     bottom: 0;
