@@ -2,17 +2,13 @@ package com.maksymchernenko.reserveit.service.impl;
 
 import com.maksymchernenko.reserveit.exceptions.RestaurantAlreadyExistsException;
 import com.maksymchernenko.reserveit.model.Restaurant;
-import com.maksymchernenko.reserveit.model.WorkingTime;
 import com.maksymchernenko.reserveit.repository.RestaurantRepository;
 import com.maksymchernenko.reserveit.service.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.DayOfWeek;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class RestaurantServiceImpl implements RestaurantService {
@@ -38,23 +34,6 @@ public class RestaurantServiceImpl implements RestaurantService {
         return restaurantRepository.getRestaurant(name).orElseGet(Restaurant::new);
     }
 
-    @Override
-    public Map<DayOfWeek, WorkingTime> getWorkingTime(long restaurantId) {
-        List<WorkingTime> workingTimes = restaurantRepository.getWorkingTime(restaurantId);
-
-        Map<DayOfWeek, WorkingTime> workingTimeMap = new HashMap<>();
-        for (WorkingTime workingTime : workingTimes) {
-            workingTimeMap.put(workingTime.getDayOfWeek(), workingTime);
-        }
-
-        return workingTimeMap;
-    }
-
-    @Override
-    public Map<Integer, Integer> getTables(long id) {
-        return restaurantRepository.getTables(id);
-    }
-
     @Transactional
     @Override
     public Restaurant createRestaurant(Restaurant restaurant) throws RestaurantAlreadyExistsException {
@@ -63,6 +42,12 @@ public class RestaurantServiceImpl implements RestaurantService {
         } else {
             return restaurantRepository.save(restaurant);
         }
+    }
+
+    @Transactional
+    @Override
+    public Restaurant updateRestaurant(Restaurant restaurant) {
+        return restaurantRepository.update(restaurant);
     }
 
     @Transactional

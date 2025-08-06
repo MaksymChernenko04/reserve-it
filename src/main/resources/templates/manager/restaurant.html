@@ -47,9 +47,9 @@
             <tbody>
               <tr>
                 <td th:each="day : ${T(java.time.DayOfWeek).values()}"
-                    th:text="${workingTime.get(day) != null
-                      ? workingTime.get(day).openTime.format(T(java.time.format.DateTimeFormatter).ofPattern('HH:mm')) + ' - '
-                      + workingTime.get(day).closeTime.format(T(java.time.format.DateTimeFormatter).ofPattern('HH:mm'))
+                    th:text="${workingTimeMap.get(day) != null
+                      ? workingTimeMap.get(day).openTime.format(T(java.time.format.DateTimeFormatter).ofPattern('HH:mm')) + ' - '
+                      + workingTimeMap.get(day).closeTime.format(T(java.time.format.DateTimeFormatter).ofPattern('HH:mm'))
                       : '-'}">
                 </td>
               </tr>
@@ -66,18 +66,18 @@
             <thead>
             <tr>
               <th th:text="#{manager.restaurant.tables.seats}" />
-              <th th:each="seatsNumber : ${tables.keySet()}" th:value="${seatsNumber}" th:text="${seatsNumber}" />
-              <th th:if="${tables.keySet().isEmpty()}">-</th>
+              <th th:each="seatsNumber : ${tableMap.keySet()}" th:value="${seatsNumber}" th:text="${seatsNumber}" />
+              <th th:if="${tableMap.keySet().isEmpty()}">-</th>
             </tr>
             </thead>
 
             <tbody>
             <tr>
               <td th:text="#{manager.restaurant.tables.tables}" />
-              <td th:each="count : ${tables.values()}"
+              <td th:each="count : ${tableMap.values()}"
                   th:text="${count}">
               </td>
-              <td th:if="${tables.values().isEmpty()}">-</td>
+              <td th:if="${tableMap.values().isEmpty()}">-</td>
             </tr>
             </tbody>
           </table>
@@ -87,7 +87,7 @@
 
         <div class="item-set-row flex-center">
           <a class="btn btn-redirect" th:text="#{button.back}" th:href="@{/manager/restaurants}" />
-          <a class="btn btn-default" th:text="#{manager.restaurant.edit}" />
+          <a class="btn btn-default" th:text="#{manager.restaurant.edit}" th:href="@{/manager/restaurant/{id}/edit(id=${restaurant.id})}" />
         </div>
       </div>
     </div>
