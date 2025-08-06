@@ -1,6 +1,7 @@
 package com.maksymchernenko.reserveit.controller;
 
 import com.maksymchernenko.reserveit.exceptions.UserAlreadyExistsException;
+import com.maksymchernenko.reserveit.exceptions.UserNotFoundException;
 import com.maksymchernenko.reserveit.model.Role;
 import com.maksymchernenko.reserveit.model.User;
 import com.maksymchernenko.reserveit.service.UserService;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping()
 public class UserController {
 
     private final UserService userService;
@@ -94,5 +95,21 @@ public class UserController {
         userService.deleteUser(id);
 
         return "redirect:/admin/users";
+    }
+
+    @GetMapping("/user/profile")
+    public String getUserProfilePage(Model model,
+                                     Authentication authentication) {
+        String email = authentication.getName();
+        try {
+            User user = userService.getByEmail(email);
+            model.addAttribute("firstName", user.getFirstName());
+            model.addAttribute("lastName", user.getLastName());
+            model.addAttribute("email", user.getEmail());
+
+            return "user/profile";
+        } catch (UserNotFoundException e) {
+            return "redirect:/user/logout";
+        }
     }
 }

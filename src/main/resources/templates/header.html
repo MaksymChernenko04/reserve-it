@@ -12,21 +12,22 @@
             <li><a href="/" th:text="#{header.index}"></a></li>
 
             <!-- Guest -->
-            <li sec:authorize="!isAuthenticated()"><a href="/guest/register" th:text="#{header.register}"></a></li>
-            <li sec:authorize="!isAuthenticated()"><a href="/guest/login" th:text="#{header.login}"></a></li>
+            <li sec:authorize="!isAuthenticated()"><a th:href="@{/guest/register}" th:text="#{header.register}"></a></li>
+            <li sec:authorize="!isAuthenticated()"><a th:href="@{/guest/login}" th:text="#{header.login}"></a></li>
 
             <!-- Admin -->
-            <li sec:authorize="hasRole('ADMIN')"><a href="/admin/users" th:text="#{header.admin.users}"></a></li>
+            <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/admin/users}" th:text="#{header.admin.users}"></a></li>
 
             <!-- Manager -->
-            <li sec:authorize="hasRole('MANAGER')"><a href="/manager/reservations" th:text="#{header.manager.reservations}"></a></li>
-            <li sec:authorize="hasRole('MANAGER')"><a href="/manager/restaurants" th:text="#{header.manager.restaurants}"></a></li>
+            <li sec:authorize="hasRole('MANAGER')"><a th:href="@{/manager/reservations}" th:text="#{header.manager.reservations}"></a></li>
+            <li sec:authorize="hasRole('MANAGER')"><a th:href="@{/manager/restaurants}" th:text="#{header.manager.restaurants}"></a></li>
 
             <!-- Client -->
-            <li sec:authorize="hasRole('CLIENT')"><a href="/client/reservations" th:text="#{header.client.reservations}"></a></li>
-            <li sec:authorize="hasRole('CLIENT')"><a href="/client/history" th:text="#{header.client.history}"></a></li>
+            <li sec:authorize="hasRole('CLIENT')"><a th:href="@{/client/reservations}" th:text="#{header.client.reservations}"></a></li>
+            <li sec:authorize="hasRole('CLIENT')"><a th:href="@{/client/history}" th:text="#{header.client.history}"></a></li>
 
-            <li sec:authorize="hasAnyRole('MANAGER', 'CLIENT')"><a href="/user/profile" th:text="#{header.user.profile}"></a></li>
+            <!-- User -->
+            <li sec:authorize="hasAnyRole('MANAGER', 'CLIENT')"><a th:href="@{/user/profile}" th:text="#{header.user.profile}"></a></li>
 
             <li sec:authorize="isAuthenticated()">
                 <form style="margin: 0; padding: 0" method="post" th:action="@{/user/logout}">
