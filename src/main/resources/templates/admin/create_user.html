@@ -7,14 +7,14 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="icon" th:href="@{/img/icon.png}">
 
-    <title th:text="#{admin.user.create.title}"></title>
+    <title th:text="#{admin.user.create}"></title>
 </head>
 <body>
     <header th:insert="~{header.html}"></header>
 
     <main>
         <form class="sign" th:object="${user}" th:action="@{/admin/user/create}" method="post">
-            <h1 th:text="#{admin.user.create.header}" />
+            <h1 th:text="#{admin.user.create}" />
 
             <div th:if="${param.error}">
                 <i class="error-message" th:text="#{user.register.error}"></i>
@@ -30,7 +30,7 @@
                 </select></label>
             </div>
 
-            <button class="btn btn-create" type="submit" th:text="#{button.create}" />
+            <button class="btn btn-create" type="submit" th:text="#{create}" />
         </form>
     </main>
 

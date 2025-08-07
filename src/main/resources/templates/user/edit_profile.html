@@ -7,21 +7,21 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="icon" th:href="@{/img/icon.png}">
 
-    <title th:text="#{user.profile.edit.title}" />
+    <title th:text="#{user.profile.edit}" />
 </head>
 <body>
     <header th:insert="~{header.html}"></header>
 
     <main>
         <div class="sign item-set-column flex-center">
-            <h1 th:text="#{user.profile.edit.header}" />
+            <h1 th:text="#{user.profile.edit}" />
 
             <form class="item-set-column flex-center" th:object="${user}" th:action="@{/user/profile/edit}" method="post">
                 <input type="hidden" th:field="*{id}" />
                 <label><input th:field="*{firstName}" type="text" th:placeholder="#{user.profile.edit.placeholder.firstname}" /></label>
                 <label><input th:field="*{lastName}" type="text" th:placeholder="#{user.profile.edit.placeholder.lastname}" /></label>
 
-                <button class="btn btn-default" type="submit" th:text="#{button.submit}" />
+                <button class="btn btn-default" type="submit" th:text="#{submit}" />
             </form>
 
             <hr />
@@ -39,12 +39,12 @@
                 <label><input name="oldPassword" type="password" th:placeholder="#{user.profile.changepassword.placeholder.oldpassword}" /></label>
                 <label><input name="newPassword" type="password" th:placeholder="#{user.profile.changepassword.placeholder.newpassword}" /></label>
 
-                <button class="btn btn-default" type="submit" th:text="#{button.submit}" />
+                <button class="btn btn-default" type="submit" th:text="#{submit}" />
             </form>
 
             <hr />
 
-            <a class="btn btn-redirect" th:href="@{/user/profile}" th:text="#{button.back}" />
+            <a class="btn btn-redirect" th:href="@{/user/profile}" th:text="#{back}" />
         </div>
     </main>
 

@@ -14,7 +14,7 @@
 
     <main>
         <div class="sign">
-            <h1 sec:authorize="isAuthenticated()" th:text="#{index.personal.greet} + ${fullName}"></h1>
+            <h1 sec:authorize="isAuthenticated()" th:text="#{index.personal.greet} + ' ' + ${fullName}"></h1>
             <h2 th:utext="#{index.greet}"></h2>
         </div>
     </main>

@@ -7,14 +7,14 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="icon" th:href="@{/img/icon.png}">
 
-    <title th:text="#{user.login.title}" />
+    <title th:text="#{user.login}" />
 </head>
 <body>
     <header th:insert="~{header.html}"></header>
 
     <main>
         <form class="sign" th:object="${user}" th:action="@{/guest/login}" method="post">
-            <h1 th:text="#{user.login.form.header}" />
+            <h1 th:text="#{user.login}" />
 
             <div th:if="${param.error}">
                 <i class="error-message" th:text="#{user.login.error}" />
@@ -26,8 +26,8 @@
             </div>
 
             <div class="item-set-row">
-                <a class="btn btn-redirect" th:href="@{/}" th:text="#{button.back}" />
-                <button class="btn btn-default" type="submit" th:text="#{user.login.form.submitbutton}" />
+                <a class="btn btn-redirect" th:href="@{/}" th:text="#{back}" />
+                <button class="btn btn-default" type="submit" th:text="#{user.login}" />
             </div>
         </form>
     </main>

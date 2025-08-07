@@ -7,33 +7,33 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="icon" th:href="@{/img/icon.png}">
 
-    <title th:text="#{user.profile.title}" />
+    <title th:text="#{user.profile}" />
 </head>
 <body>
     <header th:insert="~{header.html}"></header>
 
     <main>
         <div class="sign item-set-column flex-center">
-            <h1 th:text="#{user.profile.header}" />
+            <h1 th:text="#{user.profile}" />
 
             <div class="item-set-row flex-center">
-                <h2 th:text="#{user.profile.firstname} + ':'"></h2>
+                <h2 th:text="#{user.firstname} + ':'"></h2>
                 <p th:text="${firstName}" />
             </div>
 
             <div class="item-set-row flex-center">
-                <h2 th:text="#{user.profile.lastname} + ':'"></h2>
+                <h2 th:text="#{user.lastname} + ':'"></h2>
                 <p th:text="${lastName}" />
             </div>
 
             <div class="item-set-row flex-center">
-                <h2 th:text="#{user.profile.email} + ':'"></h2>
+                <h2 th:text="#{user.email} + ':'"></h2>
                 <p th:text="${email}" />
             </div>
 
             <div class="item-set-row flex-center">
-                <a class="btn btn-redirect" th:href="@{/}" th:text="#{button.back}" />
-                <a class="btn btn-default" th:href="@{/user/profile/edit}" th:text="#{button.edit}" />
+                <a class="btn btn-redirect" th:href="@{/}" th:text="#{back}" />
+                <a class="btn btn-default" th:href="@{/user/profile/edit}" th:text="#{edit}" />
             </div>
         </div>
     </main>

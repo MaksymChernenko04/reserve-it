@@ -7,16 +7,16 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="icon" th:href="@{/img/icon.png}">
 
-    <title th:text="#{manager.restaurants.title}"></title>
+    <title th:text="#{manager.restaurants}"></title>
 </head>
 <body>
     <header th:insert="~{header.html}"></header>
 
     <main>
         <div class="table">
-            <h1 th:text="#{manager.restaurants.header}" />
+            <h1 th:text="#{manager.restaurants}" />
 
-            <a class="btn btn-create" th:href="@{/manager/restaurant/create}" th:text="#{button.create}" />
+            <a class="btn btn-create" th:href="@{/manager/restaurant/create}" th:text="#{create}" />
 
             <table>
                 <thead>
@@ -24,7 +24,7 @@
                         <th>ID</th>
                         <th th:text="#{manager.restaurants.name}" />
                         <th th:text="#{manager.restaurants.address}" />
-                        <th th:text="#{manager.restaurants.action}" />
+                        <th th:text="#{action}" />
                     </tr>
                 </thead>
                 <tbody>
@@ -33,11 +33,11 @@
                         <td th:text="${restaurant.name}" />
                         <td th:text="${restaurant.address}" />
                         <td class="item-set-row">
-                            <a class="btn btn-redirect" th:href="@{/manager/restaurant/{id}/more(id=${restaurant.id})}" th:text="#{manager.restaurants.more}"></a>
+                            <a class="btn btn-redirect" th:href="@{/manager/restaurant/{id}/more(id=${restaurant.id})}" th:text="#{more}"></a>
 
                             <form th:action="@{/manager/restaurant/{id}/delete(id=${restaurant.id})}" method="post">
                                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                                <button type="submit" class="btn btn-delete" th:text="#{button.delete}" />
+                                <button type="submit" class="btn btn-delete" th:text="#{delete}" />
                             </form>
                         </td>
                     </tr>
