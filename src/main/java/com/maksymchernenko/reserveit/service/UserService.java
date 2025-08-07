@@ -12,6 +12,7 @@ public interface UserService {
     List<User> getAllUsers();
     List<Role> getAllRoles();
     User register(User user) throws UserAlreadyExistsException;
+    User updateUser(User user) throws UserNotFoundException;
     User getByEmail(String email) throws UserNotFoundException;
     void deleteUser(int id);
 }

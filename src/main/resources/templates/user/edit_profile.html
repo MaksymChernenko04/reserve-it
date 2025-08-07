@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="icon" th:href="@{/img/icon.png}">
+
+    <title th:text="#{user.profile.edit.title}" />
+</head>
+<body>
+    <header th:insert="~{header.html}"></header>
+
+    <main>
+        <div class="sign item-set-column flex-center">
+            <h1 th:text="#{user.profile.edit.header}" />
+
+            <form class="item-set-column flex-center" th:object="${user}" th:action="@{/user/profile/edit}" method="post">
+                <input type="hidden" th:field="*{id}" />
+                <label><input th:field="*{firstName}" type="text" th:placeholder="#{user.profile.edit.placeholder.firstname}" /></label>
+                <label><input th:field="*{lastName}" type="text" th:placeholder="#{user.profile.edit.placeholder.lastname}" /></label>
+
+                <button class="btn btn-default" type="submit" th:text="#{button.submit}" />
+            </form>
+
+            <hr />
+
+            <h1 th:text="#{user.profile.changepassword.header}" />
+            <form class="item-set-column flex-center" th:action="@{/user/profile/changepassword}" method="post">
+                <div th:if="${passwordChanged != null && passwordChanged}">
+                    <i class="message" th:text="#{user.profile.changepassword.success}"></i>
+                </div>
+
+                <div th:if="${passwordChanged != null && !passwordChanged}">
+                    <i class="error-message" th:text="#{user.profile.changepassword.error}"></i>
+                </div>
+
+                <label><input name="oldPassword" type="password" th:placeholder="#{user.profile.changepassword.placeholder.oldpassword}" /></label>
+                <label><input name="newPassword" type="password" th:placeholder="#{user.profile.changepassword.placeholder.newpassword}" /></label>
+
+                <button class="btn btn-default" type="submit" th:text="#{button.submit}" />
+            </form>
+
+            <hr />
+
+            <a class="btn btn-redirect" th:href="@{/user/profile}" th:text="#{button.back}" />
+        </div>
+    </main>
+
+    <footer th:insert="~{footer.html}"></footer>
+</body>
+</html>

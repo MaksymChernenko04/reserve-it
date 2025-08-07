@@ -4,6 +4,7 @@ import com.maksymchernenko.reserveit.exceptions.UserAlreadyExistsException;
 import com.maksymchernenko.reserveit.exceptions.UserNotFoundException;
 import com.maksymchernenko.reserveit.model.Role;
 import com.maksymchernenko.reserveit.model.User;
+import com.maksymchernenko.reserveit.model.dto.UserDTO;
 import com.maksymchernenko.reserveit.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -108,6 +109,66 @@ public class UserController {
             model.addAttribute("email", user.getEmail());
 
             return "user/profile";
+        } catch (UserNotFoundException e) {
+            return "redirect:/user/logout";
+        }
+    }
+
+    @GetMapping("/user/profile/edit")
+    public String getEditProfilePage(Model model,
+                                     Authentication authentication) {
+        String email = authentication.getName();
+        try {
+            User user = userService.getByEmail(email);
+
+            UserDTO userDTO = new UserDTO();
+            userDTO.setId(user.getId());
+            userDTO.setFirstName(user.getFirstName());
+            userDTO.setLastName(user.getLastName());
+
+            model.addAttribute("user", userDTO);
+
+            return "user/edit_profile";
+        } catch (UserNotFoundException e) {
+            return "redirect:/user/logout";
+        }
+    }
+
+    @PostMapping("/user/profile/edit")
+    public String editProfile(@ModelAttribute("user") UserDTO user,
+                              Authentication authentication) {
+        try {
+            User newUser = userService.getByEmail(authentication.getName());
+
+            newUser.setFirstName(user.getFirstName());
+            newUser.setLastName(user.getLastName());
+
+            userService.updateUser(newUser);
+
+            return "redirect:/user/profile";
+        } catch (UserNotFoundException e) {
+            return "redirect:/user/logout";
+        }
+    }
+
+    @PostMapping("/user/profile/changepassword")
+    public String changePassword(@RequestParam String oldPassword,
+                                 @RequestParam String newPassword,
+                                 Authentication authentication,
+                                 RedirectAttributes redirectAttributes) {
+        try {
+            User user = userService.getByEmail(authentication.getName());
+
+            if (!(user.getPassword()).equals("{noop}" + oldPassword)) {
+                redirectAttributes.addFlashAttribute("passwordChanged", false);
+            } else {
+                user.setPassword("{noop}" + newPassword);
+                userService.updateUser(user);
+
+                redirectAttributes.addFlashAttribute("passwordChanged", true);
+            }
+
+            return "redirect:/user/profile/edit";
         } catch (UserNotFoundException e) {
             return "redirect:/user/logout";
         }

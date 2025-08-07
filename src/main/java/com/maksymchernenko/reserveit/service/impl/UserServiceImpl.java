@@ -50,6 +50,14 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
+    public User updateUser(User user) throws UserNotFoundException {
+        this.getByEmail(user.getEmail());
+
+        return userRepository.save(user);
+    }
+
+    @Transactional
+    @Override
     public void deleteUser(int id) {
         userRepository.delete(id);
     }

@@ -31,7 +31,10 @@
                 <p th:text="${email}" />
             </div>
 
-            <a class="btn btn-redirect" th:href="@{/}" th:text="#{button.back}" />
+            <div class="item-set-row flex-center">
+                <a class="btn btn-redirect" th:href="@{/}" th:text="#{button.back}" />
+                <a class="btn btn-default" th:href="@{/user/profile/edit}" th:text="#{button.edit}" />
+            </div>
         </div>
     </main>
 
