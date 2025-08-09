@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="icon" th:href="@{/img/icon.png}">
+
+    <title th:text="#{client.reservations}"></title>
+</head>
+<body>
+    <header th:insert="~{header.html}"></header>
+
+    <main>
+        <div class="sign item-set-column flex-center">
+            <h1 th:text="#{client.reservations}" />
+
+            <a class="btn btn-create" th:text="#{client.reservations.create}" th:href="@{/client/reservations/create/submitrestaurant}" />
+
+            <section class="card-container">
+                <p th:if="${reservations.isEmpty()}" th:text="#{client.reservations.empty}" />
+
+                <div class="card" th:each="reservation : ${reservations}">
+                    <h2 th:text="'#' + ${reservation.getId()}" />
+
+                    <br />
+
+                    <div style="gap: 0.5rem" class="item-set-column">
+                        <p th:text="'Table #' + ${reservation.getTable().getNumber()}" />
+                        <p th:text="'Name: ' + ${reservation.getClient().getFirstName()}" />
+                        <p th:text="'Date: ' + ${(T(java.time.LocalDate).from(reservation.getDayTime()))}" />
+                        <p th:text="'Time: ' + ${(T(java.time.LocalTime).from(reservation.getDayTime()))}" />
+                        <p th:text="'Status: ' + ${reservation.getStatus()}" />
+                        <p th:text="'Guests Number: ' + ${reservation.getGuestsNumber()}" />
+                    </div>
+
+                    <br />
+
+                    <a class="btn btn-default" th:text="#{edit}" th:href="@{/client/reservations/{id}/edit(id=${reservation.getId()})}" />
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer th:insert="~{footer.html}"></footer>
+</body>
+</html>

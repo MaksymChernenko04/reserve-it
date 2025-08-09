@@ -101,6 +101,25 @@ hr {
     background-color: rgba(0, 0, 0, 0.75);
 }
 
+.card-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.card {
+    padding: 1rem;
+    max-width: 20vw;
+    max-height: 35vh;
+    min-width: 10vw;
+    background: rgb(113, 169, 255);
+    border-radius: 0.5rem;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
 .button-link {
     all: unset;
     cursor: pointer;

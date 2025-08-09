@@ -7,7 +7,7 @@ import java.util.Map;
 
 public interface WorkingTimeService {
     WorkingTime createWorkingTime(WorkingTime workingTime);
-    Map<DayOfWeek, WorkingTime> getWorkingTimeMap(long id);
+    Map<DayOfWeek, WorkingTime> getWorkingTimeMap(long restaurantId);
     void deleteAll(long restaurantId);
     void delete(long restaurantId, DayOfWeek day);
 }

@@ -51,6 +51,15 @@ public class RestaurantTableRepositoryImpl implements RestaurantTableRepository 
     }
 
     @Override
+    public List<RestaurantTable> getBySeatsNumber(long restaurantId, int minSeatsNumber) {
+        return entityManager.createQuery("FROM RestaurantTable WHERE restaurant.id = :restaurantId " +
+                        "AND seatsNumber >= :minSeatsNumber", RestaurantTable.class)
+                .setParameter("restaurantId", restaurantId)
+                .setParameter("minSeatsNumber", minSeatsNumber)
+                .getResultList();
+    }
+
+    @Override
     public void deleteAll(long restaurantId) {
         entityManager.createQuery("DELETE FROM RestaurantTable WHERE restaurant.id = :id")
                 .setParameter("id", restaurantId)

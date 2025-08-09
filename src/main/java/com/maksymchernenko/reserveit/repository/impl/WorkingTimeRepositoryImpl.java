@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +46,23 @@ public class WorkingTimeRepositoryImpl implements WorkingTimeRepository {
         }
 
         return workingTimeMap;
+    }
+
+    @Override
+    public List<WorkingTime> getByDaysNumber(long restaurantId, int daysNumber) {
+        DayOfWeek start = LocalDate.now().getDayOfWeek();
+        List<DayOfWeek> days = new ArrayList<>(daysNumber);
+        for (int i = 0; i < daysNumber; i++) {
+            days.add(start.plus(i));
+        }
+
+        return entityManager.createQuery(
+                        "SELECT wt FROM WorkingTime wt " +
+                                "WHERE wt.restaurant.id = :id AND wt.dayOfWeek IN :days " +
+                                "ORDER BY wt.dayOfWeek", WorkingTime.class)
+                .setParameter("id", restaurantId)
+                .setParameter("days", days)
+                .getResultList();
     }
 
     @Override
