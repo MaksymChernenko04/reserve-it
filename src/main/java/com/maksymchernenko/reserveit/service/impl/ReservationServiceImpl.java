@@ -70,7 +70,9 @@ public class ReservationServiceImpl implements ReservationService {
         }
 
         for (Reservation reservation : allReservations) {
-            if (map.containsKey(reservation.getTable())) {
+            if ((reservation.getStatus() == Reservation.Status.PENDING
+                    || reservation.getStatus() == Reservation.Status.RESERVED)
+                    && map.containsKey(reservation.getTable())) {
                 List<LocalDateTime> availableTimes = map.get(reservation.getTable());
                 removeDateTimes(availableTimes, reservation.getDayTime(), reservation.getDayTime().plusHours(RESERVATION_DURATION_OF_HOURS));
             }
