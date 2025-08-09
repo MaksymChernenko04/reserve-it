@@ -27,12 +27,14 @@
                     <br />
 
                     <div style="gap: 0.5rem" class="item-set-column">
+                        <p th:text="#{manager.restaurant} + ': ' + ${reservation.getTable().getRestaurant().getName()}" />
+                        <p th:text="#{manager.restaurants.address} + ': ' + ${reservation.getTable().getRestaurant().getAddress()}" />
                         <p th:text="#{client.reservations.table} + ' #' + ${reservation.getTable().getNumber()}" />
                         <p th:text="#{user.firstname} + ': ' + ${reservation.getClient().getFirstName()}" />
                         <p th:text="#{client.reservations.date} + ': ' + ${(T(java.time.LocalDate).from(reservation.getDayTime()))}" />
                         <p th:text="#{client.reservations.time} + ': ' + ${(T(java.time.LocalTime).from(reservation.getDayTime()))}" />
-                        <p th:text="#{client.reservations.status} + ': ' + #{${'status.' + reservation.getStatus().toString().toLowerCase()}}" />
                         <p th:text="#{client.reservations.guestsnumber} + ': ' + ${reservation.getGuestsNumber()}" />
+                        <p th:text="#{client.reservations.status} + ': ' + #{${'status.' + reservation.getStatus().toString().toLowerCase()}}" />
                     </div>
 
                     <br />
