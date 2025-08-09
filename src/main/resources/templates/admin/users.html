@@ -7,14 +7,14 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="icon" th:href="@{/img/icon.png}">
 
-    <title th:text="#{admin.users.title}"></title>
+    <title th:text="#{admin.users}"></title>
 </head>
 <body>
     <header th:insert="~{header.html}"></header>
 
     <main>
         <div class="table">
-            <h1 th:text="#{admin.users.header}" />
+            <h1 th:text="#{admin.users}" />
 
             <a class="btn btn-create" th:href="@{/admin/user/create}" th:text="#{admin.user.create}" />
 

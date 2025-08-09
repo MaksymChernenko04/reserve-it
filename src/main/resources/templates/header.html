@@ -16,14 +16,14 @@
             <li sec:authorize="!isAuthenticated()"><a th:href="@{/guest/login}" th:text="#{user.login}"></a></li>
 
             <!-- Admin -->
-            <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/admin/users}" th:text="#{header.admin.users}"></a></li>
+            <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/admin/users}" th:text="#{admin.users}"></a></li>
 
             <!-- Manager -->
-            <li sec:authorize="hasRole('MANAGER')"><a th:href="@{/manager/reservations}" th:text="#{header.reservations}"></a></li>
-            <li sec:authorize="hasRole('MANAGER')"><a th:href="@{/manager/restaurants}" th:text="#{header.manager.restaurants}"></a></li>
+            <li sec:authorize="hasRole('MANAGER')"><a th:href="@{/manager/reservations}" th:text="#{client.reservations}"></a></li>
+            <li sec:authorize="hasRole('MANAGER')"><a th:href="@{/manager/restaurants}" th:text="#{manager.restaurants}"></a></li>
 
             <!-- Client -->
-            <li sec:authorize="hasRole('CLIENT')"><a th:href="@{/client/reservations}" th:text="#{header.reservations}"></a></li>
+            <li sec:authorize="hasRole('CLIENT')"><a th:href="@{/client/reservations}" th:text="#{client.reservations}"></a></li>
             <li sec:authorize="hasRole('CLIENT')"><a th:href="@{/client/history}" th:text="#{header.client.history}"></a></li>
 
             <!-- User -->
