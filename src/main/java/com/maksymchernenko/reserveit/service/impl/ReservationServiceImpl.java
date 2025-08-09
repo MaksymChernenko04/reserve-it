@@ -1,5 +1,6 @@
 package com.maksymchernenko.reserveit.service.impl;
 
+import com.maksymchernenko.reserveit.exceptions.ReservationNotFoundException;
 import com.maksymchernenko.reserveit.model.Reservation;
 import com.maksymchernenko.reserveit.model.RestaurantTable;
 import com.maksymchernenko.reserveit.model.User;
@@ -83,6 +84,15 @@ public class ReservationServiceImpl implements ReservationService {
         return map;
     }
 
+    @Override
+    public Reservation getReservation(long id) {
+        if (reservationRepository.get(id).isEmpty()) {
+            throw new ReservationNotFoundException("Reservation with id " + id + " not found");
+        } else {
+            return reservationRepository.get(id).get();
+        }
+    }
+
     @Transactional
     @Override
     public boolean reserve(long restaurantId, LocalDateTime dateTime, int numberOfGuests, User client) {
@@ -101,6 +111,12 @@ public class ReservationServiceImpl implements ReservationService {
         reservationRepository.reserve(restaurantTable, client, status, dateTime, numberOfGuests);
 
         return true;
+    }
+
+    @Transactional
+    @Override
+    public void cancelReservation(long id) {
+        reservationRepository.cancelReservation(id);
     }
 
     private static Map<LocalTime, Integer> generateTimes(LocalTime start, LocalTime end) {

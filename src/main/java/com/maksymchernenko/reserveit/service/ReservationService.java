@@ -11,6 +11,7 @@ import java.util.Map;
 public interface ReservationService {
     List<Reservation> getByClient(User client);
     Map<RestaurantTable, List<LocalDateTime>> getAvailableTablesMap(long restaurantId, int numberOfGuests);
-
+    Reservation getReservation(long id);
     boolean reserve(long restaurantId, LocalDateTime dateTime, int numberOfGuests, User client);
+    void cancelReservation(long id);
 }

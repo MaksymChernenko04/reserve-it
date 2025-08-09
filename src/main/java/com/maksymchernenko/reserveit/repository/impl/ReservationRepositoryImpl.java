@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ReservationRepositoryImpl implements ReservationRepository {
@@ -34,11 +35,28 @@ public class ReservationRepositoryImpl implements ReservationRepository {
     }
 
     @Override
+    public Optional<Reservation> get(long id) {
+        List<Reservation> reservation = entityManager.createQuery("FROM Reservation WHERE id = :id", Reservation.class)
+                .setParameter("id", id)
+                .getResultList();
+
+        return reservation.isEmpty() ? Optional.empty() : Optional.of(reservation.get(0));
+    }
+
+    @Override
     public void reserve(RestaurantTable restaurantTable,
                            User client,
                            Reservation.Status status,
                            LocalDateTime dateTime,
                            int numberOfGuests) {
         entityManager.persist(new Reservation(restaurantTable, client, null, status, dateTime, numberOfGuests));
+    }
+
+    @Override
+    public void cancelReservation(long id) {
+        entityManager.createQuery("UPDATE Reservation r SET r.status = :status WHERE id = :id")
+                .setParameter("status", Reservation.Status.CANCELED)
+                .setParameter("id", id)
+                .executeUpdate();
     }
 }

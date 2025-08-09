@@ -92,4 +92,19 @@ public class ClientReservationController {
             return "redirect:/user/logout";
         }
     }
+
+    @GetMapping("/{id}/edit")
+    public String getEditReservationPage(Model model,
+                                         @PathVariable Long id) {
+        model.addAttribute("reservation", reservationService.getReservation(id));
+
+        return "client/edit_reservation";
+    }
+
+    @PostMapping("/{id}/cancel")
+    public String cancelReservation(@PathVariable Long id) {
+        reservationService.cancelReservation(id);
+
+        return "redirect:/client/reservations";
+    }
 }
