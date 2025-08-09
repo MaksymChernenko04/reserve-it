@@ -31,8 +31,6 @@ public class Reservation {
     @JoinColumn(name = "manager_id")
     private User manager;
 
-    @ManyToOne
-    @JoinColumn(name = "status_id")
     private Status status;
 
     @Column(name = "day_time")
@@ -41,11 +39,25 @@ public class Reservation {
     @Column(name = "guests_number")
     private Integer guestsNumber;
 
-    public Reservation(RestaurantTable table, User client, User manager, Status status, LocalDateTime dayTime) {
+    public Reservation(RestaurantTable table,
+                       User client,
+                       User manager,
+                       Status status,
+                       LocalDateTime dayTime,
+                       Integer guestsNumber) {
         this.table = table;
         this.client = client;
         this.manager = manager;
         this.status = status;
         this.dayTime = dayTime;
+        this.guestsNumber = guestsNumber;
+    }
+
+    @NoArgsConstructor
+    public enum Status {
+        PENDING,
+        RESERVED,
+        CANCELED,
+        FINISHED
     }
 }
