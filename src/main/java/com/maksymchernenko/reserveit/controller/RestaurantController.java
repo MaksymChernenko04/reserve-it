@@ -19,7 +19,7 @@ import java.time.LocalTime;
 import java.util.*;
 
 @Controller
-@RequestMapping()
+@RequestMapping("/manager")
 @SessionAttributes({"workingTimeMap", "tablesMap"})
 public class RestaurantController {
 
@@ -46,14 +46,14 @@ public class RestaurantController {
         return new HashMap<>();
     }
 
-    @GetMapping("/manager/restaurants")
+    @GetMapping("/restaurants")
     public String getAllRestaurantsPage(Model model) {
         model.addAttribute("restaurants", restaurantService.getAllRestaurants());
 
         return "manager/restaurants";
     }
 
-    @GetMapping("/manager/restaurant/{id}/more")
+    @GetMapping("/restaurant/{id}/more")
     public String getRestaurantPage(Model model,
                                     SessionStatus sessionStatus,
                                     @PathVariable long id) {
@@ -66,14 +66,14 @@ public class RestaurantController {
         return "manager/restaurant";
     }
 
-    @GetMapping("/manager/restaurant/create")
+    @GetMapping("/restaurant/create")
     public String getCreateRestaurantPage(Model model) {
         model.addAttribute("newRestaurant", new Restaurant());
 
         return "manager/create_restaurant";
     }
 
-    @PostMapping("/manager/restaurant/create")
+    @PostMapping("/restaurant/create")
     public String createRestaurant(@ModelAttribute Restaurant restaurant, RedirectAttributes redirectAttributes) {
         try {
             Restaurant saved = restaurantService.createRestaurant(restaurant);
@@ -87,7 +87,7 @@ public class RestaurantController {
         }
     }
 
-    @GetMapping("/manager/restaurant/tablesandtimes/create")
+    @GetMapping("/restaurant/tablesandtimes/create")
     public String getCreateTablesAndTimesPage(@RequestParam long id,
                                               @ModelAttribute("workingTimeMap") Map<DayOfWeek, WorkingTime> workingTimeMap,
                                               @ModelAttribute("tablesMap") Map<Integer, Integer> tablesMap,
@@ -107,7 +107,7 @@ public class RestaurantController {
         return "manager/create_tables_and_times";
     }
 
-    @PostMapping("/manager/restaurant/tablesandtimes/create")
+    @PostMapping("/restaurant/tablesandtimes/create")
     public String createTablesAndTimes(@RequestParam("id") long id,
                                        @ModelAttribute("workingTimeMap") Map<DayOfWeek, WorkingTime> workingTimeMap,
                                        @ModelAttribute("tablesMap") Map<Integer, Integer> tablesMap,
@@ -131,7 +131,7 @@ public class RestaurantController {
         return "redirect:/manager/restaurants";
     }
 
-    @PostMapping("/manager/restaurant/create/addttime")
+    @PostMapping("/restaurant/create/addttime")
     public String addTimeToRestaurant(@ModelAttribute WorkingTime newWorkingTime,
                                       @ModelAttribute("workingTimeMap") Map<DayOfWeek, WorkingTime> workingTimeMap,
                                       RedirectAttributes redirectAttributes) {
@@ -142,7 +142,7 @@ public class RestaurantController {
         return "redirect:/manager/restaurant/tablesandtimes/create";
     }
 
-    @PostMapping("/manager/restaurant/create/addtable")
+    @PostMapping("/restaurant/create/addtable")
     public String addTableToRestaurant(@ModelAttribute RestaurantTable newRestaurantTable,
                                        @RequestParam(required=false) Integer tablesNumber,
                                        @ModelAttribute("tablesMap") Map<Integer, Integer> tablesMap,
@@ -158,7 +158,7 @@ public class RestaurantController {
         return "redirect:/manager/restaurant/tablesandtimes/create";
     }
 
-    @PostMapping("/manager/restaurant/{id}/create/deletetime/{day}")
+    @PostMapping("/restaurant/{id}/create/deletetime/{day}")
     public String deleteTimeForCreateRestaurant(@PathVariable long id,
                                                 @PathVariable DayOfWeek day,
                                                 @ModelAttribute("workingTimeMap") Map<DayOfWeek, WorkingTime> workingTimeMap,
@@ -170,7 +170,7 @@ public class RestaurantController {
         return "redirect:/manager/restaurant/tablesandtimes/create";
     }
 
-    @GetMapping("/manager/restaurant/{id}/edit")
+    @GetMapping("/restaurant/{id}/edit")
     public String getEditRestaurantPage(@PathVariable long id,
                                         Model model,
                                         @ModelAttribute("workingTimeMap") Map<DayOfWeek, WorkingTime> workingTimeMap,
@@ -199,7 +199,7 @@ public class RestaurantController {
         return "manager/edit_restaurant";
     }
 
-    @PostMapping("/manager/restaurant/{id}/edit")
+    @PostMapping("/restaurant/{id}/edit")
     public String editRestaurant(@ModelAttribute Restaurant newRestaurant,
                                  @PathVariable long id,
                                  @ModelAttribute("workingTimeMap") Map<DayOfWeek, WorkingTime> workingTimeMap,
@@ -231,7 +231,7 @@ public class RestaurantController {
         return "redirect:/manager/restaurant/{id}/more";
     }
 
-    @PostMapping("/manager/restaurant/edittime")
+    @PostMapping("/restaurant/edittime")
     public String editTimeForRestaurant(@ModelAttribute WorkingTime newWorkingTime,
                                         @ModelAttribute("workingTimeMap") Map<DayOfWeek, WorkingTime> workingTimeMap,
                                         RedirectAttributes redirectAttributes) {
@@ -242,7 +242,7 @@ public class RestaurantController {
         return "redirect:/manager/restaurant/{id}/edit";
     }
 
-    @PostMapping("/manager/restaurant/edittable")
+    @PostMapping("/restaurant/edittable")
     public String editTableForRestaurant(@ModelAttribute RestaurantTable newRestaurantTable,
                                          @RequestParam(required=false) Integer tablesNumber,
                                          @ModelAttribute("tablesMap") Map<Integer, Integer> tablesMap,
@@ -259,7 +259,7 @@ public class RestaurantController {
         return "redirect:/manager/restaurant/{id}/edit";
     }
 
-    @PostMapping("/manager/restaurant/{id}/edit/deletetime/{day}")
+    @PostMapping("/restaurant/{id}/edit/deletetime/{day}")
     public String deleteTimeForEditRestaurant(@PathVariable long id,
                                           @PathVariable DayOfWeek day,
                                           @ModelAttribute("workingTimeMap") Map<DayOfWeek, WorkingTime> workingTimeMap,
@@ -272,7 +272,7 @@ public class RestaurantController {
         return "redirect:/manager/restaurant/{id}/edit";
     }
 
-    @PostMapping("/manager/restaurant/{id}/delete")
+    @PostMapping("/restaurant/{id}/delete")
     public String deleteRestaurant(@PathVariable long id) {
         restaurantService.deleteRestaurant(id);
 
