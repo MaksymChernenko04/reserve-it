@@ -22,10 +22,6 @@ import java.util.*;
 @Service
 public class ReservationServiceImpl implements ReservationService {
 
-    private static final int AVAILABLE_DAYS_FOR_RESERVATION = 3;
-    private static final int RESERVATION_DURATION_OF_HOURS = 2;
-    private static final int MINUTES_INTERVAL = 15;
-
     private final ReservationRepository reservationRepository;
     private final RestaurantTableRepository restaurantTableRepository;
     private final WorkingTimeRepository workingTimeRepository;
@@ -79,8 +75,6 @@ public class ReservationServiceImpl implements ReservationService {
             }
         }
 
-        map.values().forEach(list -> list.sort(Comparator.naturalOrder()));
-
         return map;
     }
 
@@ -109,6 +103,29 @@ public class ReservationServiceImpl implements ReservationService {
         }
 
         reservationRepository.reserve(restaurantTable, client, status, dateTime, numberOfGuests);
+
+        return true;
+    }
+
+    @Transactional
+    @Override
+    public boolean updateReservation(Reservation reservation) {
+        Reservation.Status status = Reservation.Status.PENDING;
+        reservation.setStatus(status);
+
+        RestaurantTable restaurantTable = null;
+        for (Map.Entry<RestaurantTable, List<LocalDateTime>> entry : getAvailableTablesMap(reservation.getTable().getRestaurant().getId(),
+                reservation.getGuestsNumber()).entrySet()) {
+            if (entry.getValue().contains(reservation.getDayTime())) {
+                restaurantTable = entry.getKey();
+            }
+        }
+
+        if (restaurantTable == null) {
+            return false;
+        }
+
+        reservationRepository.update(reservation);
 
         return true;
     }

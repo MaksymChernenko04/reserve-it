@@ -53,6 +53,11 @@ public class ReservationRepositoryImpl implements ReservationRepository {
     }
 
     @Override
+    public void update(Reservation reservation) {
+        entityManager.merge(reservation);
+    }
+
+    @Override
     public void cancelReservation(long id) {
         entityManager.createQuery("UPDATE Reservation r SET r.status = :status WHERE id = :id")
                 .setParameter("status", Reservation.Status.CANCELED)

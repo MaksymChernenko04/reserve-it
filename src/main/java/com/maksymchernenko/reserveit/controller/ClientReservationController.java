@@ -1,6 +1,7 @@
 package com.maksymchernenko.reserveit.controller;
 
 import com.maksymchernenko.reserveit.exceptions.UserNotFoundException;
+import com.maksymchernenko.reserveit.model.Reservation;
 import com.maksymchernenko.reserveit.model.RestaurantTable;
 import com.maksymchernenko.reserveit.model.User;
 import com.maksymchernenko.reserveit.service.ReservationService;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -63,13 +65,7 @@ public class ClientReservationController {
         Map<RestaurantTable, List<LocalDateTime>> availableTables = reservationService.getAvailableTablesMap(restaurantId, numberOfGuests);
         List<LocalDateTime> availableTimes = new ArrayList<>();
 
-        for (List<LocalDateTime> list : availableTables.values()) {
-            for (LocalDateTime time : list) {
-                if (!availableTimes.contains(time)) {
-                    availableTimes.add(time);
-                }
-            }
-        }
+        fillAndSortTimes(availableTables, availableTimes);
 
         model.addAttribute("availableTimes", availableTimes);
         model.addAttribute("restaurantId", restaurantId);
@@ -101,10 +97,61 @@ public class ClientReservationController {
         return "client/edit_reservation";
     }
 
+    @PostMapping("/{id}/edit/guestsnumber")
+    public String editNumberOfGuests(@PathVariable Long id,
+                                     @RequestParam Integer numberOfGuests,
+                                     Model model) {
+        Reservation reservation = reservationService.getReservation(id);
+
+        Map<RestaurantTable, List<LocalDateTime>> availableTables =
+                reservationService.getAvailableTablesMap(reservation.getTable().getRestaurant().getId(), numberOfGuests);
+
+        List<LocalDateTime> availableTimes = new ArrayList<>();
+
+        if (reservation.getTable().getSeatsNumber() >= numberOfGuests) {
+            for (int i = 0; i <= ReservationService.RESERVATION_DURATION_OF_HOURS * 60; i += 15) {
+                availableTimes.add(reservation.getDayTime().plusMinutes(i));
+            }
+        }
+
+        fillAndSortTimes(availableTables, availableTimes);
+
+        model.addAttribute("availableTimes", availableTimes);
+        model.addAttribute("numberOfGuests", numberOfGuests);
+        model.addAttribute("reservation", reservation);
+
+        return "client/edit_reservation";
+    }
+
+    @PostMapping("/{id}/edit")
+    public String editReservation(@PathVariable Long id,
+                                  @RequestParam LocalDateTime dateTime,
+                                  @RequestParam Integer numberOfGuests) {
+        Reservation reservation = reservationService.getReservation(id);
+        reservation.setGuestsNumber(numberOfGuests);
+        reservation.setDayTime(dateTime);
+
+        reservationService.updateReservation(reservation);
+
+        return "redirect:/client/reservations";
+    }
+
     @PostMapping("/{id}/cancel")
     public String cancelReservation(@PathVariable Long id) {
         reservationService.cancelReservation(id);
 
         return "redirect:/client/reservations";
+    }
+
+    private static void fillAndSortTimes(Map<RestaurantTable, List<LocalDateTime>> tablesMap, List<LocalDateTime> targetList) {
+        for (List<LocalDateTime> list : tablesMap.values()) {
+            for (LocalDateTime time : list) {
+                if (!targetList.contains(time)) {
+                    targetList.add(time);
+                }
+            }
+        }
+
+        targetList.sort(Comparator.naturalOrder());
     }
 }

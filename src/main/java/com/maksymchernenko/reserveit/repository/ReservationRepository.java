@@ -13,5 +13,6 @@ public interface ReservationRepository {
     List<Reservation> getByClient(User client);
     Optional<Reservation> get(long id);
     void reserve(RestaurantTable restaurantTable, User client, Reservation.Status status, LocalDateTime dateTime, int numberOfGuests);
+    void update(Reservation reservation);
     void cancelReservation(long id);
 }
