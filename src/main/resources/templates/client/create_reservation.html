@@ -7,14 +7,14 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="icon" th:href="@{/img/icon.png}">
 
-    <title th:text="#{client.reservations.create}"></title>
+    <title th:text="#{reservations.create}"></title>
 </head>
 <body>
     <header th:insert="~{header.html}"></header>
 
     <main>
         <div class="sign item-set-column">
-            <h1 th:text="#{client.reservations.create}" />
+            <h1 th:text="#{reservations.create}" />
 
             <form class="item-set-column" th:if="${availableTimes == null}" th:action="@{/client/reservations/create/submitrestaurant}" th:method="post">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
@@ -29,9 +29,9 @@
                 </div>
 
                 <div class="item-set-row">
-                    <h2 th:text="#{client.reservations.guestsnumber} + ': '" />
+                    <h2 th:text="#{reservations.guestsnumber} + ': '" />
 
-                    <label><input type="text" name="numberOfGuests" th:placeholder="#{client.reservations.guestsnumber}" required /></label>
+                    <label><input type="text" name="numberOfGuests" th:placeholder="#{reservations.guestsnumber}" required /></label>
                 </div>
 
                 <div class="item-set-row flex-center">
@@ -41,19 +41,19 @@
             </form>
 
             <div class="item-set-column flex-center" th:if="${availableTimes != null && availableTimes.isEmpty()}">
-                <p th:text="#{client.reservations.times.empty}" />
+                <p th:text="#{reservations.times.empty}" />
                 <a class="btn btn-redirect" th:text="#{back}" th:href="@{/client/reservations/create/submitrestaurant}" />
             </div>
 
             <form class="item-set-column flex-center" th:if="${availableTimes != null && !availableTimes.isEmpty()}" th:action="@{/client/reservations/create}" th:method="post">
                 <div class="item-set-row flex-center">
-                    <h2 th:text="#{client.reservations.time} + ': '" />
+                    <h2 th:text="#{reservations.time} + ': '" />
 
                     <input type="hidden" name="restaurantId" th:value="${restaurantId}" />
                     <input type="hidden" name="numberOfGuests" th:value="${numberOfGuests}" />
 
                     <label><select name="dateTime" required>
-                        <option value="" hidden selected th:text="#{client.reservations.time}" />
+                        <option value="" hidden selected th:text="#{reservations.time}" />
                         <option th:each="dateTime : ${availableTimes}"
                                 th:value="${dateTime}"
                                 th:text='${dateTime.format(T(java.time.format.DateTimeFormatter).ofPattern("yyyy-MM-dd HH:mm"))}' />

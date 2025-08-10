@@ -19,11 +19,11 @@
             <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/admin/users}" th:text="#{admin.users}"></a></li>
 
             <!-- Manager -->
-            <li sec:authorize="hasRole('MANAGER')"><a th:href="@{/manager/reservations}" th:text="#{client.reservations}"></a></li>
+            <li sec:authorize="hasRole('MANAGER')"><a th:href="@{/manager/reservations}" th:text="#{reservations}"></a></li>
             <li sec:authorize="hasRole('MANAGER')"><a th:href="@{/manager/restaurants}" th:text="#{manager.restaurants}"></a></li>
 
             <!-- Client -->
-            <li sec:authorize="hasRole('CLIENT')"><a th:href="@{/client/reservations}" th:text="#{client.reservations}"></a></li>
+            <li sec:authorize="hasRole('CLIENT')"><a th:href="@{/client/reservations}" th:text="#{reservations}"></a></li>
             <li sec:authorize="hasRole('CLIENT')"><a th:href="@{/client/reservations/history}" th:text="#{header.client.history}"></a></li>
 
             <!-- User -->

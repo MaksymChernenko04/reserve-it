@@ -7,17 +7,17 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="icon" th:href="@{/img/icon.png}">
 
-    <title th:text="#{client.reservations.history}"></title>
+    <title th:text="#{reservations.history}"></title>
 </head>
 <body>
     <header th:insert="~{header.html}"></header>
 
     <main>
         <div class="sign item-set-column flex-center">
-            <h1 th:text="#{client.reservations.history}" />
+            <h1 th:text="#{reservations.history}" />
 
             <section class="card-container">
-                <p th:if="${reservations.isEmpty()}" th:text="#{client.reservations.empty}" />
+                <p th:if="${reservations.isEmpty()}" th:text="#{reservations.empty}" />
 
                 <div class="card" th:each="reservation : ${reservations}">
                     <h2 th:text="'#' + ${reservation.getId()}" />
@@ -27,12 +27,12 @@
                     <div style="gap: 0.5rem" class="item-set-column">
                         <p th:text="#{manager.restaurant} + ': ' + ${reservation.getTable().getRestaurant().getName()}" />
                         <p th:text="#{manager.restaurants.address} + ': ' + ${reservation.getTable().getRestaurant().getAddress()}" />
-                        <p th:text="#{client.reservations.table} + ' #' + ${reservation.getTable().getNumber()}" />
+                        <p th:text="#{reservations.table} + ' #' + ${reservation.getTable().getNumber()}" />
                         <p th:text="#{user.firstname} + ': ' + ${reservation.getClient().getFirstName()}" />
-                        <p th:text="#{client.reservations.date} + ': ' + ${(T(java.time.LocalDate).from(reservation.getDayTime()))}" />
-                        <p th:text="#{client.reservations.time} + ': ' + ${(T(java.time.LocalTime).from(reservation.getDayTime()))}" />
-                        <p th:text="#{client.reservations.guestsnumber} + ': ' + ${reservation.getGuestsNumber()}" />
-                        <p th:text="#{client.reservations.status} + ': ' + #{${'status.' + reservation.getStatus().toString().toLowerCase()}}" />
+                        <p th:text="#{reservations.date} + ': ' + ${(T(java.time.LocalDate).from(reservation.getDayTime()))}" />
+                        <p th:text="#{reservations.time} + ': ' + ${(T(java.time.LocalTime).from(reservation.getDayTime()))}" />
+                        <p th:text="#{reservations.guestsnumber} + ': ' + ${reservation.getGuestsNumber()}" />
+                        <p th:text="#{reservations.status} + ': ' + #{${'status.' + reservation.getStatus().toString().toLowerCase()}}" />
                     </div>
                 </div>
             </section>

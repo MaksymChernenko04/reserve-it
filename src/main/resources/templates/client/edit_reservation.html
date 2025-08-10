@@ -7,36 +7,36 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="icon" th:href="@{/img/icon.png}">
 
-    <title th:text="#{client.reservations.edit}"></title>
+    <title th:text="#{reservations.edit}"></title>
 </head>
 <body>
     <header th:insert="~{header.html}"></header>
 
     <main>
         <div class="sign item-set-column flex-center">
-            <h1 th:text="#{client.reservations.edit}" />
+            <h1 th:text="#{reservations.edit}" />
 
             <form class="item-set-row flex-center" th:if="${availableTimes == null}" th:action="@{/client/reservations/{id}/edit/guestsnumber(id=${reservation.id})}" method="post">
-                <h2 th:text="#{client.reservations.guestsnumber} + ': '" />
+                <h2 th:text="#{reservations.guestsnumber} + ': '" />
 
-                <label><input type="text" name="numberOfGuests" th:placeholder="#{client.reservations.guestsnumber}" required /></label>
+                <label><input type="text" name="numberOfGuests" th:placeholder="#{reservations.guestsnumber}" required /></label>
 
                 <button class="btn btn-default" type="submit" th:text="#{submit}" />
             </form>
 
             <div class="item-set-column flex-center" th:if="${availableTimes != null && availableTimes.isEmpty()}">
-                <p th:text="#{client.reservations.times.empty}" />
+                <p th:text="#{reservations.times.empty}" />
                 <a class="btn btn-redirect" th:text="#{back}" th:href="@{/client/reservations/{id}/edit(id=${reservation.id})}" />
             </div>
 
             <div class="item-set-column flex-center" th:if="${availableTimes != null && !availableTimes.isEmpty()}">
                 <form class="item-set-row flex-center"
                       th:action="@{/client/reservations/{id}/edit(id=${reservation.id})}" method="post">
-                    <h2 th:text="#{client.reservations.newtime} + ': '" />
+                    <h2 th:text="#{reservations.newtime} + ': '" />
 
                     <input type="hidden" name="numberOfGuests" th:value="${numberOfGuests}" />
                     <label><select name="dateTime" required>
-                        <option value="" hidden selected th:text="#{client.reservations.time}" />
+                        <option value="" hidden selected th:text="#{reservations.time}" />
                         <option th:each="dateTime : ${availableTimes}"
                                 th:value="${dateTime}"
                                 th:text='${dateTime.format(T(java.time.format.DateTimeFormatter).ofPattern("yyyy-MM-dd HH:mm"))}' />
@@ -47,11 +47,11 @@
             </div>
             <hr />
             <div class="item-set-column flex-center" th:if="${availableTimes == null}">
-                <h2 th:text="#{client.reservations.cancel}" />
+                <h2 th:text="#{reservations.cancel}" />
 
                 <form th:action="@{/client/reservations/{id}/cancel(id=${reservation.id})}" method="post">
                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                    <button type="submit" class="btn btn-delete" th:text="#{client.reservations.cancel}" />
+                    <button type="submit" class="btn btn-delete" th:text="#{reservations.cancel}" />
                 </form>
 
                 <hr />
