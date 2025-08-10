@@ -16,6 +16,14 @@
         <div class="sign item-set-column flex-center">
             <h1 th:text="#{client.reservations}" />
 
+            <div th:if="${message != null && message.equals('Updating failed')}">
+                <i class="error-message" th:text="#{client.reservations.edit.error}" />
+            </div>
+
+            <div th:if="${message != null && message.equals('Creating failed')}">
+                <i class="error-message" th:text="#{client.reservations.create.error}" />
+            </div>
+
             <a class="btn btn-create" th:text="#{client.reservations.create}" th:href="@{/client/reservations/create/submitrestaurant}" />
 
             <section class="card-container">

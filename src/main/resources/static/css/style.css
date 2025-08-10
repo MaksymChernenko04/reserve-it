@@ -110,9 +110,8 @@ hr {
 
 .card {
     padding: 1rem;
-    max-width: 20vw;
-    max-height: 60vh;
-    min-width: 10vw;
+    width: 15vw;
+    max-height: 40vh;
     background: rgb(113, 169, 255);
     border-radius: 0.5rem;
     display: flex;

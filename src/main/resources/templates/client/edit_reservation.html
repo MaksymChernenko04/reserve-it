@@ -24,30 +24,38 @@
                 <button class="btn btn-default" type="submit" th:text="#{submit}" />
             </form>
 
-            <form class="item-set-row flex-center" th:if="${availableTimes != null}" th:action="@{/client/reservations/{id}/edit(id=${reservation.id})}" method="post">
-                <h2 th:text="#{client.reservations.newtime} + ': '" />
+            <div class="item-set-column flex-center" th:if="${availableTimes != null && availableTimes.isEmpty()}">
+                <p th:text="#{client.reservations.times.empty}" />
+                <a class="btn btn-redirect" th:text="#{back}" th:href="@{/client/reservations/{id}/edit(id=${reservation.id})}" />
+            </div>
 
-                <input type="hidden" name="numberOfGuests" th:value="${numberOfGuests}" />
-                <label><select name="dateTime" required>
-                    <option value="" hidden selected th:text="#{client.reservations.time}" />
-                    <option th:each="dateTime : ${availableTimes}"
-                            th:value="${dateTime}"
-                            th:text='${dateTime.format(T(java.time.format.DateTimeFormatter).ofPattern("yyyy-MM-dd HH:mm"))}' />
-                </select></label>
+            <div class="item-set-column flex-center" th:if="${availableTimes != null && !availableTimes.isEmpty()}">
+                <form class="item-set-row flex-center"
+                      th:action="@{/client/reservations/{id}/edit(id=${reservation.id})}" method="post">
+                    <h2 th:text="#{client.reservations.newtime} + ': '" />
 
-                <button class="btn btn-default" type="submit" th:text="#{submit}" />
-            </form>
+                    <input type="hidden" name="numberOfGuests" th:value="${numberOfGuests}" />
+                    <label><select name="dateTime" required>
+                        <option value="" hidden selected th:text="#{client.reservations.time}" />
+                        <option th:each="dateTime : ${availableTimes}"
+                                th:value="${dateTime}"
+                                th:text='${dateTime.format(T(java.time.format.DateTimeFormatter).ofPattern("yyyy-MM-dd HH:mm"))}' />
+                    </select></label>
 
+                    <button class="btn btn-default" type="submit" th:text="#{submit}" />
+                </form>
+            </div>
             <hr />
+            <div class="item-set-column flex-center" th:if="${availableTimes == null}">
+                <h2 th:text="#{client.reservations.cancel}" />
 
-            <h2 th:text="#{client.reservations.cancel}" />
+                <form th:action="@{/client/reservations/{id}/cancel(id=${reservation.id})}" method="post">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <button type="submit" class="btn btn-delete" th:text="#{client.reservations.cancel}" />
+                </form>
 
-            <form th:action="@{/client/reservations/{id}/cancel(id=${reservation.id})}" method="post">
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                <button type="submit" class="btn btn-delete" th:text="#{client.reservations.cancel}" />
-            </form>
-
-            <hr />
+                <hr />
+            </div>
 
             <a class="btn btn-redirect" th:text="#{back}" th:href="@{/client/reservations}" />
         </div>

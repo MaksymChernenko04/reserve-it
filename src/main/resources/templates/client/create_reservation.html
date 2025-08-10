@@ -40,7 +40,12 @@
                 </div>
             </form>
 
-            <form class="item-set-column flex-center" th:if="${availableTimes != null}" th:action="@{/client/reservations/create}" th:method="post">
+            <div class="item-set-column flex-center" th:if="${availableTimes != null && availableTimes.isEmpty()}">
+                <p th:text="#{client.reservations.times.empty}" />
+                <a class="btn btn-redirect" th:text="#{back}" th:href="@{/client/reservations/create/submitrestaurant}" />
+            </div>
+
+            <form class="item-set-column flex-center" th:if="${availableTimes != null && !availableTimes.isEmpty()}" th:action="@{/client/reservations/create}" th:method="post">
                 <div class="item-set-row flex-center">
                     <h2 th:text="#{client.reservations.time} + ': '" />
 

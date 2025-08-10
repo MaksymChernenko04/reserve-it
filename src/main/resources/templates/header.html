@@ -24,7 +24,7 @@
 
             <!-- Client -->
             <li sec:authorize="hasRole('CLIENT')"><a th:href="@{/client/reservations}" th:text="#{client.reservations}"></a></li>
-            <li sec:authorize="hasRole('CLIENT')"><a th:href="@{/client/history}" th:text="#{header.client.history}"></a></li>
+            <li sec:authorize="hasRole('CLIENT')"><a th:href="@{/client/reservations/history}" th:text="#{header.client.history}"></a></li>
 
             <!-- User -->
             <li sec:authorize="hasAnyRole('MANAGER', 'CLIENT')"><a th:href="@{/user/profile}" th:text="#{user.profile}"></a></li>
