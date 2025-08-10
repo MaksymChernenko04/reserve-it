@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ public class ClientReservationController {
         try {
             User client = userService.getByEmail(authentication.getName());
 
-            model.addAttribute("reservations", reservationService.getByClient(client));
+            model.addAttribute("reservations", reservationService.getActualByClient(client));
 
             return "client/reservations";
         } catch (UserNotFoundException e) {
@@ -78,10 +79,14 @@ public class ClientReservationController {
     public String createReservation(@RequestParam LocalDateTime dateTime,
                                     @RequestParam Integer numberOfGuests,
                                     @RequestParam Long restaurantId,
-                                    Authentication authentication) {
+                                    Authentication authentication,
+                                    RedirectAttributes redirectAttributes) {
         try {
             User client = userService.getByEmail(authentication.getName());
-            reservationService.reserve(restaurantId, dateTime, numberOfGuests, client);
+
+            if (!reservationService.reserve(restaurantId, dateTime, numberOfGuests, client)) {
+                redirectAttributes.addFlashAttribute("message", "Creating failed");
+            }
 
             return "redirect:/client/reservations";
         } catch (UserNotFoundException e) {
@@ -126,12 +131,15 @@ public class ClientReservationController {
     @PostMapping("/{id}/edit")
     public String editReservation(@PathVariable Long id,
                                   @RequestParam LocalDateTime dateTime,
-                                  @RequestParam Integer numberOfGuests) {
+                                  @RequestParam Integer numberOfGuests,
+                                  RedirectAttributes redirectAttributes) {
         Reservation reservation = reservationService.getReservation(id);
         reservation.setGuestsNumber(numberOfGuests);
         reservation.setDayTime(dateTime);
 
-        reservationService.updateReservation(reservation);
+        if (!reservationService.updateReservation(reservation)) {
+            redirectAttributes.addFlashAttribute("message", "Updating failed");
+        }
 
         return "redirect:/client/reservations";
     }
@@ -141,6 +149,19 @@ public class ClientReservationController {
         reservationService.cancelReservation(id);
 
         return "redirect:/client/reservations";
+    }
+
+    @GetMapping("/history")
+    public String getReservationHistoryPage(Model model,
+                                            Authentication authentication) {
+        try {
+            User client = userService.getByEmail(authentication.getName());
+            model.addAttribute("reservations", reservationService.getHistoryByClient(client));
+
+            return "client/reservations_history";
+        } catch (UserNotFoundException e) {
+            return "redirect:/user/logout";
+        }
     }
 
     private static void fillAndSortTimes(Map<RestaurantTable, List<LocalDateTime>> tablesMap, List<LocalDateTime> targetList) {

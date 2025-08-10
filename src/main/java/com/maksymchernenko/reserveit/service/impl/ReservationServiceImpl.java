@@ -35,9 +35,31 @@ public class ReservationServiceImpl implements ReservationService {
         this.workingTimeRepository = workingTimeRepository;
     }
 
+    @Transactional
     @Override
-    public List<Reservation> getByClient(User client) {
-        return reservationRepository.getByClient(client);
+    public List<Reservation> getActualByClient(User client) {
+        finishPassedReservations();
+        return reservationRepository.getByClientAndStatuses(client, List.of(Reservation.Status.PENDING, Reservation.Status.RESERVED));
+    }
+
+    @Transactional
+    @Override
+    public List<Reservation> getHistoryByClient(User client) {
+        finishPassedReservations();
+        return reservationRepository.getByClientAndStatuses(client, List.of(Reservation.Status.CANCELED, Reservation.Status.FINISHED));
+    }
+
+    private void finishPassedReservations() {
+        List<Reservation> reservations = reservationRepository.getAll();
+        for (Reservation reservation : reservations) {
+            if ((reservation.getStatus() == Reservation.Status.PENDING
+                    || reservation.getStatus() == Reservation.Status.RESERVED)
+                    && LocalDateTime.now().isAfter(reservation.getDayTime().plusHours(RESERVATION_DURATION_OF_HOURS))) {
+
+                reservation.setStatus(Reservation.Status.FINISHED);
+                reservationRepository.update(reservation);
+            }
+        }
     }
 
     @Override

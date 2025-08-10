@@ -14,7 +14,8 @@ public interface ReservationService {
     int RESERVATION_DURATION_OF_HOURS = 2;
     int MINUTES_INTERVAL = 15;
 
-    List<Reservation> getByClient(User client);
+    List<Reservation> getActualByClient(User client);
+    List<Reservation> getHistoryByClient(User client);
     Map<RestaurantTable, List<LocalDateTime>> getAvailableTablesMap(long restaurantId, int numberOfGuests);
     Reservation getReservation(long id);
     boolean reserve(long restaurantId, LocalDateTime dateTime, int numberOfGuests, User client);

@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface ReservationRepository {
     List<Reservation> getAll();
-    List<Reservation> getByClient(User client);
+    List<Reservation> getByClientAndStatuses(User client, List<Reservation.Status> statuses);
     Optional<Reservation> get(long id);
     void reserve(RestaurantTable restaurantTable, User client, Reservation.Status status, LocalDateTime dateTime, int numberOfGuests);
     void update(Reservation reservation);

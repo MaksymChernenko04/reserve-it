@@ -28,9 +28,10 @@ public class ReservationRepositoryImpl implements ReservationRepository {
     }
 
     @Override
-    public List<Reservation> getByClient(User client) {
-        return entityManager.createQuery("FROM Reservation WHERE client.id = :id", Reservation.class)
+    public List<Reservation> getByClientAndStatuses(User client, List<Reservation.Status> statuses) {
+        return entityManager.createQuery("FROM Reservation WHERE client.id = :id AND status IN :statuses", Reservation.class)
                 .setParameter("id", client.getId())
+                .setParameter("statuses", statuses)
                 .getResultList();
     }
 
