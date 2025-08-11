@@ -39,6 +39,7 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public List<Reservation> getActualByClient(User client) {
         finishPassedReservations();
+
         return reservationRepository.getByClientAndStatuses(client, List.of(Reservation.Status.PENDING, Reservation.Status.RESERVED));
     }
 
@@ -46,14 +47,39 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public List<Reservation> getHistoryByClient(User client) {
         finishPassedReservations();
+
         return reservationRepository.getByClientAndStatuses(client, List.of(Reservation.Status.CANCELED, Reservation.Status.FINISHED));
+    }
+
+    @Transactional
+    @Override
+    public List<Reservation> getAll() {
+        finishPassedReservations();
+
+        return reservationRepository.getAll();
+    }
+
+    @Transactional
+    @Override
+    public List<Reservation> getAll(String filter, User manager) {
+        finishPassedReservations();
+
+        List<Reservation> reservations =  reservationRepository.getAll();
+        reservations.removeIf(reservation -> reservation.getManager() != null && !reservation.getManager().equals(manager));
+        switch (filter) {
+            case "status" -> reservations.sort(Comparator.comparing(Reservation::getStatus));
+            case "dateTime" -> reservations.sort(Comparator.comparing(Reservation::getDayTime));
+            case "restaurant" -> reservations.sort(Comparator.comparing(r -> r.getTable().getRestaurant().getName()));
+            default -> {}
+        }
+
+        return reservations;
     }
 
     private void finishPassedReservations() {
         List<Reservation> reservations = reservationRepository.getAll();
         for (Reservation reservation : reservations) {
-            if ((reservation.getStatus() == Reservation.Status.PENDING
-                    || reservation.getStatus() == Reservation.Status.RESERVED)
+            if (reservation.getStatus() == Reservation.Status.RESERVED
                     && LocalDateTime.now().isAfter(reservation.getDayTime().plusHours(RESERVATION_DURATION_OF_HOURS))) {
 
                 reservation.setStatus(Reservation.Status.FINISHED);
@@ -156,6 +182,15 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public void cancelReservation(long id) {
         reservationRepository.cancelReservation(id);
+    }
+
+    @Transactional
+    @Override
+    public void submitReservation(long id, User manager) {
+        Reservation reservation = this.getReservation(id);
+        reservation.setStatus(Reservation.Status.RESERVED);
+        reservation.setManager(manager);
+        reservationRepository.update(reservation);
     }
 
     private static Map<LocalTime, Integer> generateTimes(LocalTime start, LocalTime end) {
