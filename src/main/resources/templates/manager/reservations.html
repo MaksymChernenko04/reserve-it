@@ -16,7 +16,7 @@
         <div class="sign item-set-column flex-center">
             <h1 th:text="#{reservations}" />
 
-            <form class="item-set-row flex-center" th:action="@{/manager/reservations/filter}" method="post">
+            <form th:if="${!reservations.isEmpty()}" class="item-set-row flex-center" th:action="@{/manager/reservations/filter}" method="post">
                 <label><select name="filterAttribute">
                     <option value="" hidden selected th:text="#{filterby}" />
 
@@ -38,9 +38,9 @@
                     <br />
 
                     <div style="gap: 0.5rem" class="item-set-column">
-                        <p th:text="#{manager.restaurant} + ': ' + ${reservation.getTable().getRestaurant().getName()}" />
-                        <p th:text="#{manager.restaurants.address} + ': ' + ${reservation.getTable().getRestaurant().getAddress()}" />
-                        <p th:text="#{reservations.table} + ' #' + ${reservation.getTable().getNumber()}" />
+                        <p th:if="${reservation.getTable() != null}" th:text="#{manager.restaurant} + ': ' + ${reservation.getTable().getRestaurant().getName()}" />
+                        <p th:if="${reservation.getTable() != null}" th:text="#{manager.restaurants.address} + ': ' + ${reservation.getTable().getRestaurant().getAddress()}" />
+                        <p th:if="${reservation.getTable() != null}" th:text="#{reservations.table} + ' #' + ${reservation.getTable().getNumber()}" />
                         <p th:text="#{user.firstname} + ': ' + ${reservation.getClient().getFirstName()}" />
                         <p th:text="#{reservations.date} + ': ' + ${(T(java.time.LocalDate).from(reservation.getDayTime()))}" />
                         <p th:text="#{reservations.time} + ': ' + ${(T(java.time.LocalTime).from(reservation.getDayTime()))}" />

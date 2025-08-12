@@ -16,7 +16,7 @@
         <div class="table">
             <h1 th:text="#{manager.restaurants}" />
 
-            <a class="btn btn-create" th:href="@{/manager/restaurant/create}" th:text="#{create}" />
+            <a class="btn btn-create" th:href="@{/manager/restaurants/create}" th:text="#{create}" />
 
             <table>
                 <thead>
@@ -33,9 +33,9 @@
                         <td th:text="${restaurant.name}" />
                         <td th:text="${restaurant.address}" />
                         <td class="item-set-row">
-                            <a class="btn btn-redirect" th:href="@{/manager/restaurant/{id}/more(id=${restaurant.id})}" th:text="#{more}"></a>
+                            <a class="btn btn-redirect" th:href="@{/manager/restaurants/{id}(id=${restaurant.id})}" th:text="#{more}"></a>
 
-                            <form th:action="@{/manager/restaurant/{id}/delete(id=${restaurant.id})}" method="post">
+                            <form th:action="@{/manager/restaurants/{id}/delete(id=${restaurant.id})}" method="post">
                                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                                 <button type="submit" class="btn btn-delete" th:text="#{delete}" />
                             </form>

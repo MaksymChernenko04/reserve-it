@@ -2,10 +2,10 @@ package com.maksymchernenko.reserveit.service;
 
 import com.maksymchernenko.reserveit.model.RestaurantTable;
 
-import java.util.Map;
+import java.util.List;
 
 public interface RestaurantTableService {
     RestaurantTable createTable(RestaurantTable restaurantTable);
-    Map<Integer, Integer> getTableMap(long restaurantId);
-    void deleteAll(long restaurantId);
+    List<RestaurantTable> getTables(long restaurantId);
+    boolean delete(long id);
 }

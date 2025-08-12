@@ -24,7 +24,8 @@ public class ReservationRepositoryImpl implements ReservationRepository {
 
     @Override
     public List<Reservation> getAll() {
-        return entityManager.createQuery("FROM Reservation", Reservation.class).getResultList();
+        return entityManager.createQuery("FROM Reservation", Reservation.class)
+                .getResultList();
     }
 
     @Override
@@ -42,6 +43,13 @@ public class ReservationRepositoryImpl implements ReservationRepository {
                 .getResultList();
 
         return reservation.isEmpty() ? Optional.empty() : Optional.of(reservation.get(0));
+    }
+
+    @Override
+    public List<Reservation> getByTableId(long tableId) {
+        return entityManager.createQuery("FROM Reservation WHERE table.id = :id", Reservation.class)
+                .setParameter("id", tableId)
+                .getResultList();
     }
 
     @Override
@@ -63,6 +71,13 @@ public class ReservationRepositoryImpl implements ReservationRepository {
         entityManager.createQuery("UPDATE Reservation r SET r.status = :status WHERE id = :id")
                 .setParameter("status", Reservation.Status.CANCELED)
                 .setParameter("id", id)
+                .executeUpdate();
+    }
+
+    @Override
+    public void deleteTables(long tableId) {
+        entityManager.createQuery("UPDATE Reservation SET table = null WHERE table.id = :id")
+                .setParameter("id", tableId)
                 .executeUpdate();
     }
 }

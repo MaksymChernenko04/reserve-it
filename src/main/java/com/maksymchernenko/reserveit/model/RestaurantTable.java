@@ -31,8 +31,5 @@ public class RestaurantTable {
     public RestaurantTable(Restaurant restaurant, Integer seatsNumber) {
         this.restaurant = restaurant;
         this.seatsNumber = seatsNumber;
-
-        restaurant.setNumberOfTables(restaurant.getNumberOfTables() + 1);
-        number = restaurant.getNumberOfTables();
     }
 }

@@ -6,9 +6,8 @@ import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class RestaurantTableRepositoryImpl implements RestaurantTableRepository {
@@ -32,22 +31,19 @@ public class RestaurantTableRepositoryImpl implements RestaurantTableRepository 
     }
 
     @Override
-    public Map<Integer, Integer> getTableMap(long restaurantId) {
-        List<Object[]> rows = entityManager.createQuery("SELECT table.seatsNumber, COUNT(table) " +
-                        "FROM RestaurantTable table " +
-                        "WHERE table.restaurant.id = :id " +
-                        "GROUP BY table.seatsNumber", Object[].class)
-                .setParameter("id", restaurantId)
+    public Optional<RestaurantTable> get(long id) {
+        List<RestaurantTable> table = entityManager.createQuery("FROM RestaurantTable WHERE id = :id", RestaurantTable.class)
+                .setParameter("id", id)
                 .getResultList();
 
-        Map<Integer,Integer> result = new LinkedHashMap<>();
-        for (Object[] row : rows) {
-            Integer seatsNumber = (Integer) row[0];
-            Long countLong = (Long) row[1];
-            result.put(seatsNumber, countLong.intValue());
-        }
+        return table.isEmpty() ? Optional.empty() : Optional.of(table.get(0));
+    }
 
-        return result;
+    @Override
+    public List<RestaurantTable> getTables(long restaurantId) {
+        return entityManager.createQuery("FROM RestaurantTable table WHERE table.restaurant.id = :id ", RestaurantTable.class)
+                .setParameter("id", restaurantId)
+                .getResultList();
     }
 
     @Override
@@ -60,9 +56,16 @@ public class RestaurantTableRepositoryImpl implements RestaurantTableRepository 
     }
 
     @Override
-    public void deleteAll(long restaurantId) {
-        entityManager.createQuery("DELETE FROM RestaurantTable WHERE restaurant.id = :id")
-                .setParameter("id", restaurantId)
+    public void delete(long id) {
+        entityManager.createQuery("DELETE FROM RestaurantTable WHERE id = :id")
+                .setParameter("id", id)
                 .executeUpdate();
+    }
+
+    @Override
+    public List<Integer> getTableNumbers(long restaurantId) {
+        return entityManager.createQuery("SELECT number FROM RestaurantTable WHERE restaurant.id = :id", Integer.class)
+                .setParameter("id", restaurantId)
+                .getResultList();
     }
 }
