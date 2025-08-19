@@ -6,6 +6,7 @@ import com.maksymchernenko.reserveit.model.Role;
 import com.maksymchernenko.reserveit.model.User;
 import com.maksymchernenko.reserveit.repository.UserRepository;
 import com.maksymchernenko.reserveit.service.UserService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,10 +18,12 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -44,6 +47,12 @@ public class UserServiceImpl implements UserService {
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new UserAlreadyExistsException("User with given email already exists");
         } else {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+            if (user.getRole() == null) {
+                user.setRole(userRepository.findRoleByName("ROLE_CLIENT").orElseThrow());
+            }
+
             return userRepository.save(user);
         }
     }
@@ -54,6 +63,18 @@ public class UserServiceImpl implements UserService {
         this.getByEmail(user.getEmail());
 
         return userRepository.save(user);
+    }
+
+    @Transactional
+    @Override
+    public boolean updatePassword(User user, String oldPassword, String newPassword) {
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) return false;
+        else {
+            user.setPassword(passwordEncoder.encode(newPassword));
+            userRepository.save(user);
+
+            return true;
+        }
     }
 
     @Transactional

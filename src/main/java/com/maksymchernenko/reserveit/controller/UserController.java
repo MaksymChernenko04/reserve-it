@@ -159,14 +159,9 @@ public class UserController {
         try {
             User user = userService.getByEmail(authentication.getName());
 
-            if (!(user.getPassword()).equals("{noop}" + oldPassword)) {
-                redirectAttributes.addFlashAttribute("passwordChanged", false);
-            } else {
-                user.setPassword("{noop}" + newPassword);
-                userService.updateUser(user);
+            boolean passwordChanged = userService.updatePassword(user, oldPassword, newPassword);
 
-                redirectAttributes.addFlashAttribute("passwordChanged", true);
-            }
+            redirectAttributes.addFlashAttribute("passwordChanged", passwordChanged);
 
             return "redirect:/user/profile/edit";
         } catch (UserNotFoundException e) {
