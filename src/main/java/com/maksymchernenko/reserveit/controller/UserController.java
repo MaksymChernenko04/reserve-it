@@ -6,11 +6,8 @@ import com.maksymchernenko.reserveit.model.Role;
 import com.maksymchernenko.reserveit.model.User;
 import com.maksymchernenko.reserveit.model.dto.UserDTO;
 import com.maksymchernenko.reserveit.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -52,13 +49,6 @@ public class UserController {
         model.addAttribute("user", new User());
 
         return "guest/login";
-    }
-
-    @PostMapping("/user/logout")
-    public String logoutUser(HttpServletRequest req, HttpServletResponse res, Authentication auth) {
-        new SecurityContextLogoutHandler().logout(req, res, auth);
-
-        return "redirect:/";
     }
 
     @GetMapping("/admin/users")
