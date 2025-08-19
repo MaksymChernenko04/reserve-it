@@ -40,6 +40,7 @@
                         <td th:each="day : ${T(java.time.DayOfWeek).values()}" th:if="${workingTimeMap.get(day) != null}">
                             <form th:action="@{/manager/restaurants/create/{id}/deletetime/{day}(id=${restaurant.id}, day=${day})}" method="post">
                                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
                                 <button type="submit" class="btn btn-delete" th:text="#{delete}" />
                             </form>
                         </td>
@@ -52,6 +53,8 @@
 
             <form class="item-set-row flex-center" th:object="${newWorkingTime}"
                   th:action="@{/manager/restaurants/create/{id}/addtime(id=${newWorkingTime.restaurant.id})}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
                 <label><select name="day" th:field="*{dayOfWeek}" required>
                     <option value="" hidden selected th:text="#{manager.tablesandtimes.create.form.day}" />
                     <option th:each="day : ${T(java.time.DayOfWeek).values()}" th:value="${day}" th:text="#{${'weekday.' + day.name().toLowerCase()}}" />
@@ -100,6 +103,7 @@
                             <form th:action="@{/manager/restaurants/{restaurantId}/create/tables/{tableId}/delete(restaurantId=${table.restaurant.id}, tableId=${table.id})}"
                                   method="post">
                                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
                                 <button type="submit" class="btn btn-delete" th:text="#{delete}" />
                             </form>
                         </td>
@@ -112,6 +116,8 @@
 
             <form class="item-set-row flex-center" th:object="${newRestaurantTable}"
                   th:action="@{/manager/restaurants/create/{id}/addtable(id=${newRestaurantTable.restaurant.id})}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
                 <label><input th:placeholder="#{manager.tablesandtimes.create.form.placeholder.seatsnumber}" type="text" th:field="*{seatsNumber}" required /></label>
                 <label><input th:placeholder="#{manager.tablesandtimes.create.form.placeholder.tablesnumber}" type="text" name="tablesNumber" required /></label>
 

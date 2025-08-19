@@ -50,6 +50,7 @@
             <h1 th:text="#{manager.tablesandtimes.createtime.header}" />
 
             <form class="item-set-row flex-center" th:object="${newWorkingTime}" th:action="@{/manager/restaurants/{id}/edit/addtime(id=${newWorkingTime.restaurant.id})}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                 <input type="hidden" th:field="*{restaurant.id}" />
 
                 <label><select name="day" th:field="*{dayOfWeek}" required>
@@ -110,6 +111,7 @@
             <h1 th:text="#{manager.tablesandtimes.createtable.header}" />
 
             <form class="item-set-row flex-center" th:object="${newRestaurantTable}" th:action="@{/manager/restaurants/{id}/edit/addtable(id=${newRestaurantTable.restaurant.id})}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                 <input type="hidden" th:field="*{restaurant.id}" />
 
                 <label><input th:placeholder="#{manager.tablesandtimes.create.form.placeholder.seatsnumber}" type="text" th:field="*{seatsNumber}" required /></label>
@@ -123,6 +125,8 @@
             <h1 th:text="#{manager.restaurant}" />
 
             <form class="item-set-column flex-center" th:object="${newRestaurant}" th:action="@{/manager/restaurants/{id}/edit(id=${newRestaurant.id})}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
                 <div class="item-set-row">
                     <h3 th:text="#{manager.restaurants.name} + ':'" />
                     <label><input th:field="*{name}" required /></label>

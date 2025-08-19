@@ -46,6 +46,8 @@
             </div>
 
             <form class="item-set-column flex-center" th:if="${availableTimes != null && !availableTimes.isEmpty()}" th:action="@{/client/reservations/create}" th:method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
                 <div class="item-set-row flex-center">
                     <h2 th:text="#{reservations.time} + ': '" />
 

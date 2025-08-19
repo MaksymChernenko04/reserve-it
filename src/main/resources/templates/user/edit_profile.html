@@ -17,7 +17,9 @@
             <h1 th:text="#{user.profile.edit}" />
 
             <form class="item-set-column flex-center" th:object="${user}" th:action="@{/user/profile/edit}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                 <input type="hidden" th:field="*{id}" />
+
                 <label><input th:field="*{firstName}" type="text" th:placeholder="#{user.profile.edit.placeholder.firstname}" /></label>
                 <label><input th:field="*{lastName}" type="text" th:placeholder="#{user.profile.edit.placeholder.lastname}" /></label>
 
@@ -28,6 +30,8 @@
 
             <h1 th:text="#{user.profile.changepassword.header}" />
             <form class="item-set-column flex-center" th:action="@{/user/profile/changepassword}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
                 <div th:if="${passwordChanged != null && passwordChanged}">
                     <i class="message" th:text="#{user.profile.changepassword.success}"></i>
                 </div>
