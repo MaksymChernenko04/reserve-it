@@ -126,8 +126,12 @@ hr {
     text-decoration: none;
 }
 
-.sign h1, h2, h3, p {
+.sign h1, .sign h2, .sign h3, .sign p {
     color: white;
+}
+
+.sign .error-message {
+    color: #ec1c1c;
 }
 
 ::selection {
