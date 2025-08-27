@@ -37,8 +37,8 @@
                     </tr>
 
                     <tr>
-                        <td th:each="day : ${T(java.time.DayOfWeek).values()}" th:if="${workingTimeMap.get(day) != null}">
-                            <form th:action="@{/manager/restaurants/create/{id}/deletetime/{day}(id=${restaurant.id}, day=${day})}" method="post">
+                        <td th:each="day : ${T(java.time.DayOfWeek).values()}">
+                            <form th:if="${workingTimeMap.containsKey(day)}" th:action="@{/manager/restaurants/create/{id}/deletetime/{day}(id=${restaurant.id}, day=${day})}" method="post">
                                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
                                 <button type="submit" class="btn btn-delete" th:text="#{delete}" />
