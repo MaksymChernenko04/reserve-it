@@ -63,7 +63,8 @@ public class ClientReservationController {
     public String submitRestaurant(@RequestParam Long restaurantId,
                                    @RequestParam Integer numberOfGuests,
                                    Model model) {
-        Map<RestaurantTable, List<LocalDateTime>> availableTables = reservationService.getAvailableTablesMap(restaurantId, numberOfGuests);
+        Map<RestaurantTable, List<LocalDateTime>> availableTables =
+                reservationService.getAvailableTablesMap(restaurantId, numberOfGuests);
         List<LocalDateTime> availableTimes = new ArrayList<>();
 
         fillAndSortTimes(availableTables, availableTimes);
@@ -164,7 +165,9 @@ public class ClientReservationController {
         }
     }
 
-    private static void fillAndSortTimes(Map<RestaurantTable, List<LocalDateTime>> tablesMap, List<LocalDateTime> targetList) {
+    private static void fillAndSortTimes(Map<RestaurantTable,
+                                         List<LocalDateTime>> tablesMap,
+                                         List<LocalDateTime> targetList) {
         for (List<LocalDateTime> list : tablesMap.values()) {
             for (LocalDateTime time : list) {
                 if (!targetList.contains(time)) {

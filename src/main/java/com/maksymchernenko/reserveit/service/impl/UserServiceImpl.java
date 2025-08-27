@@ -21,7 +21,8 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository,
+                           PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -59,15 +60,17 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public User updateUser(User user) throws UserNotFoundException {
+    public void updateUser(User user) throws UserNotFoundException {
         this.getByEmail(user.getEmail());
 
-        return userRepository.save(user);
+        userRepository.save(user);
     }
 
     @Transactional
     @Override
-    public boolean updatePassword(User user, String oldPassword, String newPassword) {
+    public boolean updatePassword(User user,
+                                  String oldPassword,
+                                  String newPassword) {
         if (!passwordEncoder.matches(oldPassword, user.getPassword())) return false;
         else {
             user.setPassword(passwordEncoder.encode(newPassword));

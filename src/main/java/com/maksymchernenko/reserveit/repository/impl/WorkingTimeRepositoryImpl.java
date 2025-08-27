@@ -49,7 +49,8 @@ public class WorkingTimeRepositoryImpl implements WorkingTimeRepository {
     }
 
     @Override
-    public List<WorkingTime> getByDaysNumber(long restaurantId, int daysNumber) {
+    public List<WorkingTime> getByDaysNumber(long restaurantId,
+                                             int daysNumber) {
         DayOfWeek start = LocalDate.now().getDayOfWeek();
         List<DayOfWeek> days = new ArrayList<>(daysNumber);
         for (int i = 0; i < daysNumber; i++) {
@@ -66,14 +67,8 @@ public class WorkingTimeRepositoryImpl implements WorkingTimeRepository {
     }
 
     @Override
-    public void deleteAll(long restaurantId) {
-        entityManager.createQuery("DELETE FROM WorkingTime WHERE restaurant.id = :id")
-                .setParameter("id", restaurantId)
-                .executeUpdate();
-    }
-
-    @Override
-    public void delete(long restaurantId, DayOfWeek day) {
+    public void delete(long restaurantId,
+                       DayOfWeek day) {
         entityManager.createQuery("DELETE FROM WorkingTime WHERE restaurant.id = :id AND dayOfWeek = :day")
                 .setParameter("id", restaurantId)
                 .setParameter("day", day)

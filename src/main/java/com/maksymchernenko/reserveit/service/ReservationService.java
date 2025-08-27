@@ -16,7 +16,6 @@ public interface ReservationService {
 
     List<Reservation> getActualByClient(User client);
     List<Reservation> getHistoryByClient(User client);
-    List<Reservation> getAll();
     List<Reservation> getAll(String filter, User manager);
     Map<RestaurantTable, List<LocalDateTime>> getAvailableTablesMap(long restaurantId, int numberOfGuests);
     Reservation getReservation(long id);

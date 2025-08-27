@@ -11,6 +11,6 @@ public interface RestaurantService {
     Restaurant getRestaurant(long id);
     Restaurant getRestaurant(String name);
     Restaurant createRestaurant(Restaurant restaurant) throws RestaurantAlreadyExistsException;
-    Restaurant updateRestaurant(Restaurant restaurant);
+    void updateRestaurant(Restaurant restaurant);
     void deleteRestaurant(long id);
 }

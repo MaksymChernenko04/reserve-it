@@ -46,8 +46,8 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Transactional
     @Override
-    public Restaurant updateRestaurant(Restaurant restaurant) {
-        return restaurantRepository.update(restaurant);
+    public void updateRestaurant(Restaurant restaurant) {
+        restaurantRepository.update(restaurant);
     }
 
     @Transactional

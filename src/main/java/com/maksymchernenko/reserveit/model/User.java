@@ -36,7 +36,12 @@ public class User {
     @Column(name = "last_name")
     private String lastName;
 
-    public User(Role role, String email, String password, Boolean active, String firstName, String lastName) {
+    public User(Role role,
+                String email,
+                String password,
+                Boolean active,
+                String firstName,
+                String lastName) {
         this.role = role;
         this.email = email;
         this.password = password;

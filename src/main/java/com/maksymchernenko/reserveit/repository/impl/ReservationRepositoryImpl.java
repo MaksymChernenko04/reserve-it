@@ -29,7 +29,8 @@ public class ReservationRepositoryImpl implements ReservationRepository {
     }
 
     @Override
-    public List<Reservation> getByClientAndStatuses(User client, List<Reservation.Status> statuses) {
+    public List<Reservation> getByClientAndStatuses(User client,
+                                                    List<Reservation.Status> statuses) {
         return entityManager.createQuery("FROM Reservation WHERE client.id = :id AND status IN :statuses", Reservation.class)
                 .setParameter("id", client.getId())
                 .setParameter("statuses", statuses)
@@ -54,10 +55,10 @@ public class ReservationRepositoryImpl implements ReservationRepository {
 
     @Override
     public void reserve(RestaurantTable restaurantTable,
-                           User client,
-                           Reservation.Status status,
-                           LocalDateTime dateTime,
-                           int numberOfGuests) {
+                        User client,
+                        Reservation.Status status,
+                        LocalDateTime dateTime,
+                        int numberOfGuests) {
         entityManager.persist(new Reservation(restaurantTable, client, null, status, dateTime, numberOfGuests));
     }
 

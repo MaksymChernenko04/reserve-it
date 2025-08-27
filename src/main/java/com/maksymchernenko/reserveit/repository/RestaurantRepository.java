@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface RestaurantRepository {
 
     Restaurant save(Restaurant restaurant);
-    Restaurant update(Restaurant restaurant);
+    void update(Restaurant restaurant);
     void remove(long id);
     List<Restaurant> getAll();
     Optional<Restaurant> getRestaurant(long id);

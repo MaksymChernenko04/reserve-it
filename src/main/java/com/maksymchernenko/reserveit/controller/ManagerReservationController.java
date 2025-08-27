@@ -18,7 +18,8 @@ public class ManagerReservationController {
     private final UserService userService;
 
     @Autowired
-    public ManagerReservationController(ReservationService reservationService, UserService userService) {
+    public ManagerReservationController(ReservationService reservationService,
+                                        UserService userService) {
         this.reservationService = reservationService;
         this.userService = userService;
     }

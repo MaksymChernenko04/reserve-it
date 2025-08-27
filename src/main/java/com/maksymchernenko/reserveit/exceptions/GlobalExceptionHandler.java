@@ -1,4 +1,4 @@
-package com.maksymchernenko.reserveit.controller;
+package com.maksymchernenko.reserveit.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;

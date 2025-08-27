@@ -19,19 +19,20 @@ public class RestaurantTableServiceImpl implements RestaurantTableService {
     private final ReservationRepository reservationRepository;
 
     @Autowired
-    public RestaurantTableServiceImpl(RestaurantTableRepository restaurantTableRepository, ReservationRepository reservationRepository) {
+    public RestaurantTableServiceImpl(RestaurantTableRepository restaurantTableRepository,
+                                      ReservationRepository reservationRepository) {
         this.restaurantTableRepository = restaurantTableRepository;
         this.reservationRepository = reservationRepository;
     }
 
     @Transactional
     @Override
-    public RestaurantTable createTable(RestaurantTable restaurantTable) {
+    public void createTable(RestaurantTable restaurantTable) {
         int n = 1;
         while (restaurantTableRepository.getTableNumbers(restaurantTable.getRestaurant().getId()).contains(n)) n++;
         restaurantTable.setNumber(n);
 
-        return restaurantTableRepository.save(restaurantTable);
+        restaurantTableRepository.save(restaurantTable);
     }
 
     @Override

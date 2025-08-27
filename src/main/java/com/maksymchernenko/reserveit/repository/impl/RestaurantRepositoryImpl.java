@@ -26,8 +26,8 @@ public class RestaurantRepositoryImpl implements RestaurantRepository {
     }
 
     @Override
-    public Restaurant update(Restaurant restaurant) {
-        return entityManager.merge(restaurant);
+    public void update(Restaurant restaurant) {
+        entityManager.merge(restaurant);
     }
 
     @Override

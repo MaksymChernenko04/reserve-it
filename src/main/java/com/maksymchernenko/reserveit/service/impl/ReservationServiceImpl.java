@@ -53,15 +53,8 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Transactional
     @Override
-    public List<Reservation> getAll() {
-        finishPassedReservations();
-
-        return reservationRepository.getAll();
-    }
-
-    @Transactional
-    @Override
-    public List<Reservation> getAll(String filter, User manager) {
+    public List<Reservation> getAll(String filter,
+                                    User manager) {
         finishPassedReservations();
 
         List<Reservation> reservations =  reservationRepository.getAll();
@@ -89,7 +82,8 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public Map<RestaurantTable, List<LocalDateTime>> getAvailableTablesMap(long restaurantId, int numberOfGuests) {
+    public Map<RestaurantTable, List<LocalDateTime>> getAvailableTablesMap(long restaurantId,
+                                                                           int numberOfGuests) {
         List<RestaurantTable> tables = restaurantTableRepository.getBySeatsNumber(restaurantId, numberOfGuests);
         List<WorkingTime> times = workingTimeRepository.getByDaysNumber(restaurantId, AVAILABLE_DAYS_FOR_RESERVATION);
         List<Reservation> allReservations = reservationRepository.getAll();
@@ -137,7 +131,10 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Transactional
     @Override
-    public boolean reserve(long restaurantId, LocalDateTime dateTime, int numberOfGuests, User client) {
+    public boolean reserve(long restaurantId,
+                           LocalDateTime dateTime,
+                           int numberOfGuests,
+                           User client) {
         Reservation.Status status = Reservation.Status.PENDING;
         RestaurantTable restaurantTable = null;
         for (Map.Entry<RestaurantTable, List<LocalDateTime>> entry : getAvailableTablesMap(restaurantId, numberOfGuests).entrySet()) {
@@ -186,14 +183,16 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Transactional
     @Override
-    public void submitReservation(long id, User manager) {
+    public void submitReservation(long id,
+                                  User manager) {
         Reservation reservation = this.getReservation(id);
         reservation.setStatus(Reservation.Status.RESERVED);
         reservation.setManager(manager);
         reservationRepository.update(reservation);
     }
 
-    private static Map<LocalTime, Integer> generateTimes(LocalTime start, LocalTime end) {
+    private static Map<LocalTime, Integer> generateTimes(LocalTime start,
+                                                         LocalTime end) {
         Map<LocalTime, Integer> times = new HashMap<>();
         LocalTime time = start;
 
@@ -223,7 +222,9 @@ public class ReservationServiceImpl implements ReservationService {
         return date;
     }
 
-    private static void removeDateTimes(List<LocalDateTime> times, LocalDateTime start, LocalDateTime end) {
+    private static void removeDateTimes(List<LocalDateTime> times,
+                                        LocalDateTime start,
+                                        LocalDateTime end) {
         times.removeIf(time -> time.isBefore(end.plusMinutes(1)) && time.isAfter(start.minusMinutes(1)) || time.isBefore(LocalDateTime.now()));
     }
 }

@@ -35,7 +35,10 @@ public class WorkingTime {
     @Column(name = "close_time")
     private LocalTime closeTime;
 
-    public WorkingTime(Restaurant restaurant, DayOfWeek dayOfWeek, LocalTime openTime, LocalTime closeTime) {
+    public WorkingTime(Restaurant restaurant,
+                       DayOfWeek dayOfWeek,
+                       LocalTime openTime,
+                       LocalTime closeTime) {
         this.restaurant = restaurant;
         this.dayOfWeek = dayOfWeek;
         this.openTime = openTime;

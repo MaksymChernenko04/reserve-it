@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ReservationRepository {
+
     List<Reservation> getAll();
     List<Reservation> getByClientAndStatuses(User client, List<Reservation.Status> statuses);
     Optional<Reservation> get(long id);

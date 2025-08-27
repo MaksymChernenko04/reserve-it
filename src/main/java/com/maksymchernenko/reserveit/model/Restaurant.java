@@ -40,7 +40,8 @@ public class Restaurant {
     )
     private List<RestaurantTable> restaurantTables = new ArrayList<>();
 
-    public Restaurant(String name, String address) {
+    public Restaurant(String name,
+                      String address) {
         this.name = name;
         this.address = address;
     }

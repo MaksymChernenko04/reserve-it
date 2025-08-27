@@ -28,7 +28,8 @@ public class RestaurantTable {
     @Column(name = "seats_number")
     private Integer seatsNumber;
 
-    public RestaurantTable(Restaurant restaurant, Integer seatsNumber) {
+    public RestaurantTable(Restaurant restaurant,
+                           Integer seatsNumber) {
         this.restaurant = restaurant;
         this.seatsNumber = seatsNumber;
     }

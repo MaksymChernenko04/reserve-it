@@ -32,7 +32,8 @@ public class UserController {
     }
 
     @PostMapping("/guest/register")
-    public String registerUser(@ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
+    public String registerUser(@ModelAttribute("user") User user,
+                               RedirectAttributes redirectAttributes) {
         try {
             userService.register(user);
 
@@ -69,7 +70,8 @@ public class UserController {
     }
 
     @PostMapping("/admin/user/create")
-    public String createUser(@ModelAttribute User user, RedirectAttributes redirectAttributes) {
+    public String createUser(@ModelAttribute User user,
+                             RedirectAttributes redirectAttributes) {
         try {
             userService.register(user);
 

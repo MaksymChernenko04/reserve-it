@@ -22,7 +22,7 @@ public class WorkingTimeServiceImpl implements WorkingTimeService {
 
     @Transactional
     @Override
-    public WorkingTime createWorkingTime(WorkingTime workingTime) {
+    public void createWorkingTime(WorkingTime workingTime) {
         Map<DayOfWeek, WorkingTime> workingTimeMap = workingTimeRepository.getWorkingTimeMap(workingTime.getRestaurant().getId());
 
         DayOfWeek yesterday = workingTime.getDayOfWeek().minus(1);
@@ -30,12 +30,12 @@ public class WorkingTimeServiceImpl implements WorkingTimeService {
         if (yesterdayWorkingTime != null
                 && yesterdayWorkingTime.getOpenTime().isAfter(yesterdayWorkingTime.getCloseTime())
                 && yesterdayWorkingTime.getCloseTime().isAfter(workingTime.getOpenTime())) {
-            if (yesterdayWorkingTime.getCloseTime().isAfter(workingTime.getCloseTime())) return null;
+            if (yesterdayWorkingTime.getCloseTime().isAfter(workingTime.getCloseTime())) return;
 
             workingTime.setOpenTime(yesterdayWorkingTime.getCloseTime());
         }
 
-        return workingTimeRepository.save(workingTime);
+        workingTimeRepository.save(workingTime);
     }
 
     @Override
@@ -45,13 +45,8 @@ public class WorkingTimeServiceImpl implements WorkingTimeService {
 
     @Transactional
     @Override
-    public void deleteAll(long restaurantId) {
-        workingTimeRepository.deleteAll(restaurantId);
-    }
-
-    @Transactional
-    @Override
-    public void delete(long restaurantId, DayOfWeek day) {
+    public void delete(long restaurantId,
+                       DayOfWeek day) {
         workingTimeRepository.delete(restaurantId, day);
     }
 }

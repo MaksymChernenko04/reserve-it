@@ -47,7 +47,8 @@ public class RestaurantTableRepositoryImpl implements RestaurantTableRepository 
     }
 
     @Override
-    public List<RestaurantTable> getBySeatsNumber(long restaurantId, int minSeatsNumber) {
+    public List<RestaurantTable> getBySeatsNumber(long restaurantId,
+                                                  int minSeatsNumber) {
         return entityManager.createQuery("FROM RestaurantTable WHERE restaurant.id = :restaurantId " +
                         "AND seatsNumber >= :minSeatsNumber", RestaurantTable.class)
                 .setParameter("restaurantId", restaurantId)

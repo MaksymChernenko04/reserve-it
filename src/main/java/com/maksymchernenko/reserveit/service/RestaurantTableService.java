@@ -5,7 +5,8 @@ import com.maksymchernenko.reserveit.model.RestaurantTable;
 import java.util.List;
 
 public interface RestaurantTableService {
-    RestaurantTable createTable(RestaurantTable restaurantTable);
+
+    void createTable(RestaurantTable restaurantTable);
     List<RestaurantTable> getTables(long restaurantId);
     boolean delete(long id);
 }

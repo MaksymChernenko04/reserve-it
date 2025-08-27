@@ -22,7 +22,8 @@ public class IndexController {
     }
 
     @GetMapping
-    public String index(Model model, Authentication authentication) {
+    public String index(Model model,
+                        Authentication authentication) {
         if (authentication != null && authentication.isAuthenticated()) {
             String email = authentication.getName();
             try {

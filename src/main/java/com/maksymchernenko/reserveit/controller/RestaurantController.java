@@ -62,7 +62,8 @@ public class RestaurantController {
     }
 
     @PostMapping("/create")
-    public String createRestaurant(@ModelAttribute Restaurant restaurant, RedirectAttributes redirectAttributes) {
+    public String createRestaurant(@ModelAttribute Restaurant restaurant,
+                                   RedirectAttributes redirectAttributes) {
         try {
             Restaurant saved = restaurantService.createRestaurant(restaurant);
 
@@ -157,7 +158,8 @@ public class RestaurantController {
         model.addAttribute("newRestaurant", newRestaurant);
         model.addAttribute("workingTimeMap", workingTimeMap);
         model.addAttribute("availableTimes", generateTimes());
-        model.addAttribute("newWorkingTime", new WorkingTime(restaurant, null, null, null));
+        model.addAttribute("newWorkingTime", new WorkingTime(restaurant, null,
+                null, null));
         model.addAttribute("newRestaurantTable", new RestaurantTable(restaurant, null));
 
         return "manager/edit_restaurant";
@@ -167,7 +169,6 @@ public class RestaurantController {
     public String editRestaurant(@ModelAttribute Restaurant newRestaurant,
                                  @PathVariable long id,
                                  RedirectAttributes redirectAttributes) {
-
 
         Restaurant restaurant = restaurantService.getRestaurant(id);
         restaurant.setName(newRestaurant.getName());
@@ -200,8 +201,8 @@ public class RestaurantController {
 
     @PostMapping("/{restaurantId}/edit/tables/{tableId}/delete")
     public String deleteTableForEditRestaurant(@PathVariable long restaurantId,
-                              @PathVariable long tableId,
-                              RedirectAttributes redirectAttributes) {
+                                               @PathVariable long tableId,
+                                               RedirectAttributes redirectAttributes) {
         if (!restaurantTableService.delete(tableId)) {
             redirectAttributes.addFlashAttribute("deleted", false);
         }
@@ -232,7 +233,8 @@ public class RestaurantController {
                          RedirectAttributes redirectAttributes) {
         Restaurant restaurant = restaurantService.getRestaurant(id);
         newWorkingTime.setRestaurant(restaurant);
-        workingTimeService.createWorkingTime(new WorkingTime(restaurant, newWorkingTime.getDayOfWeek(), newWorkingTime.getOpenTime(), newWorkingTime.getCloseTime()));
+        workingTimeService.createWorkingTime(new WorkingTime(restaurant, newWorkingTime.getDayOfWeek(),
+                newWorkingTime.getOpenTime(), newWorkingTime.getCloseTime()));
 
         redirectAttributes.addAttribute("id", newWorkingTime.getRestaurant().getId());
     }
@@ -244,7 +246,8 @@ public class RestaurantController {
         Restaurant restaurant = restaurantService.getRestaurant(id);
         newRestaurantTable.setRestaurant(restaurant);
         for (int i = 0; i < tablesNumber; i++) {
-            restaurantTableService.createTable(new RestaurantTable(newRestaurantTable.getRestaurant(), newRestaurantTable.getSeatsNumber()));
+            restaurantTableService.createTable(new RestaurantTable(newRestaurantTable.getRestaurant(),
+                    newRestaurantTable.getSeatsNumber()));
         }
 
         redirectAttributes.addAttribute("id", newRestaurantTable.getRestaurant().getId());
