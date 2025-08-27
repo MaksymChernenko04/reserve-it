@@ -23,6 +23,18 @@ public class WorkingTimeServiceImpl implements WorkingTimeService {
     @Transactional
     @Override
     public WorkingTime createWorkingTime(WorkingTime workingTime) {
+        Map<DayOfWeek, WorkingTime> workingTimeMap = workingTimeRepository.getWorkingTimeMap(workingTime.getRestaurant().getId());
+
+        DayOfWeek yesterday = workingTime.getDayOfWeek().minus(1);
+        WorkingTime yesterdayWorkingTime = workingTimeMap.get(yesterday);
+        if (yesterdayWorkingTime != null
+                && yesterdayWorkingTime.getOpenTime().isAfter(yesterdayWorkingTime.getCloseTime())
+                && yesterdayWorkingTime.getCloseTime().isAfter(workingTime.getOpenTime())) {
+            if (yesterdayWorkingTime.getCloseTime().isAfter(workingTime.getCloseTime())) return null;
+
+            workingTime.setOpenTime(yesterdayWorkingTime.getCloseTime());
+        }
+
         return workingTimeRepository.save(workingTime);
     }
 
