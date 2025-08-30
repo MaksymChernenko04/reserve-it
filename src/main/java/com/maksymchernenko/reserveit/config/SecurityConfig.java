@@ -11,9 +11,21 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import javax.sql.DataSource;
 
+/**
+ * Configuration class that provides beans for authentication and authorization.
+ * <p>
+ * Defines {@link UserDetailsManager}, {@link SecurityFilterChain} and {@link PasswordEncoder}.
+ */
 @Configuration
 public class SecurityConfig {
 
+    /**
+     * Provides a {@link JdbcUserDetailsManager} configured with custom SQL queries
+     * for loading user credentials and roles from the database.
+     *
+     * @param dataSource the application's {@link DataSource}
+     * @return the configured user details manager
+     */
     @Bean
     public UserDetailsManager userDetailsManager(DataSource dataSource) {
         JdbcUserDetailsManager userDetailsManager = new JdbcUserDetailsManager(dataSource);
@@ -25,6 +37,20 @@ public class SecurityConfig {
         return userDetailsManager;
     }
 
+    /**
+     * Configures the {@link SecurityFilterChain} with role-based access control and custom
+     * login/logout behavior.
+     * <p>
+     * - Public access: "/", "/guest/login", "/guest/register", static resources (CSS, images). <br>
+     * - Restricted: "/client/**" (CLIENT role), "/manager/**" (MANAGER role), "/admin/**" (ADMIN role). <br>
+     * - Authenticated users: all other requests.
+     * <p>
+     * Defines a custom login page and logout URL.
+     *
+     * @param httpSecurity the {@link HttpSecurity} configuration builder
+     * @return the built security filter chain
+     * @throws Exception if configuration fails
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
@@ -57,6 +83,11 @@ public class SecurityConfig {
         return httpSecurity.build();
     }
 
+    /**
+     * Provides a {@link PasswordEncoder} using the BCrypt hashing algorithm.
+     *
+     * @return a BCrypt-based password encoder
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
