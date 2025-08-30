@@ -12,12 +12,23 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * Implements {@link RestaurantTableService} interface.
+ * <p>
+ * Provides business logic methods to manage restaurant tables.
+ */
 @Service
 public class RestaurantTableServiceImpl implements RestaurantTableService {
 
     private final RestaurantTableRepository restaurantTableRepository;
     private final ReservationRepository reservationRepository;
 
+    /**
+     * Instantiates a new {@link RestaurantTableService}.
+     *
+     * @param restaurantTableRepository the {@link RestaurantTableRepository}
+     * @param reservationRepository     the {@link ReservationRepository}
+     */
     @Autowired
     public RestaurantTableServiceImpl(RestaurantTableRepository restaurantTableRepository,
                                       ReservationRepository reservationRepository) {
@@ -25,6 +36,11 @@ public class RestaurantTableServiceImpl implements RestaurantTableService {
         this.reservationRepository = reservationRepository;
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Searches for an available table number every time a new table is created.
+     */
     @Transactional
     @Override
     public void createTable(RestaurantTable restaurantTable) {
@@ -35,6 +51,11 @@ public class RestaurantTableServiceImpl implements RestaurantTableService {
         restaurantTableRepository.save(restaurantTable);
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * The result list of tables is sorted by table number.
+     */
     @Override
     public List<RestaurantTable> getTables(long restaurantId) {
         List<RestaurantTable> tables = restaurantTableRepository.getTables(restaurantId);
@@ -43,6 +64,13 @@ public class RestaurantTableServiceImpl implements RestaurantTableService {
         return tables;
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Deletes tables if they are not in the process of reserving.
+     * <p>
+     * Deletes the table in reservations.
+     */
     @Transactional
     @Override
     public boolean delete(long id) {

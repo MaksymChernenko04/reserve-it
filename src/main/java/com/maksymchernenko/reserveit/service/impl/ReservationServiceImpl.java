@@ -19,6 +19,11 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 
+/**
+ * Implements {@link ReservationService} interface.
+ * <p>
+ * Provides business logic methods to reserve tables, cancel, submit, update and get reservations.
+ */
 @Service
 public class ReservationServiceImpl implements ReservationService {
 
@@ -26,6 +31,13 @@ public class ReservationServiceImpl implements ReservationService {
     private final RestaurantTableRepository restaurantTableRepository;
     private final WorkingTimeRepository workingTimeRepository;
 
+    /**
+     * Instantiates a new {@link ReservationService}.
+     *
+     * @param reservationRepository     the {@link ReservationRepository}
+     * @param restaurantTableRepository the {@link RestaurantTableRepository}
+     * @param workingTimeRepository     the {@link WorkingTimeRepository}
+     */
     @Autowired
     public ReservationServiceImpl(ReservationRepository reservationRepository,
                                   RestaurantTableRepository restaurantTableRepository,
@@ -35,6 +47,13 @@ public class ReservationServiceImpl implements ReservationService {
         this.workingTimeRepository = workingTimeRepository;
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * The actual reservation has a {@link Reservation.Status#PENDING} or {@link Reservation.Status#RESERVED}
+     * <p>
+     * Finishes passed reservations by setting a status to {@link Reservation.Status#FINISHED}
+     */
     @Transactional
     @Override
     public List<Reservation> getActualByClient(User client) {
@@ -43,6 +62,13 @@ public class ReservationServiceImpl implements ReservationService {
         return reservationRepository.getByClientAndStatuses(client, List.of(Reservation.Status.PENDING, Reservation.Status.RESERVED));
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * The historical reservation has a status {@link Reservation.Status#CANCELED} or {@link Reservation.Status#FINISHED}
+     * <p>
+     * Finishes passed reservations by setting a status to {@link Reservation.Status#FINISHED}
+     */
     @Transactional
     @Override
     public List<Reservation> getHistoryByClient(User client) {
@@ -51,6 +77,11 @@ public class ReservationServiceImpl implements ReservationService {
         return reservationRepository.getByClientAndStatuses(client, List.of(Reservation.Status.CANCELED, Reservation.Status.FINISHED));
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Finishes passed reservations by setting a status to {@link Reservation.Status#FINISHED}
+     */
     @Transactional
     @Override
     public List<Reservation> getAll(String filter,
@@ -81,6 +112,11 @@ public class ReservationServiceImpl implements ReservationService {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Gets suitable tables, generates nearest time slots removing already reserved times
+     */
     @Override
     public Map<RestaurantTable, List<LocalDateTime>> getAvailableTablesMap(long restaurantId,
                                                                            int numberOfGuests) {
@@ -129,6 +165,11 @@ public class ReservationServiceImpl implements ReservationService {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Creates a new reservation object with status {@link Reservation.Status#PENDING}
+     */
     @Transactional
     @Override
     public boolean reserve(long restaurantId,
@@ -152,6 +193,11 @@ public class ReservationServiceImpl implements ReservationService {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Sets a reservation status to {@link Reservation.Status#PENDING}
+     */
     @Transactional
     @Override
     public boolean updateReservation(Reservation reservation) {
@@ -181,6 +227,12 @@ public class ReservationServiceImpl implements ReservationService {
         reservationRepository.cancelReservation(id);
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Sets a reservation status to {@link Reservation.Status#RESERVED}
+     * and assigns a {@link User} (manager).
+     */
     @Transactional
     @Override
     public void submitReservation(long id,

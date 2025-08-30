@@ -14,12 +14,23 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implements {@link UserService} interface.
+ * <p>
+ * Provides business logic methods to save and delete users, query users and roles.
+ */
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    /**
+     * Instantiates a new {@link UserService}.
+     *
+     * @param userRepository  the {@link UserRepository}
+     * @param passwordEncoder the {@link PasswordEncoder}
+     */
     @Autowired
     public UserServiceImpl(UserRepository userRepository,
                            PasswordEncoder passwordEncoder) {

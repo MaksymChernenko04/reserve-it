@@ -10,16 +10,31 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.DayOfWeek;
 import java.util.Map;
 
+/**
+ * Implements {@link WorkingTimeService} interface.
+ * <p>
+ * Provides business logic methods to manage working times.
+ */
 @Service
 public class WorkingTimeServiceImpl implements WorkingTimeService {
 
     private final WorkingTimeRepository workingTimeRepository;
 
+    /**
+     * Instantiates a new {@link WorkingTimeService}.
+     *
+     * @param workingTimeRepository the {@link WorkingTimeRepository}
+     */
     @Autowired
     public WorkingTimeServiceImpl(WorkingTimeRepository workingTimeRepository) {
         this.workingTimeRepository = workingTimeRepository;
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Ensures that working times are not overlapping.
+     */
     @Transactional
     @Override
     public void createWorkingTime(WorkingTime workingTime) {
