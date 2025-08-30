@@ -9,6 +9,12 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a restaurant in the system.
+ * <p>
+ * Has relationships with {@link WorkingTime} and {@link RestaurantTable},
+ * stores name and address.
+ */
 @NoArgsConstructor
 @Setter
 @Getter
@@ -40,6 +46,12 @@ public class Restaurant {
     )
     private List<RestaurantTable> restaurantTables = new ArrayList<>();
 
+    /**
+     * Instantiates a new Restaurant.
+     *
+     * @param name    the restaurant name
+     * @param address the restaurant address
+     */
     public Restaurant(String name,
                       String address) {
         this.name = name;

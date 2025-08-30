@@ -6,6 +6,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Represents a user in the system.
+ * <p>
+ * Has a relationship with {@link Role} and stores user email, password, first and last name.
+ */
 @NoArgsConstructor
 @Setter
 @Getter
@@ -36,6 +41,16 @@ public class User {
     @Column(name = "last_name")
     private String lastName;
 
+    /**
+     * Instantiates a new User.
+     *
+     * @param role      the user role
+     * @param email     the user email
+     * @param password  the user password
+     * @param active    the user activity
+     * @param firstName the user first name
+     * @param lastName  the user last name
+     */
     public User(Role role,
                 String email,
                 String password,

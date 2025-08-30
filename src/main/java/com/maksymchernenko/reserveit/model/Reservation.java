@@ -8,6 +8,13 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+/**
+ * Represents a reservation in the system.
+ * <p>
+ * Has relationships with {@link RestaurantTable}, {@link User} (client),
+ * {@link User} (manager), and stores {@link Status}, date, time
+ * and number of guests.
+ */
 @NoArgsConstructor
 @Setter
 @Getter
@@ -39,6 +46,16 @@ public class Reservation {
     @Column(name = "guests_number")
     private Integer guestsNumber;
 
+    /**
+     * Instantiates a new Reservation.
+     *
+     * @param table        the reserved table
+     * @param client       the client
+     * @param manager      the manager
+     * @param status       the reservation status
+     * @param dayTime      the reservation day and time
+     * @param guestsNumber the number of guests
+     */
     public Reservation(RestaurantTable table,
                        User client,
                        User manager,
@@ -53,11 +70,26 @@ public class Reservation {
         this.guestsNumber = guestsNumber;
     }
 
+    /**
+     * Represents a reservation status in the system.
+     */
     @NoArgsConstructor
     public enum Status {
+        /**
+         * The reservation is created and is waiting for manager review.
+         */
         PENDING,
+        /**
+         * The reservation has been confirmed by a manager.
+         */
         RESERVED,
+        /**
+         * The reservation has been canceled by either the manager or the client.
+         */
         CANCELED,
+        /**
+         * The reservation is finished, meaning the time reserved for it has passed.
+         */
         FINISHED
     }
 }

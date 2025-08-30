@@ -10,6 +10,11 @@ import org.hibernate.annotations.Cascade;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 
+/**
+ * Represents a restaurant working time in the system.
+ * <p>
+ * Has a relationship with {@link Restaurant} and stores day of week, restaurant open and close time.
+ */
 @NoArgsConstructor
 @Setter
 @Getter
@@ -35,6 +40,14 @@ public class WorkingTime {
     @Column(name = "close_time")
     private LocalTime closeTime;
 
+    /**
+     * Instantiates a new Working time.
+     *
+     * @param restaurant the restaurant
+     * @param dayOfWeek  the day of the week
+     * @param openTime   the restaurant open time
+     * @param closeTime  the restaurant close time
+     */
     public WorkingTime(Restaurant restaurant,
                        DayOfWeek dayOfWeek,
                        LocalTime openTime,
