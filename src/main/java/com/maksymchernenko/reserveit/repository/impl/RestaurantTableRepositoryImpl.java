@@ -9,11 +9,19 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implements {@link RestaurantTableRepository} interface using JPA and custom JPQL queries.
+ */
 @Repository
 public class RestaurantTableRepositoryImpl implements RestaurantTableRepository {
 
     private final EntityManager entityManager;
 
+    /**
+     * Instantiates a new {@link RestaurantTableRepository}.
+     *
+     * @param entityManager the entity manager
+     */
     @Autowired
     public RestaurantTableRepositoryImpl(EntityManager entityManager) {
         this.entityManager = entityManager;

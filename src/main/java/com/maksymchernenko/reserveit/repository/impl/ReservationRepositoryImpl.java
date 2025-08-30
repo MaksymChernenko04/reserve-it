@@ -12,11 +12,19 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implements {@link ReservationRepository} interface using JPA and custom JPQL queries.
+ */
 @Repository
 public class ReservationRepositoryImpl implements ReservationRepository {
 
     private final EntityManager entityManager;
 
+    /**
+     * Instantiates a new {@link ReservationRepository}.
+     *
+     * @param entityManager the entity manager
+     */
     @Autowired
     public ReservationRepositoryImpl(EntityManager entityManager) {
         this.entityManager = entityManager;
@@ -53,6 +61,11 @@ public class ReservationRepositoryImpl implements ReservationRepository {
                 .getResultList();
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Sets responsible manager to {@code null}.
+     */
     @Override
     public void reserve(RestaurantTable restaurantTable,
                         User client,
@@ -67,6 +80,11 @@ public class ReservationRepositoryImpl implements ReservationRepository {
         entityManager.merge(reservation);
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Sets {@link Reservation.Status} to {@link Reservation.Status#CANCELED}.
+     */
     @Override
     public void cancelReservation(long id) {
         entityManager.createQuery("UPDATE Reservation r SET r.status = :status WHERE id = :id")
@@ -75,6 +93,11 @@ public class ReservationRepositoryImpl implements ReservationRepository {
                 .executeUpdate();
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Sets {@link RestaurantTable} field to {@code null} for reservations with a specified {@link RestaurantTable} id.
+     */
     @Override
     public void deleteTables(long tableId) {
         entityManager.createQuery("UPDATE Reservation SET table = null WHERE table.id = :id")

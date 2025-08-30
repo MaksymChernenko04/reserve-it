@@ -13,11 +13,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Implements {@link WorkingTimeRepository} interface using JPA and custom JPQL queries.
+ */
 @Repository
 public class WorkingTimeRepositoryImpl implements WorkingTimeRepository {
 
     private final EntityManager entityManager;
 
+    /**
+     * Instantiates a new {@link WorkingTimeRepository}.
+     *
+     * @param entityManager the entity manager
+     */
     @Autowired
     public WorkingTimeRepositoryImpl(EntityManager entityManager) {
         this.entityManager = entityManager;
@@ -34,6 +42,11 @@ public class WorkingTimeRepositoryImpl implements WorkingTimeRepository {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Maps a day of the week to a working time
+     */
     @Override
     public Map<DayOfWeek, WorkingTime> getWorkingTimeMap(long restaurantId) {
         List<WorkingTime> workingTimes = entityManager.createQuery("FROM WorkingTime WHERE restaurant.id = :id", WorkingTime.class)

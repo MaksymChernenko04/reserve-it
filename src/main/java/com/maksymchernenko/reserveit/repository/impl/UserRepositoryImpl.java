@@ -10,11 +10,19 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implements {@link UserRepository} interface using JPA and custom JPQL queries.
+ */
 @Repository
 public class UserRepositoryImpl implements UserRepository {
 
     private final EntityManager entityManager;
 
+    /**
+     * Instantiates a new {@link UserRepository}.
+     *
+     * @param entityManager the entity manager
+     */
     @Autowired
     public UserRepositoryImpl(EntityManager entityManager) {
         this.entityManager = entityManager;
