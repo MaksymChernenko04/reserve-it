@@ -17,6 +17,12 @@ import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.*;
 
+/**
+ * Controller responsible for handling restaurant-related actions such as
+ * restaurant, restaurant table and working time CRUD methods.
+ * <p>
+ * Provides endpoints for managers.
+ */
 @Controller
 @RequestMapping("/manager/restaurants")
 public class RestaurantController {
@@ -25,6 +31,13 @@ public class RestaurantController {
     private final WorkingTimeService workingTimeService;
     private final RestaurantTableService restaurantTableService;
 
+    /**
+     * Instantiates a new Restaurant controller.
+     *
+     * @param restaurantService      the {@link RestaurantService}
+     * @param workingTimeService     the {@link WorkingTimeService}
+     * @param restaurantTableService the {@link RestaurantTableService}
+     */
     @Autowired
     public RestaurantController(RestaurantService restaurantService,
                                 WorkingTimeService workingTimeService,
@@ -35,6 +48,12 @@ public class RestaurantController {
     }
 
 
+    /**
+     * Displays all restaurants page.
+     *
+     * @param model the model to bind attributes for the view
+     * @return the list of all restaurants page view name
+     */
     @GetMapping
     public String getAllRestaurantsPage(Model model) {
         model.addAttribute("restaurants", restaurantService.getAllRestaurants());
@@ -42,6 +61,13 @@ public class RestaurantController {
         return "manager/restaurants";
     }
 
+    /**
+     * Displays a restaurant page with the list of tables and working times.
+     *
+     * @param model the model to bind attributes for the view
+     * @param id    the restaurant id
+     * @return the restaurant page view name
+     */
     @GetMapping("/{id}")
     public String getRestaurantPage(Model model,
                                     @PathVariable long id) {
@@ -54,6 +80,12 @@ public class RestaurantController {
         return "manager/restaurant";
     }
 
+    /**
+     * Displays a restaurant creation page.
+     *
+     * @param model the model to bind attributes for the view
+     * @return the restaurant creation page view name
+     */
     @GetMapping("/create")
     public String getCreateRestaurantPage(Model model) {
         model.addAttribute("newRestaurant", new Restaurant());
@@ -61,6 +93,14 @@ public class RestaurantController {
         return "manager/create_restaurant";
     }
 
+    /**
+     * Creates a new restaurant.
+     *
+     * @param restaurant         the restaurant to create
+     * @param redirectAttributes the redirect attributes used to pass error flags on redirect
+     * @return redirect to the tables and working times creation page on success,
+     * redirect to the creation page if the restaurant is already exists otherwise
+     */
     @PostMapping("/create")
     public String createRestaurant(@ModelAttribute Restaurant restaurant,
                                    RedirectAttributes redirectAttributes) {
@@ -75,6 +115,13 @@ public class RestaurantController {
         }
     }
 
+    /**
+     * Displays create restaurant tables and times page.
+     *
+     * @param id    the restaurant id
+     * @param model the model to bind attributes for the view
+     * @return the tables and times creation page
+     */
     @GetMapping("/create/{id}")
     public String getCreateTablesAndTimesPage(@PathVariable Long id,
                                               Model model) {
@@ -100,6 +147,14 @@ public class RestaurantController {
         return "manager/create_tables_and_times";
     }
 
+    /**
+     * Creates a new restaurant working time while creating a restaurant.
+     *
+     * @param id                 the restaurant id
+     * @param newWorkingTime     the new working time
+     * @param redirectAttributes the redirect attributes used to pass restaurant id on redirect
+     * @return redirect to the tables and times creation page
+     */
     @PostMapping("/create/{id}/addtime")
     public String addTimeToRestaurant(@PathVariable Long id,
                                       @ModelAttribute WorkingTime newWorkingTime,
@@ -109,6 +164,15 @@ public class RestaurantController {
         return "redirect:/manager/restaurants/create/{id}";
     }
 
+    /**
+     * Creates a new restaurant table while creating a restaurant.
+     *
+     * @param id                 the restaurant id
+     * @param newRestaurantTable the new restaurant table
+     * @param tablesNumber       the number of tables
+     * @param redirectAttributes the redirect attributes used to pass restaurant id on redirect
+     * @return redirect to the tables and times creation page
+     */
     @PostMapping("/create/{id}/addtable")
     public String addTableToRestaurant(@PathVariable Long id,
                                        @ModelAttribute RestaurantTable newRestaurantTable,
@@ -119,6 +183,14 @@ public class RestaurantController {
         return "redirect:/manager/restaurants/create/{id}";
     }
 
+    /**
+     * Deletes the restaurant working time from creation.
+     *
+     * @param id                 the restaurant id
+     * @param day                the day of the week
+     * @param redirectAttributes the redirect attributes used to pass restaurant id on redirect
+     * @return redirect to the tables and times creation page
+     */
     @PostMapping("/create/{id}/deletetime/{day}")
     public String deleteTimeForCreateRestaurant(@PathVariable long id,
                                                 @PathVariable DayOfWeek day,
@@ -130,6 +202,14 @@ public class RestaurantController {
         return "redirect:/manager/restaurants/create/{id}";
     }
 
+    /**
+     * Deletes the restaurant table from creation.
+     *
+     * @param restaurantId       the restaurant id
+     * @param tableId            the table id
+     * @param redirectAttributes the redirect attributes used to pass flags if the table is deleted on redirect
+     * @return redirect to the tables and times creation page
+     */
     @PostMapping("/{restaurantId}/create/tables/{tableId}/delete")
     public String deleteTableForCreateRestaurant(@PathVariable long restaurantId,
                                                  @PathVariable long tableId,
@@ -141,6 +221,13 @@ public class RestaurantController {
         return "redirect:/manager/restaurants/create/{restaurantId}";
     }
 
+    /**
+     * Displays edit restaurant page.
+     *
+     * @param id    the restaurant id
+     * @param model the model to bind attributes for the view
+     * @return the edit restaurant page view name
+     */
     @GetMapping("/{id}/edit")
     public String getEditRestaurantPage(@PathVariable long id,
                                         Model model) {
@@ -165,6 +252,14 @@ public class RestaurantController {
         return "manager/edit_restaurant";
     }
 
+    /**
+     * Updates the restaurant.
+     *
+     * @param newRestaurant      the new restaurant
+     * @param id                 the restaurant id
+     * @param redirectAttributes the redirect attributes used to pass restaurant id on redirect
+     * @return redirect to the restaurant page
+     */
     @PostMapping("/{id}/edit")
     public String editRestaurant(@ModelAttribute Restaurant newRestaurant,
                                  @PathVariable long id,
@@ -180,6 +275,14 @@ public class RestaurantController {
         return "redirect:/manager/restaurants/{id}";
     }
 
+    /**
+     * Creates a new working time while editing the restaurant.
+     *
+     * @param id                 the restaurant id
+     * @param newWorkingTime     the new working time
+     * @param redirectAttributes the redirect attributes used to pass restaurant id on redirect
+     * @return redirect to the edit restaurant page
+     */
     @PostMapping("/{id}/edit/addtime")
     public String editTimeForRestaurant(@PathVariable Long id,
                                         @ModelAttribute WorkingTime newWorkingTime,
@@ -189,6 +292,15 @@ public class RestaurantController {
         return "redirect:/manager/restaurants/{id}/edit";
     }
 
+    /**
+     * Creates a new restaurant table while editing the restaurant.
+     *
+     * @param id                 the restaurant id
+     * @param newRestaurantTable the new restaurant table
+     * @param tablesNumber       the number of tables
+     * @param redirectAttributes the redirect attributes used to pass restaurant id on redirect
+     * @return redirect to the edit restaurant page
+     */
     @PostMapping("/{id}/edit/addtable")
     public String editTableForRestaurant(@PathVariable Long id,
                                          @ModelAttribute RestaurantTable newRestaurantTable,
@@ -199,6 +311,14 @@ public class RestaurantController {
         return "redirect:/manager/restaurants/{id}/edit";
     }
 
+    /**
+     * Deletes the restaurant table from editing.
+     *
+     * @param restaurantId       the restaurant id
+     * @param tableId            the table id
+     * @param redirectAttributes the redirect attributes used to pass flags if the table is deleted on redirect
+     * @return redirect to the edit restaurant page
+     */
     @PostMapping("/{restaurantId}/edit/tables/{tableId}/delete")
     public String deleteTableForEditRestaurant(@PathVariable long restaurantId,
                                                @PathVariable long tableId,
@@ -210,6 +330,14 @@ public class RestaurantController {
         return "redirect:/manager/restaurants/{restaurantId}/edit";
     }
 
+    /**
+     * Deletes the restaurant working time from editing.
+     *
+     * @param id                 the restaurant id
+     * @param day                the day of the week
+     * @param redirectAttributes the redirect attributes used to pass restaurant id on redirect
+     * @return redirect to the edit restaurant page
+     */
     @PostMapping("/{id}/edit/deletetime/{day}")
     public String deleteTimeForEditRestaurant(@PathVariable long id,
                                               @PathVariable DayOfWeek day,
@@ -221,6 +349,12 @@ public class RestaurantController {
         return "redirect:/manager/restaurants/{id}/edit";
     }
 
+    /**
+     * Deletes the restaurant.
+     *
+     * @param id the restaurant id
+     * @return redirect to the list of all restaurants
+     */
     @PostMapping("/{id}/delete")
     public String deleteRestaurant(@PathVariable long id) {
         restaurantService.deleteRestaurant(id);

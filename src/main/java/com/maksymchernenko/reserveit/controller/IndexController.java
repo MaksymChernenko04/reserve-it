@@ -10,17 +10,35 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+/**
+ * Controller responsible for handling a default page.
+ * <p>
+ * Provides an endpoint to render the home page for either a guest or a user.
+ */
 @Controller
 @RequestMapping("/")
 public class IndexController {
 
     private final UserService userService;
 
+    /**
+     * Instantiates a new Index controller.
+     *
+     * @param userService the {@link UserService}
+     */
     @Autowired
     public IndexController(UserService userService) {
         this.userService = userService;
     }
 
+    /**
+     * Displays the home page.
+     *
+     * @param model          the model to bind attributes for the view
+     * @param authentication the authentication instance containing the current user
+     * @return the user home page view name on success,
+     * redirect to logout if the user is not found otherwise
+     */
     @GetMapping
     public String index(Model model,
                         Authentication authentication) {

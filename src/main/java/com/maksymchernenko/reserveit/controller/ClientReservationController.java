@@ -20,6 +20,12 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Controller responsible for handling reservation-related actions to view actual reservations
+ * as well as the reservation history, create, edit and cancel reservations.
+ * <p>
+ * Provides endpoints for clients.
+ */
 @Controller
 @RequestMapping("/client/reservations")
 public class ClientReservationController {
@@ -28,6 +34,13 @@ public class ClientReservationController {
     private final ReservationService reservationService;
     private final RestaurantService restaurantService;
 
+    /**
+     * Instantiates a new Client reservation controller.
+     *
+     * @param userService        the {@link UserService}
+     * @param reservationService the {@link ReservationService}
+     * @param restaurantService  the {@link RestaurantService}
+     */
     @Autowired
     public ClientReservationController(UserService userService,
                                        ReservationService reservationService,
@@ -37,6 +50,14 @@ public class ClientReservationController {
         this.restaurantService = restaurantService;
     }
 
+    /**
+     * Displays actual user reservations page.
+     *
+     * @param model          the model to bind attributes for the view
+     * @param authentication the authentication instance containing the current user
+     * @return the list of actual user reservations page view name on success,
+     * redirect to logout if the user is not found otherwise
+     */
     @GetMapping
     public String getReservationsPage(Model model,
                                       Authentication authentication) {
@@ -51,6 +72,12 @@ public class ClientReservationController {
         }
     }
 
+    /**
+     * Displays a submit restaurant page.
+     *
+     * @param model the model to bind attributes for the view
+     * @return the submit restaurant page view name
+     */
     @GetMapping("/create/submitrestaurant")
     public String getSubmitRestaurantPage(Model model) {
         model.addAttribute("restaurants", restaurantService.getAllRestaurants());
@@ -59,6 +86,14 @@ public class ClientReservationController {
         return "client/create_reservation";
     }
 
+    /**
+     * Submits the choice of the restaurant for a reservation.
+     *
+     * @param restaurantId   the restaurant id
+     * @param numberOfGuests the number of guests
+     * @param model          the model to bind attributes for the view
+     * @return the reservation creation page view name
+     */
     @PostMapping("/create/submitrestaurant")
     public String submitRestaurant(@RequestParam Long restaurantId,
                                    @RequestParam Integer numberOfGuests,
@@ -76,6 +111,17 @@ public class ClientReservationController {
         return "client/create_reservation";
     }
 
+    /**
+     * Creates a new reservation.
+     *
+     * @param dateTime           the date and time
+     * @param numberOfGuests     the number of guests
+     * @param restaurantId       the restaurant id
+     * @param authentication     the authentication instance containing the current user
+     * @param redirectAttributes the redirect attributes used to pass a message either the reservation is created on redirect
+     * @return redirect to the list of actual user reservations on success,
+     * redirect to logout if the user is not found otherwise
+     */
     @PostMapping("/create")
     public String createReservation(@RequestParam LocalDateTime dateTime,
                                     @RequestParam Integer numberOfGuests,
@@ -95,6 +141,13 @@ public class ClientReservationController {
         }
     }
 
+    /**
+     * Displays an edit reservation page.
+     *
+     * @param model the model to bind attributes for the view
+     * @param id    the reservation id
+     * @return the edit reservation page view name
+     */
     @GetMapping("/{id}/edit")
     public String getEditReservationPage(Model model,
                                          @PathVariable Long id) {
@@ -103,6 +156,14 @@ public class ClientReservationController {
         return "client/edit_reservation";
     }
 
+    /**
+     * Updates the number of guests in the reservation.
+     *
+     * @param id             the reservation id
+     * @param numberOfGuests the new number of guests
+     * @param model          the model to bind attributes for the view
+     * @return the edit reservation page view name
+     */
     @PostMapping("/{id}/edit/guestsnumber")
     public String editNumberOfGuests(@PathVariable Long id,
                                      @RequestParam Integer numberOfGuests,
@@ -129,6 +190,15 @@ public class ClientReservationController {
         return "client/edit_reservation";
     }
 
+    /**
+     * Updates the reservation.
+     *
+     * @param id                 the reservation id
+     * @param dateTime           the new date and time
+     * @param numberOfGuests     the new number of guests
+     * @param redirectAttributes the redirect attributes used to pass a message either the reservation is updated on redirect
+     * @return redirect to the list of actual user reservations
+     */
     @PostMapping("/{id}/edit")
     public String editReservation(@PathVariable Long id,
                                   @RequestParam LocalDateTime dateTime,
@@ -145,6 +215,12 @@ public class ClientReservationController {
         return "redirect:/client/reservations";
     }
 
+    /**
+     * Cancels the reservation.
+     *
+     * @param id the reservation id
+     * @return redirect to the list of actual user reservations
+     */
     @PostMapping("/{id}/cancel")
     public String cancelReservation(@PathVariable Long id) {
         reservationService.cancelReservation(id);
@@ -152,6 +228,14 @@ public class ClientReservationController {
         return "redirect:/client/reservations";
     }
 
+    /**
+     * Displays reservation history page.
+     *
+     * @param model          the model to bind attributes for the view
+     * @param authentication the authentication instance containing the current user
+     * @return the reservation history page on success,
+     * redirect to logout if the user is not found otherwise
+     */
     @GetMapping("/history")
     public String getReservationHistoryPage(Model model,
                                             Authentication authentication) {
