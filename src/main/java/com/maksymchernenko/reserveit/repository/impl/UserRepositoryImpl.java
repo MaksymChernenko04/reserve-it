@@ -4,6 +4,8 @@ import com.maksymchernenko.reserveit.model.Role;
 import com.maksymchernenko.reserveit.model.User;
 import com.maksymchernenko.reserveit.repository.UserRepository;
 import jakarta.persistence.EntityManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -15,6 +17,8 @@ import java.util.Optional;
  */
 @Repository
 public class UserRepositoryImpl implements UserRepository {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserRepositoryImpl.class);
 
     private final EntityManager entityManager;
 
@@ -30,6 +34,8 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Optional<List<User>> getAllUsers() {
+        logger.info("Fetching all users");
+
         List<User> users = entityManager
                 .createQuery("FROM User", User.class)
                 .getResultList();
@@ -39,6 +45,8 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Optional<List<Role>> getAllRoles() {
+        logger.info("Fetching all roles");
+
         List<Role> roles = entityManager
                 .createQuery("FROM Role", Role.class)
                 .getResultList();
@@ -48,6 +56,8 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Optional<User> findByEmail(String email) {
+        logger.info("Fetching user with email {}", email);
+
         List<User> list = entityManager.createQuery("FROM User u WHERE u.email = :email", User.class)
                 .setParameter("email", email)
                 .getResultList();
@@ -57,6 +67,8 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Optional<Role> findRoleByName(String name) {
+        logger.info("Fetching role with name {}", name);
+
         List<Role> list = entityManager.createQuery("FROM Role r WHERE r.name = :name", Role.class)
                 .setParameter("name", name)
                 .getResultList();
@@ -66,14 +78,23 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User save(User user) {
-        if (user.getId() == null) entityManager.persist(user);
-        else entityManager.merge(user);
+        if (user.getId() == null) {
+            logger.info("Creating user = {}", user);
+
+            entityManager.persist(user);
+        } else {
+            logger.info("Updating user = {}", user);
+
+            entityManager.merge(user);
+        }
 
         return entityManager.find(User.class, user.getId());
     }
 
     @Override
     public void delete(int id) {
+        logger.info("Deleting user with id = {}", id);
+
         User user = entityManager.find(User.class, id);
         entityManager.remove(user);
     }

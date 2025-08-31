@@ -5,6 +5,8 @@ import com.maksymchernenko.reserveit.model.RestaurantTable;
 import com.maksymchernenko.reserveit.model.User;
 import com.maksymchernenko.reserveit.repository.ReservationRepository;
 import jakarta.persistence.EntityManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -17,6 +19,8 @@ import java.util.Optional;
  */
 @Repository
 public class ReservationRepositoryImpl implements ReservationRepository {
+
+    private static final Logger logger = LoggerFactory.getLogger(ReservationRepositoryImpl.class);
 
     private final EntityManager entityManager;
 
@@ -32,6 +36,8 @@ public class ReservationRepositoryImpl implements ReservationRepository {
 
     @Override
     public List<Reservation> getAll() {
+        logger.info("Fetching all reservations");
+
         return entityManager.createQuery("FROM Reservation", Reservation.class)
                 .getResultList();
     }
@@ -39,6 +45,10 @@ public class ReservationRepositoryImpl implements ReservationRepository {
     @Override
     public List<Reservation> getByClientAndStatuses(User client,
                                                     List<Reservation.Status> statuses) {
+        logger.info("Fetching reservations with client id = {} and statuses = {}",
+                client.getId(),
+                statuses);
+
         return entityManager.createQuery("FROM Reservation WHERE client.id = :id AND status IN :statuses", Reservation.class)
                 .setParameter("id", client.getId())
                 .setParameter("statuses", statuses)
@@ -47,6 +57,8 @@ public class ReservationRepositoryImpl implements ReservationRepository {
 
     @Override
     public Optional<Reservation> get(long id) {
+        logger.info("Fetching reservation with id = {}", id);
+
         List<Reservation> reservation = entityManager.createQuery("FROM Reservation WHERE id = :id", Reservation.class)
                 .setParameter("id", id)
                 .getResultList();
@@ -56,6 +68,8 @@ public class ReservationRepositoryImpl implements ReservationRepository {
 
     @Override
     public List<Reservation> getByTableId(long tableId) {
+        logger.info("Fetching reservation with tableId = {}", tableId);
+
         return entityManager.createQuery("FROM Reservation WHERE table.id = :id", Reservation.class)
                 .setParameter("id", tableId)
                 .getResultList();
@@ -72,11 +86,17 @@ public class ReservationRepositoryImpl implements ReservationRepository {
                         Reservation.Status status,
                         LocalDateTime dateTime,
                         int numberOfGuests) {
-        entityManager.persist(new Reservation(restaurantTable, client, null, status, dateTime, numberOfGuests));
+        Reservation newReservation = new Reservation(restaurantTable, client, null, status, dateTime, numberOfGuests);
+
+        logger.info("Creating reservation = {}", newReservation);
+
+        entityManager.persist(newReservation);
     }
 
     @Override
     public void update(Reservation reservation) {
+        logger.info("Updating reservation = {}", reservation);
+
         entityManager.merge(reservation);
     }
 
@@ -87,6 +107,8 @@ public class ReservationRepositoryImpl implements ReservationRepository {
      */
     @Override
     public void cancelReservation(long id) {
+        logger.info("Cancelling reservation with id = {}", id);
+
         entityManager.createQuery("UPDATE Reservation r SET r.status = :status WHERE id = :id")
                 .setParameter("status", Reservation.Status.CANCELED)
                 .setParameter("id", id)
@@ -100,6 +122,8 @@ public class ReservationRepositoryImpl implements ReservationRepository {
      */
     @Override
     public void deleteTables(long tableId) {
+        logger.info("Removing table links from reservations with tableId = {}", tableId);
+
         entityManager.createQuery("UPDATE Reservation SET table = null WHERE table.id = :id")
                 .setParameter("id", tableId)
                 .executeUpdate();

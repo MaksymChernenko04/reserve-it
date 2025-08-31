@@ -3,6 +3,8 @@ package com.maksymchernenko.reserveit.repository.impl;
 import com.maksymchernenko.reserveit.model.WorkingTime;
 import com.maksymchernenko.reserveit.repository.WorkingTimeRepository;
 import jakarta.persistence.EntityManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -19,6 +21,8 @@ import java.util.Map;
 @Repository
 public class WorkingTimeRepositoryImpl implements WorkingTimeRepository {
 
+    private static final Logger logger = LoggerFactory.getLogger(WorkingTimeRepositoryImpl.class);
+
     private final EntityManager entityManager;
 
     /**
@@ -34,10 +38,14 @@ public class WorkingTimeRepositoryImpl implements WorkingTimeRepository {
     @Override
     public WorkingTime save(WorkingTime workingTime) {
         if (workingTime.getId() == null) {
+            logger.info("Creating working time = {}", workingTime);
+
             entityManager.persist(workingTime);
 
             return workingTime;
         } else {
+            logger.info("Updating working time = {}", workingTime);
+
             return entityManager.merge(workingTime);
         }
     }
@@ -49,6 +57,8 @@ public class WorkingTimeRepositoryImpl implements WorkingTimeRepository {
      */
     @Override
     public Map<DayOfWeek, WorkingTime> getWorkingTimeMap(long restaurantId) {
+        logger.info("Fetching working time map by restaurant id = {}", restaurantId);
+
         List<WorkingTime> workingTimes = entityManager.createQuery("FROM WorkingTime WHERE restaurant.id = :id", WorkingTime.class)
                 .setParameter("id", restaurantId)
                 .getResultList();
@@ -70,6 +80,10 @@ public class WorkingTimeRepositoryImpl implements WorkingTimeRepository {
             days.add(start.plus(i));
         }
 
+        logger.info("Fetching working times by restaurant id = {}, days number = {}",
+                restaurantId,
+                daysNumber);
+
         return entityManager.createQuery(
                         "SELECT wt FROM WorkingTime wt " +
                                 "WHERE wt.restaurant.id = :id AND wt.dayOfWeek IN :days " +
@@ -82,6 +96,10 @@ public class WorkingTimeRepositoryImpl implements WorkingTimeRepository {
     @Override
     public void delete(long restaurantId,
                        DayOfWeek day) {
+        logger.info("Deleting working time by restaurant id = {}, day of week = {}",
+                restaurantId,
+                day);
+
         entityManager.createQuery("DELETE FROM WorkingTime WHERE restaurant.id = :id AND dayOfWeek = :day")
                 .setParameter("id", restaurantId)
                 .setParameter("day", day)
