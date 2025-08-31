@@ -57,4 +57,13 @@ public class Restaurant {
         this.name = name;
         this.address = address;
     }
+
+    @Override
+    public String toString() {
+        return "Restaurant{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                '}';
+    }
 }

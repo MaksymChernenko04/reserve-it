@@ -44,4 +44,14 @@ public class RestaurantTable {
         this.restaurant = restaurant;
         this.seatsNumber = seatsNumber;
     }
+
+    @Override
+    public String toString() {
+        return "RestaurantTable{" +
+                "id=" + id +
+                ", restaurant=" + restaurant +
+                ", number=" + number +
+                ", seatsNumber=" + seatsNumber +
+                '}';
+    }
 }

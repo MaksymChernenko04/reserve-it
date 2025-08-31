@@ -92,4 +92,17 @@ public class Reservation {
          */
         FINISHED
     }
+
+    @Override
+    public String toString() {
+        return "Reservation{" +
+                "table=" + table +
+                ", client=" + client +
+                ", manager=" + manager +
+                ", status=" + status +
+                ", dayTime=" + dayTime +
+                ", guestsNumber=" + guestsNumber +
+                ", id=" + id +
+                '}';
+    }
 }

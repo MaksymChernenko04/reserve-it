@@ -57,4 +57,15 @@ public class WorkingTime {
         this.openTime = openTime;
         this.closeTime = closeTime;
     }
+
+    @Override
+    public String toString() {
+        return "WorkingTime{" +
+                "id=" + id +
+                ", restaurant=" + restaurant +
+                ", dayOfWeek=" + dayOfWeek +
+                ", openTime=" + openTime +
+                ", closeTime=" + closeTime +
+                '}';
+    }
 }
