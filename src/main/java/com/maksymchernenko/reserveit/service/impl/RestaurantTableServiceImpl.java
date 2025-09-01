@@ -5,6 +5,8 @@ import com.maksymchernenko.reserveit.model.RestaurantTable;
 import com.maksymchernenko.reserveit.repository.ReservationRepository;
 import com.maksymchernenko.reserveit.repository.RestaurantTableRepository;
 import com.maksymchernenko.reserveit.service.RestaurantTableService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +21,8 @@ import java.util.List;
  */
 @Service
 public class RestaurantTableServiceImpl implements RestaurantTableService {
+
+    private static final Logger logger = LoggerFactory.getLogger(RestaurantTableServiceImpl.class);
 
     private final RestaurantTableRepository restaurantTableRepository;
     private final ReservationRepository reservationRepository;
@@ -48,6 +52,8 @@ public class RestaurantTableServiceImpl implements RestaurantTableService {
         while (restaurantTableRepository.getTableNumbers(restaurantTable.getRestaurant().getId()).contains(n)) n++;
         restaurantTable.setNumber(n);
 
+        logger.info("Creating table = {}", restaurantTable);
+
         restaurantTableRepository.save(restaurantTable);
     }
 
@@ -58,6 +64,8 @@ public class RestaurantTableServiceImpl implements RestaurantTableService {
      */
     @Override
     public List<RestaurantTable> getTables(long restaurantId) {
+        logger.info("Getting tables for restaurant with id = {}", restaurantId);
+
         List<RestaurantTable> tables = restaurantTableRepository.getTables(restaurantId);
         tables.sort(Comparator.comparing(RestaurantTable::getNumber));
 
@@ -82,6 +90,8 @@ public class RestaurantTableServiceImpl implements RestaurantTableService {
                 return false;
             }
         }
+
+        logger.info("Deleting table with id = {}", id);
 
         reservationRepository.deleteTables(id);
         restaurantTableRepository.delete(id);

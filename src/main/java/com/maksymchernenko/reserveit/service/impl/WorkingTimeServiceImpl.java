@@ -3,6 +3,8 @@ package com.maksymchernenko.reserveit.service.impl;
 import com.maksymchernenko.reserveit.model.WorkingTime;
 import com.maksymchernenko.reserveit.repository.WorkingTimeRepository;
 import com.maksymchernenko.reserveit.service.WorkingTimeService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +19,8 @@ import java.util.Map;
  */
 @Service
 public class WorkingTimeServiceImpl implements WorkingTimeService {
+
+    private static final Logger logger = LoggerFactory.getLogger(WorkingTimeServiceImpl.class);
 
     private final WorkingTimeRepository workingTimeRepository;
 
@@ -40,6 +44,8 @@ public class WorkingTimeServiceImpl implements WorkingTimeService {
     public void createWorkingTime(WorkingTime workingTime) {
         Map<DayOfWeek, WorkingTime> workingTimeMap = workingTimeRepository.getWorkingTimeMap(workingTime.getRestaurant().getId());
 
+        logger.info("Creating workingTime = {}", workingTime);
+
         DayOfWeek yesterday = workingTime.getDayOfWeek().minus(1);
         WorkingTime yesterdayWorkingTime = workingTimeMap.get(yesterday);
         if (yesterdayWorkingTime != null
@@ -55,6 +61,8 @@ public class WorkingTimeServiceImpl implements WorkingTimeService {
 
     @Override
     public Map<DayOfWeek, WorkingTime> getWorkingTimeMap(long restaurantId) {
+        logger.info("Getting working time map by restaurant id = {}", restaurantId);
+
         return workingTimeRepository.getWorkingTimeMap(restaurantId);
     }
 
@@ -62,6 +70,10 @@ public class WorkingTimeServiceImpl implements WorkingTimeService {
     @Override
     public void delete(long restaurantId,
                        DayOfWeek day) {
+        logger.info("Deleting working time by restaurant id = {}, day of week = {}",
+                restaurantId,
+                day);
+
         workingTimeRepository.delete(restaurantId, day);
     }
 }
