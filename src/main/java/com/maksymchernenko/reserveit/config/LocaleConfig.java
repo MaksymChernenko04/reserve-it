@@ -37,7 +37,7 @@ public class LocaleConfig implements WebMvcConfigurer {
 
     /**
      * Defines the interceptor that allows changing the current locale
-     * by passing a request parameter {@code ?lang=uk}.
+     * by passing a request parameter, for example {@code ?lang=uk}.
      *
      * @return a {@link LocaleChangeInterceptor} configured with parameter name "lang"
      */

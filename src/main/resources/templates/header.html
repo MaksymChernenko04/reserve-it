@@ -43,6 +43,7 @@
             <label><select class="lang-select" name="lang" onchange="document.getElementById('langForm').submit();">
                 <option value="en" th:text="#{header.lang.en}" th:selected="${#locale.language == 'en'}"></option>
                 <option value="uk" th:text="#{header.lang.uk}" th:selected="${#locale.language == 'uk'}"></option>
+                <option value="pl" th:text="#{header.lang.pl}" th:selected="${#locale.language == 'pl'}"></option>
             </select></label>
         </form>
     </div>
