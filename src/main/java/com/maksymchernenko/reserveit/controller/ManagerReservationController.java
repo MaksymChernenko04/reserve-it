@@ -4,6 +4,8 @@ import com.maksymchernenko.reserveit.exceptions.UserNotFoundException;
 import com.maksymchernenko.reserveit.model.User;
 import com.maksymchernenko.reserveit.service.ReservationService;
 import com.maksymchernenko.reserveit.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/manager/reservations")
 public class ManagerReservationController {
+
+    private static final Logger logger = LoggerFactory.getLogger(ManagerReservationController.class);
 
     private final ReservationService reservationService;
     private final UserService userService;
@@ -47,12 +51,19 @@ public class ManagerReservationController {
     @GetMapping
     public String getReservationsPage(Model model,
                                       Authentication authentication) {
+        logger.info("GET /manager/reservations called");
+
         try {
             User manager = userService.getByEmail(authentication.getName());
             model.addAttribute("reservations", reservationService.getAll("default", manager));
 
+            logger.info("All reservations page rendered for manager");
+
             return "manager/reservations";
         } catch (UserNotFoundException e) {
+            logger.warn("Getting reservations failed. User with email = {} does not exist. " +
+                    "Redirecting to logout", authentication.getName());
+
             return "redirect:/user/logout";
         }
     }
@@ -70,12 +81,19 @@ public class ManagerReservationController {
     public String filterReservations(Model model,
                                      Authentication authentication,
                                      @RequestParam String filterAttribute) {
+        logger.info("POST /manager/reservations/filter called");
+
         try {
             User manager = userService.getByEmail(authentication.getName());
             model.addAttribute("reservations", reservationService.getAll(filterAttribute, manager));
 
+            logger.info("All reservations page rendered with filter for manager");
+
             return "manager/reservations";
         } catch (UserNotFoundException e) {
+            logger.warn("Getting reservations with filter failed. User with email = {} does not exist. " +
+                    "Redirecting to logout", authentication.getName());
+
             return "redirect:/user/logout";
         }
     }
@@ -91,12 +109,19 @@ public class ManagerReservationController {
     @PostMapping("/{id}/submit")
     public String submitResevation(@PathVariable int id,
                                    Authentication authentication) {
+        logger.info("POST /manager/reservations/{id}/submit called");
+
         try {
             User manager = userService.getByEmail(authentication.getName());
             reservationService.submitReservation(id, manager);
 
+            logger.info("Redirecting to all reservations page after submit");
+
             return "redirect:/manager/reservations";
         } catch (UserNotFoundException e) {
+            logger.warn("Getting reservations after submit failed. User with email = {} does not exist. " +
+                    "Redirecting to logout", authentication.getName());
+
             return "redirect:/user/logout";
         }
     }
@@ -109,7 +134,11 @@ public class ManagerReservationController {
      */
     @PostMapping("/{id}/cancel")
     public String cancelResevation(@PathVariable int id) {
+        logger.info("POST /manager/reservations/{id}/cancel called");
+
         reservationService.cancelReservation(id);
+
+        logger.info("Redirecting to all reservations page after cancel");
 
         return "redirect:/manager/reservations";
     }

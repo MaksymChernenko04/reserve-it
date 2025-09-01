@@ -6,6 +6,8 @@ import com.maksymchernenko.reserveit.model.Role;
 import com.maksymchernenko.reserveit.model.User;
 import com.maksymchernenko.reserveit.model.dto.UserDTO;
 import com.maksymchernenko.reserveit.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -23,6 +25,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @RequestMapping()
 public class UserController {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     private final UserService userService;
 
@@ -44,7 +48,11 @@ public class UserController {
      */
     @GetMapping("/guest/register")
     public String getRegisterPage(Model model) {
+        logger.info("GET /guest/register called");
+
         model.addAttribute("user", new User());
+
+        logger.info("Registration page rendered");
 
         return "guest/register";
     }
@@ -60,12 +68,19 @@ public class UserController {
     @PostMapping("/guest/register")
     public String registerUser(@ModelAttribute("user") User user,
                                RedirectAttributes redirectAttributes) {
+        logger.info("POST /guest/register called");
+
         try {
             userService.register(user);
+
+            logger.info("Successful registration page rendered");
 
             return "guest/successful_register";
         } catch (UserAlreadyExistsException e) {
             redirectAttributes.addAttribute("error", "true");
+
+            logger.warn("Registration failed. User with email = {} already exists. " +
+                    "Redirecting to registration page", user.getEmail());
 
             return "redirect:/guest/register";
         }
@@ -79,7 +94,11 @@ public class UserController {
      */
     @GetMapping("/guest/login")
     public String loginUser(Model model) {
+        logger.info("GET /guest/login called");
+
         model.addAttribute("user", new User());
+
+        logger.info("Login page rendered");
 
         return "guest/login";
     }
@@ -92,7 +111,11 @@ public class UserController {
      */
     @GetMapping("/admin/users")
     public String getAllUsers(Model model) {
+        logger.info("GET /admin/users called");
+
         model.addAttribute("users", userService.getAllUsers());
+
+        logger.info("All users page rendered");
 
         return "admin/users";
     }
@@ -105,10 +128,14 @@ public class UserController {
      */
     @GetMapping("/admin/user/create")
     public String getCreateUserPage(Model model) {
+        logger.info("GET /admin/user/create called");
+
         User user = new User();
         user.setRole(new Role());
         model.addAttribute("user", user);
         model.addAttribute("roles", userService.getAllRoles());
+
+        logger.info("User creation page rendered");
 
         return "admin/create_user";
     }
@@ -125,12 +152,19 @@ public class UserController {
     @PostMapping("/admin/user/create")
     public String createUser(@ModelAttribute User user,
                              RedirectAttributes redirectAttributes) {
+        logger.info("POST /admin/user/create called");
+
         try {
             userService.register(user);
+
+            logger.info("Redirecting to all users page");
 
             return "redirect:/admin/users";
         } catch (UserAlreadyExistsException e) {
             redirectAttributes.addAttribute("error", "true");
+
+            logger.warn("User creation failed. User with email = {} already exists. " +
+                    "Redirecting to user creation page", user.getEmail());
 
             return "redirect:/admin/user/create";
         }
@@ -144,7 +178,11 @@ public class UserController {
      */
     @PostMapping("/admin/user/{id}/delete")
     public String deleteUser(@PathVariable("id") int id) {
+        logger.info("POST /admin/user/{id}/delete called");
+
         userService.deleteUser(id);
+
+        logger.info("Redirecting to all users page after deletion");
 
         return "redirect:/admin/users";
     }
@@ -160,6 +198,8 @@ public class UserController {
     @GetMapping("/user/profile")
     public String getUserProfilePage(Model model,
                                      Authentication authentication) {
+        logger.info("GET /user/profile called");
+
         String email = authentication.getName();
         try {
             User user = userService.getByEmail(email);
@@ -167,8 +207,13 @@ public class UserController {
             model.addAttribute("lastName", user.getLastName());
             model.addAttribute("email", user.getEmail());
 
+            logger.info("User profile page rendered");
+
             return "user/profile";
         } catch (UserNotFoundException e) {
+            logger.warn("Getting user profile failed. User with email = {} does not exist. " +
+                    "Redirecting to logout", authentication.getName());
+
             return "redirect:/user/logout";
         }
     }
@@ -184,6 +229,8 @@ public class UserController {
     @GetMapping("/user/profile/edit")
     public String getEditProfilePage(Model model,
                                      Authentication authentication) {
+        logger.info("GET /user/profile/edit called");
+
         String email = authentication.getName();
         try {
             User user = userService.getByEmail(email);
@@ -195,8 +242,13 @@ public class UserController {
 
             model.addAttribute("user", userDTO);
 
+            logger.info("User profile editing page rendered");
+
             return "user/edit_profile";
         } catch (UserNotFoundException e) {
+            logger.warn("Getting user profile editing page failed. User with email = {} does not exist. " +
+                    "Redirecting to logout", authentication.getName());
+
             return "redirect:/user/logout";
         }
     }
@@ -212,6 +264,8 @@ public class UserController {
     @PostMapping("/user/profile/edit")
     public String editProfile(@ModelAttribute("user") UserDTO user,
                               Authentication authentication) {
+        logger.info("POST /user/profile/edit called");
+
         try {
             User newUser = userService.getByEmail(authentication.getName());
 
@@ -220,8 +274,13 @@ public class UserController {
 
             userService.updateUser(newUser);
 
+            logger.info("Redirecting to user profile page");
+
             return "redirect:/user/profile";
         } catch (UserNotFoundException e) {
+            logger.warn("User profile update failed. User with email = {} does not exist. " +
+                    "Redirecting to logout", authentication.getName());
+
             return "redirect:/user/logout";
         }
     }
@@ -241,15 +300,21 @@ public class UserController {
                                  @RequestParam String newPassword,
                                  Authentication authentication,
                                  RedirectAttributes redirectAttributes) {
+        logger.info("POST /user/profile/changepassword called");
+
         try {
             User user = userService.getByEmail(authentication.getName());
-
             boolean passwordChanged = userService.updatePassword(user, oldPassword, newPassword);
 
             redirectAttributes.addFlashAttribute("passwordChanged", passwordChanged);
 
+            logger.info("Redirecting to user profile editing page after password change");
+
             return "redirect:/user/profile/edit";
         } catch (UserNotFoundException e) {
+            logger.warn("User password change failed. User with email = {} does not exist. " +
+                    "Redirecting to logout", authentication.getName());
+
             return "redirect:/user/logout";
         }
     }

@@ -7,6 +7,8 @@ import com.maksymchernenko.reserveit.model.User;
 import com.maksymchernenko.reserveit.service.ReservationService;
 import com.maksymchernenko.reserveit.service.RestaurantService;
 import com.maksymchernenko.reserveit.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -29,6 +31,8 @@ import java.util.Map;
 @Controller
 @RequestMapping("/client/reservations")
 public class ClientReservationController {
+
+    private static final Logger logger = LoggerFactory.getLogger(ClientReservationController.class);
 
     private final UserService userService;
     private final ReservationService reservationService;
@@ -61,13 +65,20 @@ public class ClientReservationController {
     @GetMapping
     public String getReservationsPage(Model model,
                                       Authentication authentication) {
+        logger.info("GET /client/reservations called");
+
         try {
             User client = userService.getByEmail(authentication.getName());
 
             model.addAttribute("reservations", reservationService.getActualByClient(client));
 
+            logger.info("Reservations page rendered for client");
+
             return "client/reservations";
         } catch (UserNotFoundException e) {
+            logger.warn("Getting reservations failed. User with email = {} does not exist. " +
+                    "Redirecting to logout", authentication.getName());
+
             return "redirect:/user/logout";
         }
     }
@@ -82,6 +93,9 @@ public class ClientReservationController {
     public String getSubmitRestaurantPage(Model model) {
         model.addAttribute("restaurants", restaurantService.getAllRestaurants());
         model.addAttribute("availableTimes", null);
+
+        logger.info("GET /client/reservations/create/submitrestaurant called");
+        logger.info("Reservation creation page rendered");
 
         return "client/create_reservation";
     }
@@ -108,6 +122,9 @@ public class ClientReservationController {
         model.addAttribute("restaurantId", restaurantId);
         model.addAttribute("numberOfGuests", numberOfGuests);
 
+        logger.info("POST /client/reservations/create/submitrestaurant called");
+        logger.info("Reservation creation page update rendered");
+
         return "client/create_reservation";
     }
 
@@ -128,15 +145,24 @@ public class ClientReservationController {
                                     @RequestParam Long restaurantId,
                                     Authentication authentication,
                                     RedirectAttributes redirectAttributes) {
+        logger.info("POST /client/reservations/create called");
+
         try {
             User client = userService.getByEmail(authentication.getName());
 
             if (!reservationService.reserve(restaurantId, dateTime, numberOfGuests, client)) {
                 redirectAttributes.addFlashAttribute("message", "Creating failed");
+
+                logger.warn("Reservation creation failed");
             }
+
+            logger.info("Redirecting to all reservations page after creation");
 
             return "redirect:/client/reservations";
         } catch (UserNotFoundException e) {
+            logger.warn("Reservation creation failed. User with email = {} does not exist. " +
+                    "Redirecting to logout", authentication.getName());
+
             return "redirect:/user/logout";
         }
     }
@@ -151,7 +177,11 @@ public class ClientReservationController {
     @GetMapping("/{id}/edit")
     public String getEditReservationPage(Model model,
                                          @PathVariable Long id) {
+        logger.info("GET /client/reservations/{id}/edit called");
+
         model.addAttribute("reservation", reservationService.getReservation(id));
+
+        logger.info("Reservation editing page rendered");
 
         return "client/edit_reservation";
     }
@@ -168,6 +198,8 @@ public class ClientReservationController {
     public String editNumberOfGuests(@PathVariable Long id,
                                      @RequestParam Integer numberOfGuests,
                                      Model model) {
+        logger.info("POST /client/reservations/{id}/edit/guestsnumber called");
+
         Reservation reservation = reservationService.getReservation(id);
 
         Map<RestaurantTable, List<LocalDateTime>> availableTables =
@@ -187,6 +219,8 @@ public class ClientReservationController {
         model.addAttribute("numberOfGuests", numberOfGuests);
         model.addAttribute("reservation", reservation);
 
+        logger.info("Reservation editing page update rendered");
+
         return "client/edit_reservation";
     }
 
@@ -204,13 +238,19 @@ public class ClientReservationController {
                                   @RequestParam LocalDateTime dateTime,
                                   @RequestParam Integer numberOfGuests,
                                   RedirectAttributes redirectAttributes) {
+        logger.info("POST /client/reservations/{id}/edit called");
+
         Reservation reservation = reservationService.getReservation(id);
         reservation.setGuestsNumber(numberOfGuests);
         reservation.setDayTime(dateTime);
 
         if (!reservationService.updateReservation(reservation)) {
             redirectAttributes.addFlashAttribute("message", "Updating failed");
+
+            logger.warn("Reservation update failed");
         }
+
+        logger.info("Redirecting to all reservations page after update");
 
         return "redirect:/client/reservations";
     }
@@ -223,7 +263,11 @@ public class ClientReservationController {
      */
     @PostMapping("/{id}/cancel")
     public String cancelReservation(@PathVariable Long id) {
+        logger.info("POST /client/reservations/{id}/cancel called");
+
         reservationService.cancelReservation(id);
+
+        logger.info("Reservation cancelled page rendered");
 
         return "redirect:/client/reservations";
     }
@@ -239,12 +283,19 @@ public class ClientReservationController {
     @GetMapping("/history")
     public String getReservationHistoryPage(Model model,
                                             Authentication authentication) {
+        logger.info("GET /client/reservations/history called");
+
         try {
             User client = userService.getByEmail(authentication.getName());
             model.addAttribute("reservations", reservationService.getHistoryByClient(client));
 
+            logger.info("Reservation history page rendered");
+
             return "client/reservations_history";
         } catch (UserNotFoundException e) {
+            logger.warn("Getting reservation history failed. User with email = {} does not exist. " +
+                    "Redirecting to logout", authentication.getName());
+
             return "redirect:/user/logout";
         }
     }

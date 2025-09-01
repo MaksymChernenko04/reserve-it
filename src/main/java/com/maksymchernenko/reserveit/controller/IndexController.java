@@ -3,6 +3,8 @@ package com.maksymchernenko.reserveit.controller;
 import com.maksymchernenko.reserveit.exceptions.UserNotFoundException;
 import com.maksymchernenko.reserveit.model.User;
 import com.maksymchernenko.reserveit.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -18,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/")
 public class IndexController {
+
+    private static final Logger logger = LoggerFactory.getLogger(IndexController.class);
 
     private final UserService userService;
 
@@ -42,15 +46,21 @@ public class IndexController {
     @GetMapping
     public String index(Model model,
                         Authentication authentication) {
+        logger.info("GET / called");
+
         if (authentication != null && authentication.isAuthenticated()) {
             String email = authentication.getName();
             try {
                 User user = userService.getByEmail(email);
                 model.addAttribute("fullName", user.getFirstName() + " " + user.getLastName());
             } catch (UserNotFoundException e) {
+                logger.warn("User with email = {} does not exist. Redirecting to logout", email);
+
                 return "redirect:/user/logout";
             }
         }
+
+        logger.info("Index page rendered");
 
         return "index";
     }

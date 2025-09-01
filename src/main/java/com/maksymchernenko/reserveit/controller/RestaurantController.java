@@ -7,6 +7,8 @@ import com.maksymchernenko.reserveit.model.WorkingTime;
 import com.maksymchernenko.reserveit.service.RestaurantService;
 import com.maksymchernenko.reserveit.service.RestaurantTableService;
 import com.maksymchernenko.reserveit.service.WorkingTimeService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +28,8 @@ import java.util.*;
 @Controller
 @RequestMapping("/manager/restaurants")
 public class RestaurantController {
+
+    private static final Logger logger = LoggerFactory.getLogger(RestaurantController.class);
 
     private final RestaurantService restaurantService;
     private final WorkingTimeService workingTimeService;
@@ -47,7 +51,6 @@ public class RestaurantController {
         this.restaurantTableService = restaurantTableService;
     }
 
-
     /**
      * Displays all restaurants page.
      *
@@ -56,7 +59,11 @@ public class RestaurantController {
      */
     @GetMapping
     public String getAllRestaurantsPage(Model model) {
+        logger.info("GET /manager/restaurants called");
+
         model.addAttribute("restaurants", restaurantService.getAllRestaurants());
+
+        logger.info("All restaurants page rendered");
 
         return "manager/restaurants";
     }
@@ -71,11 +78,15 @@ public class RestaurantController {
     @GetMapping("/{id}")
     public String getRestaurantPage(Model model,
                                     @PathVariable long id) {
+        logger.info("GET /manager/restaurants/{id} called");
+
         Map<DayOfWeek, WorkingTime> workingTimeMap = workingTimeService.getWorkingTimeMap(id);
 
         model.addAttribute("workingTimeMap", workingTimeMap);
         model.addAttribute("restaurant", restaurantService.getRestaurant(id));
         model.addAttribute("tables", restaurantTableService.getTables(id));
+
+        logger.info("Restaurant page rendered");
 
         return "manager/restaurant";
     }
@@ -88,7 +99,11 @@ public class RestaurantController {
      */
     @GetMapping("/create")
     public String getCreateRestaurantPage(Model model) {
+        logger.info("GET /manager/restaurants/create called");
+
         model.addAttribute("newRestaurant", new Restaurant());
+
+        logger.info("Restaurant creation page rendered");
 
         return "manager/create_restaurant";
     }
@@ -104,12 +119,19 @@ public class RestaurantController {
     @PostMapping("/create")
     public String createRestaurant(@ModelAttribute Restaurant restaurant,
                                    RedirectAttributes redirectAttributes) {
+        logger.info("POST /manager/restaurants/create called");
+
         try {
             Restaurant saved = restaurantService.createRestaurant(restaurant);
+
+            logger.info("Redirecting to updated creation page");
 
             return "redirect:/manager/restaurants/create/" + saved.getId();
         } catch (RestaurantAlreadyExistsException e) {
             redirectAttributes.addAttribute("error", "true");
+
+            logger.warn("Restaurant creation failed. Restaurant with name = {} already exists. " +
+                    "Redirecting to restaurant creation page", restaurant.getName());
 
             return "redirect:/manager/restaurants/create";
         }
@@ -125,6 +147,8 @@ public class RestaurantController {
     @GetMapping("/create/{id}")
     public String getCreateTablesAndTimesPage(@PathVariable Long id,
                                               Model model) {
+        logger.info("GET /manager/restaurants/create/{id} called");
+
         Restaurant restaurant = restaurantService.getRestaurant(id);
 
         WorkingTime newWorkingTime = new WorkingTime();
@@ -144,6 +168,8 @@ public class RestaurantController {
         model.addAttribute("availableTimes", generateTimes());
         model.addAttribute("tablesNumber", null);
 
+        logger.info("Restaurant tables and times creation page rendered");
+
         return "manager/create_tables_and_times";
     }
 
@@ -159,7 +185,11 @@ public class RestaurantController {
     public String addTimeToRestaurant(@PathVariable Long id,
                                       @ModelAttribute WorkingTime newWorkingTime,
                                       RedirectAttributes redirectAttributes) {
+        logger.info("POST /manager/restaurants/create/{id}/addtime called");
+
         addTime(id, newWorkingTime, redirectAttributes);
+
+        logger.info("Redirecting to tables and times creation page after adding time");
 
         return "redirect:/manager/restaurants/create/{id}";
     }
@@ -178,7 +208,11 @@ public class RestaurantController {
                                        @ModelAttribute RestaurantTable newRestaurantTable,
                                        @RequestParam Integer tablesNumber,
                                        RedirectAttributes redirectAttributes) {
+        logger.info("POST /manager/restaurants/create/{id}/addtable called");
+
         addTable(id, newRestaurantTable, tablesNumber, redirectAttributes);
+
+        logger.info("Redirecting to tables and times creation page after adding table");
 
         return "redirect:/manager/restaurants/create/{id}";
     }
@@ -195,9 +229,13 @@ public class RestaurantController {
     public String deleteTimeForCreateRestaurant(@PathVariable long id,
                                                 @PathVariable DayOfWeek day,
                                                 RedirectAttributes redirectAttributes) {
+        logger.info("POST /manager/restaurants/create/{id}/deletetime/{day} called");
+
         workingTimeService.delete(id, day);
 
         redirectAttributes.addAttribute("id", id);
+
+        logger.info("Redirecting to tables and times creation page after deleting time");
 
         return "redirect:/manager/restaurants/create/{id}";
     }
@@ -214,9 +252,13 @@ public class RestaurantController {
     public String deleteTableForCreateRestaurant(@PathVariable long restaurantId,
                                                  @PathVariable long tableId,
                                                  RedirectAttributes redirectAttributes) {
+        logger.info("POST /{restaurantId}/create/tables/{tableId}/delete called");
+
         if (!restaurantTableService.delete(tableId)) {
             redirectAttributes.addFlashAttribute("deleted", false);
         }
+
+        logger.info("Redirecting to tables and times creation page after deleting table");
 
         return "redirect:/manager/restaurants/create/{restaurantId}";
     }
@@ -231,6 +273,8 @@ public class RestaurantController {
     @GetMapping("/{id}/edit")
     public String getEditRestaurantPage(@PathVariable long id,
                                         Model model) {
+        logger.info("GET /manager/restaurants/{id}/edit called");
+
         Map<DayOfWeek, WorkingTime> workingTimeMap = workingTimeService.getWorkingTimeMap(id);
 
         List<RestaurantTable> tables = restaurantTableService.getTables(id);
@@ -249,6 +293,8 @@ public class RestaurantController {
                 null, null));
         model.addAttribute("newRestaurantTable", new RestaurantTable(restaurant, null));
 
+        logger.info("Restaurant editing page rendered");
+
         return "manager/edit_restaurant";
     }
 
@@ -264,6 +310,7 @@ public class RestaurantController {
     public String editRestaurant(@ModelAttribute Restaurant newRestaurant,
                                  @PathVariable long id,
                                  RedirectAttributes redirectAttributes) {
+        logger.info("POST /manager/restaurants/{id}/edit called");
 
         Restaurant restaurant = restaurantService.getRestaurant(id);
         restaurant.setName(newRestaurant.getName());
@@ -271,6 +318,8 @@ public class RestaurantController {
         restaurantService.updateRestaurant(restaurant);
 
         redirectAttributes.addAttribute("id", restaurant.getId());
+
+        logger.info("Restaurant page rendered after update");
 
         return "redirect:/manager/restaurants/{id}";
     }
@@ -287,7 +336,11 @@ public class RestaurantController {
     public String editTimeForRestaurant(@PathVariable Long id,
                                         @ModelAttribute WorkingTime newWorkingTime,
                                         RedirectAttributes redirectAttributes) {
+        logger.info("POST /manager/restaurants/{id}/edit/addtime called");
+
         addTime(id, newWorkingTime, redirectAttributes);
+
+        logger.info("Redirecting to restaurant editing page after adding time");
 
         return "redirect:/manager/restaurants/{id}/edit";
     }
@@ -306,7 +359,11 @@ public class RestaurantController {
                                          @ModelAttribute RestaurantTable newRestaurantTable,
                                          @RequestParam(required=false) Integer tablesNumber,
                                          RedirectAttributes redirectAttributes) {
+        logger.info("POST /manager/restaurants/{id}/edit/addtable called");
+
         addTable(id, newRestaurantTable, tablesNumber, redirectAttributes);
+
+        logger.info("Redirecting to restaurant editing page after adding table");
 
         return "redirect:/manager/restaurants/{id}/edit";
     }
@@ -323,9 +380,13 @@ public class RestaurantController {
     public String deleteTableForEditRestaurant(@PathVariable long restaurantId,
                                                @PathVariable long tableId,
                                                RedirectAttributes redirectAttributes) {
+        logger.info("POST /{restaurantId}/edit/tables/{tableId}/delete called");
+
         if (!restaurantTableService.delete(tableId)) {
             redirectAttributes.addFlashAttribute("deleted", false);
         }
+
+        logger.info("Redirecting to restaurant editing page after deleting table");
 
         return "redirect:/manager/restaurants/{restaurantId}/edit";
     }
@@ -342,9 +403,13 @@ public class RestaurantController {
     public String deleteTimeForEditRestaurant(@PathVariable long id,
                                               @PathVariable DayOfWeek day,
                                               RedirectAttributes redirectAttributes) {
+        logger.info("POST /manager/restaurants/{id}/edit/deletetime/{day} called");
+
         workingTimeService.delete(id, day);
 
         redirectAttributes.addAttribute("id", id);
+
+        logger.info("Redirecting to restaurant editing page after deleting time");
 
         return "redirect:/manager/restaurants/{id}/edit";
     }
@@ -357,7 +422,11 @@ public class RestaurantController {
      */
     @PostMapping("/{id}/delete")
     public String deleteRestaurant(@PathVariable long id) {
+        logger.info("POST /manager/restaurants/{id}/delete called");
+
         restaurantService.deleteRestaurant(id);
+
+        logger.info("Redirecting to all restaurants page after deleting restaurant");
 
         return "redirect:/manager/restaurants";
     }
