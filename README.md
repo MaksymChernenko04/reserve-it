@@ -1,10 +1,12 @@
+[Українська](README.uk.md) | [Polski](README.pl.md)
+
 # Reserve It
 
-A web application for managing restaurant reservations.
+A web application for managing restaurant tables reservations.
 
 ## Description
 There are three user roles in the application:
-- **Client**: Can create, edit and cancel reservations.
+- **Client**: Can create, edit and cancel their reservations.
 - **Manager**: Can manage restaurants and reservations.
 - **Admin**: Can manage users.
 
@@ -13,14 +15,14 @@ There are three user roles in the application:
 - **Spring Boot** (MVC, JPA, Security)
 - **SLF4J + Logback** (logging)
 - **Thymeleaf** (server-side rendering)
-- **MySQL**
+- **MySQL** (DB)
 - **i18n** (internationalization: English, Ukrainian, Polish)
 
 ## Architecture
 Three-tier monolith server architecture:
 - **Repository layer**: Communication with a DB using JPA.
 - **Service layer**: Business logic.
-- **Controller layer**: Handles client HTTP requests and responses
+- **Controller layer**: Handles client HTTP requests and responses.
 
 ## Installation
 ### 0. Prerequisites
@@ -95,7 +97,7 @@ CREATE TABLE `role` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY (`name`)
+  UNIQUE KEY `UK_role_name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `user` (
@@ -107,7 +109,7 @@ CREATE TABLE `user` (
   `password` varchar(255) NOT NULL,
   `role_id` bigint NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY (`email`),
+  UNIQUE KEY `UK_user_email` (`email`),
   FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 ```
